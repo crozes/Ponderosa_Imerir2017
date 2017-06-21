@@ -23,7 +23,7 @@ public class Communication {
 	 * 
 	 * @return
 	 */
-	public static BufferedReader getRecevoir(String URL_Serveur) {
+	public static String getRecevoir(String URL_Serveur) {
 
 		URL url;
 		HttpURLConnection connection =null;
@@ -47,10 +47,10 @@ public class Communication {
 			// out.close();
 
 			in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-			System.out.println("get recuperer = " + org.apache.commons.io.IOUtils.toString(in) +" >");
+			String resultat = org.apache.commons.io.IOUtils.toString(in);
+			System.out.println("get recuperer = " + resultat +" >");
 		
-			return in;
+			return resultat;
 
 		} catch (MalformedURLException e) {
 
@@ -60,8 +60,8 @@ public class Communication {
 			System.out.println(e.getMessage());
 			System.out.println(e.getStackTrace());
 		}
-		
-		return in;
+
+		return " ";
 		
 	}
 	
