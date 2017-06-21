@@ -1,7 +1,12 @@
 package les_mains;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+
 import communication.*;
 import outils.Global;
+import netscape.javascript.JSObject;
+
 
 public class MainTest {
 
@@ -10,20 +15,28 @@ public class MainTest {
 		System.out.println("Debut du main");
 		
 		
-		Communication connection = new Communication(Global.URL_SERVEUR);
+
 		
 		
 		//connection.postEnvoyer("Plop_du_java");
 		
 		
-		String testGet = " ";
-		testGet = connection.getRecevoir();
-		
-		System.out.println("Voila le get ->"+testGet.toString());
-		
-		
-		connection.finalize();
+		BufferedReader testGet = null; 
+		String testGetString = " ";
+		testGet = Communication.getRecevoir(Global.URL_TEST_JSON);
 
+		try {
+			testGetString = org.apache.commons.io.IOUtils.toString(testGet);
+			JSONObject  json = new JSONObject (testGetString);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		
 		System.out.println("fin du main");
 	}
 

@@ -18,60 +18,26 @@ import org.apache.commons.io.IOUtils;
  */
 public class Communication {
 	
-	private HttpURLConnection connection =null;
-	
-	
-	/**
-	 * Constructeur.
-	 * On prefere utuliser une seule connection pour toute les requetes.
-	 * @param URL_Serveur
-	 */
-	public Communication(String URL_Serveur) {
-		super();
-		URL url;
-		
-		try {
-			url= new URL(URL_Serveur);
-			this.connection = (HttpURLConnection) url.openConnection();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Erreur lors de la creation de la connection");
-		}
-		
-		
-	}
-	
-	
-	/**
-	 * Destructeur.
-	 * On deconnecte la connection à la fin.
-	 */
-	public void finalize(){
-		if(this.connection != null){
-			this.connection.disconnect();
-		}
-	}
-
-
-
 
 	/**
 	 * 
 	 * @return
 	 */
-	public String getRecevoir() {
+	public static BufferedReader getRecevoir(String URL_Serveur) {
 
-
-		BufferedReader in;
-
+		URL url;
+		HttpURLConnection connection =null;
+		BufferedReader in = null;
 		try {
+			url= new URL(URL_Serveur);
+			connection = (HttpURLConnection) url.openConnection();
+
 			System.out.println("< Recuperation du get");
 
-			this.connection.setRequestMethod("GET");
-			this.connection.setDoInput(true);
-			this.connection.setDoOutput(true);
-			this.connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			connection.setRequestMethod("GET");
+			connection.setDoInput(true);
+			connection.setDoOutput(true);
+			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
 			// DataOutputStream out = new
 			// DataOutputStream(urlConn.getOutputStream());
@@ -80,11 +46,11 @@ public class Communication {
 			// out.flush();
 			// out.close();
 
-			in = new BufferedReader(new InputStreamReader(this.connection.getInputStream()));
+			in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
-			System.out.println("get recuperer >"+org.apache.commons.io.IOUtils.toString(in));
-			System.out.println("Dans fonction get la valeur est ->"+in.toString());
-			return in.toString();
+			System.out.println("get recuperer = " + org.apache.commons.io.IOUtils.toString(in) +" >");
+		
+			return in;
 
 		} catch (MalformedURLException e) {
 
@@ -95,7 +61,7 @@ public class Communication {
 			System.out.println(e.getStackTrace());
 		}
 		
-		return " ";
+		return in;
 		
 	}
 	
@@ -104,9 +70,15 @@ public class Communication {
 	 * 
 	 * @param toPost
 	 */
-	public String postEnvoyer(String toPost) {
+	public String postEnvoyer(String toPost, String URL_Serveur) {
+		URL url;
+		HttpURLConnection connection =null;
+		BufferedReader in = null;
 
 		try {
+			url= new URL(URL_Serveur);
+			connection = (HttpURLConnection) url.openConnection();
+		
 
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");

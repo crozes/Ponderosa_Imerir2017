@@ -2,7 +2,9 @@ package outils;
 
 public final class Global {
 	
-	public static final String URL_SERVEUR = "https://ponderosaproject.herokuapp.com/dayinfo";
+	public static String URL_TEST_JSON = "https://ponderosaproject.herokuapp.com/dayinfo";
+
+	
 	
 	
 	//min max motivation et mouvement
