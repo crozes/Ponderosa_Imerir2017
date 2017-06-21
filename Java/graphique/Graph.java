@@ -25,6 +25,17 @@ import les_mains.MainTest;
 import outils.Global;
 
 public class Graph extends Application  {
+	String texte;
+	public String recup(){
+	
+		JsonElement jelement = new JsonParser().parse(Communication.getRecevoir(Global.URL_TEST_JSON));
+		JsonObject json = jelement.getAsJsonObject();
+
+		String weather = json.get("weather").getAsString();
+		int day = json.get("day").getAsInt();
+		float budget = json.get("budget").getAsFloat();
+		return "meteo : " + weather + "\n jour : " + day + "\n budjet : " + budget;
+	}
 
     public void start(Stage primaryStage) {
     	/**creation de la fenetre*/
@@ -36,7 +47,7 @@ public class Graph extends Application  {
         GridPane panelTop = new GridPane();
         panelTop.getColumnConstraints().add(new ColumnConstraints(scene.getWidth()-100));
         /**contenu de la page*/
-        String text=Communication.getRecevoir(Global.URL_TEST_JSON);
+        String text=recup();
         Label topLabel= new Label(); 
         topLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); 
         topLabel.setStyle("-fx-background-color: white; -fx-border-color: white;");
