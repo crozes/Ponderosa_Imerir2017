@@ -1,4 +1,9 @@
 package graphique;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import communication.Communication;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -16,28 +21,26 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import les_mains.MainTest;
+import outils.Global;
 
-public class Graph extends Application {
+public class Graph extends Application  {
 
-    public void start(Stage primaryStage)  {
-    	String time="bla";
-    	String fric="lala";
-    	String meteo="pluis";
+    public void start(Stage primaryStage) {
     	/**creation de la fenetre*/
     	primaryStage.setTitle("limonade");
         Group root=new Group();
-        Scene scene= new Scene(root,1920,640,Color.LIGHTBLUE);
+        Scene scene= new Scene(root,640,640,Color.LIGHTBLUE);
         /**creation de panel*/
         BorderPane genPanel = new BorderPane();
         GridPane panelTop = new GridPane();
         panelTop.getColumnConstraints().add(new ColumnConstraints(scene.getWidth()-100));
-        //panelTop.getColumnConstraints().add(new ColumnConstraints(scene.getWidth()));
         /**contenu de la page*/
+        String text=Communication.getRecevoir(Global.URL_TEST_JSON);
         Label topLabel= new Label(); 
-        String texte="\n"+time+"\n"+fric+"\n"+meteo;
         topLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); 
-        topLabel.setStyle("-fx-background-color: gold; -fx-border-color: goldenrod;");
-        topLabel.setText(texte);
+        topLabel.setStyle("-fx-background-color: white; -fx-border-color: white;");
+        topLabel.setText(text);
         genPanel.setTop(panelTop);
         ComboBox listJoueur=new ComboBox();
         listJoueur.getItems().addAll(

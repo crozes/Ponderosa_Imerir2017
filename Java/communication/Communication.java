@@ -11,6 +11,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import org.apache.commons.io.IOUtils;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import outils.Global;
+
 /**
  * 
  * @author atila
@@ -50,7 +56,13 @@ public class Communication {
 			String resultat = org.apache.commons.io.IOUtils.toString(in);
 			System.out.println("get recuperer = " + resultat +" >");
 		
-			return resultat;
+			JsonElement jelement = new JsonParser().parse(resultat);
+			JsonObject json = jelement.getAsJsonObject();
+
+			String weather = json.get("weather").getAsString();
+			int day = json.get("day").getAsInt();
+			float budget = json.get("budget").getAsFloat();
+			return "meteo : " + weather + "\n jour : " + day + "\n budjet : " + budget;
 
 		} catch (MalformedURLException e) {
 
