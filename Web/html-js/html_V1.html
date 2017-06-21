@@ -65,7 +65,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Bootstrap 101 Template</title>
+    <title>Projet 2017</title>
 
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
@@ -91,7 +91,7 @@
 
 							<div class="info">
 								<div class="city"><span>Ville:</span> Perpignan</div>
-								<div class="night">Nuageux</div>
+								<div class="night" id="weather"></div>
 								<div class="temp">22:07</div>
 
 								<div class="wind">
@@ -128,13 +128,14 @@
 										</g>
 									</g>
 
-									<span>Jour 1 / PM</span>
+									<span>Jour <font id="numJourCourrant"></font> / <font id="moment"></font></span>
 								</div>
 							</div>
 
 							<div class="icon">
 								<img 
-    								src="SVG/8.svg" 
+									id="logoDay1"
+    								src="SVG/14.svg" 
     								alt="weather"
     								height="87px"
     								width="80px" 
@@ -143,7 +144,7 @@
 
 						</article>
 						
-						<figure><img src="images/sunny.png" class="fontImage" /></figure>
+						<figure><img id="imageback" src="images/rain.png" class="fontImage" /></figure>
 					</div>
 
 					<div class="days">
@@ -197,9 +198,10 @@
         				<ul class="nav nav-tabs">
           					<li class="active"><a href="#Stats" data-toggle="tab">Statistiques</a></li>
           					<li><a href="#Cost" data-toggle="tab">Coûts</a></li>
-          					<li><a href="#Map" data-toggle="tab">Carte</a></li>
+          					<li><a href="#Map" data-toggle="tab" onclick="displayMap(20,20)">Carte</a></li>
           					<li><a href="#Actions" data-toggle="tab" onclick="getActions()">Actions</a></li>
           					<li><a href="#Player" data-toggle="tab" >Joueur en partie</a></li>
+          					<li>Budget : <font id="money"></font></li>
         				</ul>
 
         				<div id="myTabContent" class="tab-content">
@@ -213,6 +215,9 @@
           					</div>
           					<div class="tab-pane fade" id="Map">
             					Carte du jeu :
+            					<div id="MapPlace">
+
+									</div>
           					</div>
           					<div class="tab-pane fade" id="Actions">
             					<fieldset>
@@ -239,22 +244,22 @@
 
 	<script type="text/javascript">
 				
-				document.addEventListener('DOMCOntentLoaded', main);
+				document.addEventListener('DOMCOntentLoaded', getDayInfo());
 				var nbDivX = 0;
 				var nbDivY = 0;
 
-				/*function displayMap(x,y,name){
+				function displayMap(x,y){
 						nbDivX = 0;
 						nbDivY = 0;
-						$('#map').empty();
+						$('#MapPlace').empty();
 						for(var i = 0; i < x; i++){
 							for(var j = 0; j < y ; j++){
-								$('#map').append('<div class="case" id="' + nbDivY + nbDivX + '"></div>');
+								$('#MapPlace').append('<div class="case" id="' + nbDivY + nbDivX + '"></div>');
 								nbDivX +=1;
 							}
 							nbDivY +=1;
 							nbDivX = 0;
-							$('#map').append('<br/>');
+							$('#MapPlace').append('<br/>');
 						}
 
 						for(var i = 0; i < 10 ; i++){
@@ -262,9 +267,51 @@
 							var y = Math.floor(Math.random() * 20) + 1 
 							$('#' + x + '' + y).append('<div class="perso"></div>');
 						}
-				}*/
+				}
 
-				
+				function getDayInfo(){
+					$.ajax('http://ponderosaproject.herokuapp.com/dayinfo').done(function(data){
+
+						var day = data['day'];
+						var budget = data['budget'];
+						var weather = data['weather'];
+						var momentOfDay = data['moment'];
+
+						$('#money').empty();
+						$('#money').append('' + budget);
+						$('#weather').empty();
+						$('#weather').append('' + weather);
+						$('#numJourCourrant').empty();
+						$('#numJourCourrant').append('' + day);
+						$('#moment').empty();
+						$('#moment').append('' + momentOfDay);
+
+						switch(weather){
+							case 'CLOUDY':
+								 document.getElementById("logoDay1").src= "SVG/14.svg";
+								 document.getElementById("imageback").src = "images/cloudy.png";
+								break;
+							case 'RAINY':
+								 document.getElementById("logoDay1").src= "SVG/18.svg";
+								 document.getElementById("imageback").src = "images/rainy.png";
+								break;
+							case 'SUNNY':
+								 document.getElementById("logoDay1").src= "SVG/8.svg";
+								 document.getElementById("imageback").src = "images/sunny.png";
+								break;
+							case 'HEATWAVE':
+								 document.getElementById("logoDay1").src= "SVG/2.svg";
+								 document.getElementById("imageback").src = "images/heatwave.png";
+								break;
+							case 'THUNDERSTORM':
+								 document.getElementById("logoDay1").src= "SVG/16.svg";
+								 document.getElementById("imageback").src = "images/thunderstorm.png";
+								break;
+							default:
+								break;
+						}
+					});
+				}
 
 				function getActions(){
 					
@@ -276,19 +323,20 @@
 							$('#BuyMP').append('<div id="MP_' + i + '">' + data[i] + '<button id="buttonMP_' + i + '" onclick="addMP(' + i + ')">+</button></div>');
 						}*/
 					});
-
-					$.ajax("http://ponderosaproject.herokuapp.com/posttest").done(function(data){
-						var nb = data["sales"];
-						$('#verreVendu').val(nb);
-					});
 				}
+
+
 				
 				function addMP(numMP){
 
 				}
 
 				function sendData(){
-					
+					$.ajax("http://ponderosaproject.herokuapp.com/posttest",{
+						type: 'POST',
+						contentType: 'application/json',
+						data: JSON.stringify('datapost')
+					});
 				}
 
 	</script>

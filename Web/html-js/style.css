@@ -9,3 +9,25 @@
 .titre_tab{
 	padding: 15px;
 }
+
+.money{
+	font-size: 120%;
+}
+
+.perso{
+	position: absolute;
+	width: 5px;
+	height: 5px;
+	border: 1px solid black;
+	border-radius: 50%;
+	background: blue;
+}
+
+.case{
+	width: 25px;
+	height: 25px;
+	display: inline-block;
+	background-color: #ccc;
+	/*border: 1px solid black;*/
+	margin-top: -4px;
+}
