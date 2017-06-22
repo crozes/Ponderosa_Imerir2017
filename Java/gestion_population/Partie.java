@@ -7,16 +7,42 @@ import outils.*;
 
 public class Partie {
 
-	private MapItem laMap[][];
-	private HashMap<String, MapItem> listeDesMapItem;
+	private MapItem laMapDesObjets[][];
 	private Population mapDeLaPopulation;
+	
+	private HashMap<String, MapItem> listeItemByPlayer;
 	private HashMap<String, PlayerInfo> listePlayerInfo;
 	private Meteo meteoDuJour;
 	private Meteo meteoDeDemain;
 	private int heureDepuisDebutJeu;
-	private HashMap<String, DrinkInfo> listeDesRecipes;
+	private HashMap<String, DrinkInfo> listeDesDrinkInfo;
 	private ArrayList<String> ranking;
 
+
+	
+	
+	
+	
+	
+	
+	
+
+
+	public HashMap<String, MapItem> getListeItemByPlayer() {
+		return listeItemByPlayer;
+	}
+
+	public void setListeItemByPlayer(HashMap<String, MapItem> listeItemByPlayer) {
+		this.listeItemByPlayer = listeItemByPlayer;
+	}
+
+	public HashMap<String, DrinkInfo> getListeDesDrinkInfo() {
+		return listeDesDrinkInfo;
+	}
+
+	public void setListeDesDrinkInfo(HashMap<String, DrinkInfo> listeDesDrinkInfo) {
+		this.listeDesDrinkInfo = listeDesDrinkInfo;
+	}
 
 	public HashMap<String, PlayerInfo> getListePlayerInfo() {
 		return listePlayerInfo;

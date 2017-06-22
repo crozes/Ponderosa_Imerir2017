@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Population {
 
-	private ArrayList<Individu> population;
+	private Individu population[][];
 	
 	
 	

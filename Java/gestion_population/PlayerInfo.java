@@ -26,8 +26,11 @@ public class PlayerInfo {
 	float cash;
 	float profit;
 	HashMap<String, DrinkInfo> drinksOffered;
+	HashMap<String, Integer> deTest = new HashMap<>();
 	
-	
+	public PlayerInfo(){
+
+	}
 	
 	public PlayerInfo(int sales, float cash, float profit, HashMap<String, DrinkInfo> drinksOffered) {
 		super();
@@ -36,6 +39,15 @@ public class PlayerInfo {
 		this.profit = profit;
 		this.drinksOffered = drinksOffered;
 	}
+	
+	
+	
+	public HashMap<String, Integer> getDeTest(){
+		return this.deTest;
+	}
+	
+	
+	
 	public int getSales() {
 		return sales;
 	}
