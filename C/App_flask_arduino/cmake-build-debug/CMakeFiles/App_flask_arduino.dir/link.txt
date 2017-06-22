@@ -1,1 +1,1 @@
-/usr/bin/cc  -g   CMakeFiles/App_flask_arduino.dir/main.c.o CMakeFiles/App_flask_arduino.dir/arduino-serial-lib.c.o  -o App_flask_arduino -lcurl 
+/usr/bin/cc  -g   CMakeFiles/App_flask_arduino.dir/main.c.o CMakeFiles/App_flask_arduino.dir/arduino-serial-lib.c.o  -o App_flask_arduino -lcurl -ljson-c 

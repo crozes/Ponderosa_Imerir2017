@@ -4,7 +4,7 @@
 #include <string.h>
 #include "arduino-serial-lib.h"
 #include <curl/curl.h>
-
+#include <json-c/json.h>
 
 
 struct string {
@@ -49,34 +49,49 @@ void delimiterString(char* tampon){
         }
     }
     buffer[i]='\0';
+    memset(tampon, 0, 512);
     memcpy(tampon,buffer,i+1);
 }
 
 void sendJson(char* a_envoyer){
 
+
+
+    char *url = "https://ponderosaproject.herokuapp.com/postHour";
+
     CURL* curl;
     CURLcode res;
-    char* jsonObj[512];
+    json_object *json;                                      /* json post body */
+    enum json_tokener_error jerr = json_tokener_success;    /* json parse error */
+    char* jsonTime[512];
     struct string retourRequete;
     init_string(&retourRequete);
+    struct curl_slist *headers = NULL; /* http headers to send with request */
 
-    sprintf(jsonObj,"%s",a_envoyer);
+    sprintf(jsonTime,"%s",a_envoyer);
+
+    /* create json object for post */
+    json = json_object_new_object();
+
+    json_object_object_add(json, "time", json_object_new_string(jsonTime));
+
 
     curl_global_init(CURL_GLOBAL_ALL);
 
     curl = curl_easy_init();
     if(curl) {
-        struct curl_slist *headers = NULL;
-        curl_slist_append(headers, "Accept: application/json");
-        curl_slist_append(headers, "Content-Type: application/json");
-        curl_slist_append(headers, "charsets: utf-8");
 
-        curl_easy_setopt(curl, CURLOPT_URL, "https://ponderosaproject.herokuapp.com/");
+        /* set content type */
+        headers = curl_slist_append(headers, "charsets: utf-8");
+        headers = curl_slist_append(headers, "Accept: application/json");
+        headers = curl_slist_append(headers, "Content-Type: application/json");
+
+        curl_easy_setopt(curl, CURLOPT_URL, url);
 
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonObj);
-        curl_easy_setopt(curl, CURLOPT_USERAGENT, "libcrp/0.1");
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json_object_to_json_string(json));
+        //curl_easy_setopt(curl, CURLOPT_USERAGENT, "libcrp/0.1");
 
 
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
@@ -101,18 +116,24 @@ int main (int argc, char *argv[]){
 
 
     char buffer[1024];
+    int longueurBuffer=0;
 
     char *portname = "/dev/ttyACM0";
     int fd = open (portname, O_RDWR | O_NOCTTY | O_SYNC);
 
 
     while(1){
-        serialport_read_until(fd, buffer,'\0',1024,500);
-        if(strlen(buffer)>0){
+        serialport_read_until(fd, buffer,'\0',1024,100);
+        longueurBuffer=strlen(buffer);
+        if(longueurBuffer>0){
                 delimiterString(buffer);
-                //printf("\nchaine:%s",buffer);
-                //buffer[strlen(buffer)-1]='\0';
-                sendJson(buffer);
+                longueurBuffer=strlen(buffer);
+                if(longueurBuffer<512) {
+                    printf("\nchaine:%s",buffer);
+                    sendJson(buffer);
+                }else {
+                    memset(buffer, 0, 512);
+                }
             }
         }
 
