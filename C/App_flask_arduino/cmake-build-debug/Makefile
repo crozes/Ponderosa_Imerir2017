@@ -123,6 +123,60 @@ App_flask_arduino/fast:
 	$(MAKE) -f CMakeFiles/App_flask_arduino.dir/build.make CMakeFiles/App_flask_arduino.dir/build
 .PHONY : App_flask_arduino/fast
 
+arduino-serial-lib.o: arduino-serial-lib.c.o
+
+.PHONY : arduino-serial-lib.o
+
+# target to build an object file
+arduino-serial-lib.c.o:
+	$(MAKE) -f CMakeFiles/App_flask_arduino.dir/build.make CMakeFiles/App_flask_arduino.dir/arduino-serial-lib.c.o
+.PHONY : arduino-serial-lib.c.o
+
+arduino-serial-lib.i: arduino-serial-lib.c.i
+
+.PHONY : arduino-serial-lib.i
+
+# target to preprocess a source file
+arduino-serial-lib.c.i:
+	$(MAKE) -f CMakeFiles/App_flask_arduino.dir/build.make CMakeFiles/App_flask_arduino.dir/arduino-serial-lib.c.i
+.PHONY : arduino-serial-lib.c.i
+
+arduino-serial-lib.s: arduino-serial-lib.c.s
+
+.PHONY : arduino-serial-lib.s
+
+# target to generate assembly for a file
+arduino-serial-lib.c.s:
+	$(MAKE) -f CMakeFiles/App_flask_arduino.dir/build.make CMakeFiles/App_flask_arduino.dir/arduino-serial-lib.c.s
+.PHONY : arduino-serial-lib.c.s
+
+main.o: main.c.o
+
+.PHONY : main.o
+
+# target to build an object file
+main.c.o:
+	$(MAKE) -f CMakeFiles/App_flask_arduino.dir/build.make CMakeFiles/App_flask_arduino.dir/main.c.o
+.PHONY : main.c.o
+
+main.i: main.c.i
+
+.PHONY : main.i
+
+# target to preprocess a source file
+main.c.i:
+	$(MAKE) -f CMakeFiles/App_flask_arduino.dir/build.make CMakeFiles/App_flask_arduino.dir/main.c.i
+.PHONY : main.c.i
+
+main.s: main.c.s
+
+.PHONY : main.s
+
+# target to generate assembly for a file
+main.c.s:
+	$(MAKE) -f CMakeFiles/App_flask_arduino.dir/build.make CMakeFiles/App_flask_arduino.dir/main.c.s
+.PHONY : main.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -132,6 +186,12 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... App_flask_arduino"
+	@echo "... arduino-serial-lib.o"
+	@echo "... arduino-serial-lib.i"
+	@echo "... arduino-serial-lib.s"
+	@echo "... main.o"
+	@echo "... main.i"
+	@echo "... main.s"
 .PHONY : help
 
 

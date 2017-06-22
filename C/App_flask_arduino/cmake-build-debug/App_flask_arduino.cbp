@@ -84,6 +84,15 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/gaspard/CLionProjects/App_flask_arduino/arduino-serial-lib.c">
+			<Option target="App_flask_arduino"/>
+		</Unit>
+		<Unit filename="/home/gaspard/CLionProjects/App_flask_arduino/arduino-serial-lib.h">
+			<Option target="App_flask_arduino"/>
+		</Unit>
+		<Unit filename="/home/gaspard/CLionProjects/App_flask_arduino/main.c">
+			<Option target="App_flask_arduino"/>
+		</Unit>
 		<Unit filename="/home/gaspard/CLionProjects/App_flask_arduino/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

@@ -3,7 +3,8 @@
 #include <fcntl.h>
 #include <string.h>
 #include "arduino-serial-lib.h"
-#include "./curl-7.54.1/include/curl/curl.h"
+#include <curl/curl.h>
+
 
 
 struct string {
@@ -36,22 +37,30 @@ size_t writefunc(void *ptr, size_t size, size_t nmemb, struct string *s)
     return size*nmemb;
 }
 
+void delimiterString(char* tampon){
+    char buffer[512];
+    int i=0;
+    int length=strlen(tampon);
+    for(i=0;i<512 && i<length;i++){
+        if(tampon[i]!='\n') {
+            buffer[i] = tampon[i];
+        }else{
+            break;
+        }
+    }
+    buffer[i]='\0';
+    memcpy(tampon,buffer,i+1);
+}
 
+void sendJson(char* a_envoyer){
 
-
-
-
-int main (int argc, char *argv[]){
-
-    CURL *curl;
+    CURL* curl;
     CURLcode res;
-    char buffer[1024];
-    char* jsonObj = "{ \"name\" : \"Pedro\" , \"age\" : \"22\" }";
-    char *portname = "/dev/ttyACM0";
-    int fd = open (portname, O_RDWR | O_NOCTTY | O_SYNC);
-
+    char* jsonObj[512];
     struct string retourRequete;
     init_string(&retourRequete);
+
+    sprintf(jsonObj,"{ \"time\" : \" %s \" }",a_envoyer);
 
     curl_global_init(CURL_GLOBAL_ALL);
 
@@ -85,12 +94,25 @@ int main (int argc, char *argv[]){
 
     printf("\nRetour:%s",retourRequete.ptr);
 
+}
+
+
+int main (int argc, char *argv[]){
+
+
+    char buffer[1024];
+
+    char *portname = "/dev/ttyACM0";
+    int fd = open (portname, O_RDWR | O_NOCTTY | O_SYNC);
+
+
     while(1){
-        serialport_read_until(fd, buffer,'\0',1024,1000);
+        serialport_read_until(fd, buffer,'\0',1024,2000);
         if(strlen(buffer)>0){
-
-                printf("\nchaine:%s",buffer);
-
+                delimiterString(buffer);
+                //printf("\nchaine:%s",buffer);
+                //buffer[strlen(buffer)-1]='\0';
+                sendJson(buffer);
             }
         }
 

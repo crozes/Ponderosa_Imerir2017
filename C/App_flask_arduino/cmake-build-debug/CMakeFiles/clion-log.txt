@@ -1,15 +1,4 @@
 /etc/clion-2017.1.1/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/gaspard/CLionProjects/App_flask_arduino
 -- Configuring done
-CMake Error at CMakeLists.txt:7 (add_executable):
-  Cannot find source file:
-
-    /curl-7.54.1/include/curl/*
-
-  Tried extensions .c .C .c++ .cc .cpp .cxx .m .M .mm .h .hh .h++ .hm .hpp
-  .hxx .in .txx
-
-
-CMake Error: CMake can not determine linker language for target: App_flask_arduino
-CMake Error: Cannot determine link language for target "App_flask_arduino".
 -- Generating done
 -- Build files have been written to: /home/gaspard/CLionProjects/App_flask_arduino/cmake-build-debug
