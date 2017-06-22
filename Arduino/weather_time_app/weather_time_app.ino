@@ -164,7 +164,8 @@ void serial_output(){
 			case HOUR_12:
 			//météo generator
 			case TIME_PP:
-				sprintf(tampon,"{'time' : '%u'}\0",hour_count+day_count*24);
+				//sprintf(tampon,"{\"time\":\"%u\"}\n\0",hour_count+day_count*24);
+				sprintf(tampon,"%u\n\0",hour_count+day_count*24);
 				Serial.write(tampon);
 			break;
 			default:
