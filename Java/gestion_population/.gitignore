@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /Population.class
 /Individu.class
 /MapItem.class
@@ -12,3 +13,17 @@
 /Partie.class
 /PlayerInfo.class
 /DrinkInfo.class
+=======
+/Population.class
+/Individu.class
+/MapItem.class
+/Publicite.class
+/Stand.class
+/Ingredient.class
+/Location.class
+/Recipe.class
+/Joueur.class
+/Coordonnees.class
+/OutilsCalculs.class
+/Partie.class
+>>>>>>> branch 'master' of https://github.com/crozes/Ponderosa_Imerir2017.git

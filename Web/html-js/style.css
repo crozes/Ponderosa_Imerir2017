@@ -1,0 +1,77 @@
+.weather{
+	color: white
+}
+.fontImage{
+	height: 320px;
+	width: 350px;
+}
+
+.titre_tab{
+	padding: 15px;
+}
+
+.money{
+	font-size: 120%;
+}
+
+.perso{
+	position: absolute;
+	width: 5px;
+	height: 5px;
+	border: 1px solid black;
+	border-radius: 50%;
+	background: blue;
+}
+
+.case{
+	width: 25px;
+	height: 25px;
+	display: inline-block;
+	background-color: #ccc;
+	/*border: 1px solid black;*/
+	margin-top: -4px;
+}
+
+.list_0{
+	background-color: #EEE;
+}
+
+.titleList{
+	background-color: #738fc4;
+	margin-bottom: 10px;
+}
+
+.titleList_texte{
+	color: white;
+	font-weight: bold;
+}
+
+.buttonMoins{
+	color: red;
+}
+
+.buttonPlus{
+	color: green;
+}
+
+.divEnvoie{
+	margin-top: 15px;
+}
+
+.btn.active {                
+	display: none;		
+}
+
+.btn span:nth-of-type(1)  {            	
+	display: none;
+}
+.btn span:last-child  {            	
+	display: block;		
+}
+
+.btn.active  span:nth-of-type(1)  {            	
+	display: block;		
+}
+.btn.active span:last-child  {            	
+	display: none;			
+}

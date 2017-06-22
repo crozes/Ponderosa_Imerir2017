@@ -26,6 +26,9 @@ public class PlayerInfo {
 	float cash;
 	float profit;
 	HashMap<String, DrinkInfo> drinksOffered;
+	
+	
+	
 	public PlayerInfo(int sales, float cash, float profit, HashMap<String, DrinkInfo> drinksOffered) {
 		super();
 		this.sales = sales;

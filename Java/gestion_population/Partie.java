@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import outils.*;
 
+
 public class Partie {
 
 	private MapItem laMap[][];
@@ -58,5 +59,6 @@ public class Partie {
 	public void setHeureDepuisDebutJeu(int heureDepuisDebutJeu) {
 		this.heureDepuisDebutJeu = heureDepuisDebutJeu;
 	}
+
 
 }
