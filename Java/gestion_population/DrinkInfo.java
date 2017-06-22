@@ -16,7 +16,8 @@ public class DrinkInfo {
 	boolean hasAlcohol;
 	boolean isCold;
 	
-	
+	int vendue;
+	int demande_apres_stock_vide;
 	
 	
 	
@@ -28,6 +29,8 @@ public class DrinkInfo {
 		this.price = price;
 		this.hasAlcohol = hasAlcohol;
 		this.isCold = isCold;
+		this.vendue= 0;
+		this.demande_apres_stock_vide = 0;
 	}
 	
 	

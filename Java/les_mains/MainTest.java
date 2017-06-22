@@ -18,11 +18,13 @@ public class MainTest {
 
 		// connection.postEnvoyer("Plop_du_java");
 
+		
+		System.out.println("\n\n On lanche une demande get \n ");
 		String plop = testGet();
 
 		
 		
-		
+		System.out.println("\n\n On lance un post qui pour m'a part me fait perdre à chaque fois");
 		testPost(" ");
 		
 		
@@ -33,7 +35,7 @@ public class MainTest {
 	private static void testPost(String plop){
 
 		
-		Communication.postEnvoyer(ManipulationJson.creerUnString("prout","The_Game"), Global.URL_TEST_JSON_POST);
+		Communication.postEnvoyer(ManipulationJson.creerUnString("The_Game","Perdue"), Global.URL_TEST_JSON_POST);
 
 	}
 	
