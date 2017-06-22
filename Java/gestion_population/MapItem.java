@@ -8,7 +8,7 @@ package gestion_population;
  */
 public abstract class MapItem {
 	String nom;
-	Joueur appartient_a;
+	PlayerInfo appartient_a;
 	String kind;
 
 	Coordonnees coordonnees;
@@ -23,11 +23,11 @@ public abstract class MapItem {
 		this.nom = nom;
 	}
 
-	public Joueur getAppartient_a() {
+	public PlayerInfo getAppartient_a() {
 		return appartient_a;
 	}
 
-	public void setAppartient_a(Joueur appartient_a) {
+	public void setAppartient_a(PlayerInfo appartient_a) {
 		this.appartient_a = appartient_a;
 	}
 

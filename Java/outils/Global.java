@@ -2,8 +2,8 @@ package outils;
 
 public final class Global {
 	
-	public static String URL_TEST_JSON = "https://ponderosaproject.herokuapp.com/dayinfo";
-
+	public static String URL_TEST_JSON_GET = "https://ponderosaproject.herokuapp.com/dayinfo";
+	public static String URL_TEST_JSON_POST ="https://ponderosaproject.herokuapp.com/posttest";
 	
 	
 	
