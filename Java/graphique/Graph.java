@@ -89,10 +89,10 @@ public class Graph extends Application  {
         ///////////////////////////////////////contenu de la page///////////////////////////////////////
         for(int i=0;i<10;i++){
         	Circle rond=new Circle();
-        	//rond.setCenterX(1000f);
-        	//rond.setCenterY(1000f);
-        	//rond.centerXProperty();
-        	//rond.centerYProperty();
+        	rond.setCenterX(1000f);
+        	rond.setCenterY(1000f);
+        	rond.centerXProperty();
+        	rond.centerYProperty();
         	rond.setRadius(10*i);
         	rond.setFill(Color.rgb(100, 100, 100, 0.2));
         	genPanel.add(rond,0, 0);
