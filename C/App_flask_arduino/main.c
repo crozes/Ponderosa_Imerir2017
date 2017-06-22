@@ -60,7 +60,7 @@ void sendJson(char* a_envoyer){
     struct string retourRequete;
     init_string(&retourRequete);
 
-    sprintf(jsonObj,"{ \"time\" : \" %s \" }",a_envoyer);
+    sprintf(jsonObj,"%s",a_envoyer);
 
     curl_global_init(CURL_GLOBAL_ALL);
 
@@ -71,7 +71,7 @@ void sendJson(char* a_envoyer){
         curl_slist_append(headers, "Content-Type: application/json");
         curl_slist_append(headers, "charsets: utf-8");
 
-        curl_easy_setopt(curl, CURLOPT_URL, "https://ponderosaproject.herokuapp.com/posttest");
+        curl_easy_setopt(curl, CURLOPT_URL, "https://ponderosaproject.herokuapp.com/");
 
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
@@ -107,7 +107,7 @@ int main (int argc, char *argv[]){
 
 
     while(1){
-        serialport_read_until(fd, buffer,'\0',1024,2000);
+        serialport_read_until(fd, buffer,'\0',1024,500);
         if(strlen(buffer)>0){
                 delimiterString(buffer);
                 //printf("\nchaine:%s",buffer);
