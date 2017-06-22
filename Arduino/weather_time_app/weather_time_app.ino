@@ -250,7 +250,7 @@ void display_output(){
 
 void btn_init(){
 button_state=BTN_IDLE;
-in_game_hour_duration=14000; //14 seccondes par heure par défaut
+in_game_hour_duration=16384; //14 seccondes par heure par défaut
 btn_pin_prev_val = btn_pin_val;
 }
 
@@ -271,7 +271,7 @@ void btn_update(){
 		if (in_game_hour_duration < 120000 && btn_pin_prev_val > 50 && btn_pin_prev_val < 250 && (btn_pin_val < 50 || btn_pin_val > 250)){
 			next_button_state = BTN_PLS;
 		}else{
-		 if (in_game_hour_duration > 2000 && btn_pin_prev_val > 250 && btn_pin_prev_val < 450 && (btn_pin_val < 250 || btn_pin_val > 450)){
+		 if (in_game_hour_duration > 500 && btn_pin_prev_val > 250 && btn_pin_prev_val < 450 && (btn_pin_val < 250 || btn_pin_val > 450)){
 				next_button_state = BTN_MNS;
 			}
 		}
@@ -287,10 +287,10 @@ void btn_update(){
 void btn_output(){
 	switch(button_state){
 		case BTN_PLS:
-			in_game_hour_duration+=2000;		//on ajoute 2 secondes par heure de jeu
+			in_game_hour_duration*=2;		//on ajoute 2 secondes par heure de jeu
 		break;
 		case BTN_MNS:
-			 in_game_hour_duration-=2000;		//on enlève 2 secondes par heure de jeu
+			 in_game_hour_duration/=2;		//on enlève 2 secondes par heure de jeu
 		break;
 		case BTN_IDLE:
 		break;
