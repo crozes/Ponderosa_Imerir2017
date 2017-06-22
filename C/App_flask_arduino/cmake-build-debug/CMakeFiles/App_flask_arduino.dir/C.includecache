@@ -1,0 +1,44 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/gaspard/CLionProjects/App_flask_arduino/arduino-serial-lib.c
+arduino-serial-lib.h
+/home/gaspard/CLionProjects/App_flask_arduino/arduino-serial-lib.h
+stdio.h
+-
+unistd.h
+-
+fcntl.h
+-
+errno.h
+-
+termios.h
+-
+string.h
+-
+sys/ioctl.h
+-
+
+/home/gaspard/CLionProjects/App_flask_arduino/arduino-serial-lib.h
+stdint.h
+-
+
+/home/gaspard/CLionProjects/App_flask_arduino/main.c
+stdio.h
+-
+stdlib.h
+-
+fcntl.h
+-
+string.h
+-
+arduino-serial-lib.h
+/home/gaspard/CLionProjects/App_flask_arduino/arduino-serial-lib.h
+curl/curl.h
+-
+
