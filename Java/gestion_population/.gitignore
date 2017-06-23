@@ -27,3 +27,8 @@
 /OutilsCalculs.class
 /Partie.class
 >>>>>>> branch 'master' of https://github.com/crozes/Ponderosa_Imerir2017.git
+/Region.class
+/CoordonneesSpan.class
+/Region$NonPositiveException.class
+/CoordonneesSpan$NonPositiveException.class
+/PositionException.class

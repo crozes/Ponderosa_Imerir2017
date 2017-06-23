@@ -13,7 +13,26 @@ import java.util.concurrent.ThreadLocalRandom;
 public class OutilsCalculs {
 	
 	
-	public static float calculerDistance(int x, int y, int x_p, int y_p){
+	
+	/**
+	 * influencePub = pub1/distance1² + pu2/dis2² + pubN/distanceN²
+	 * 
+	 * distance = racineCarre( (xa-xb)+(ya-yb) )
+	 * 
+	 * diviser par X motiv entre chaque bar
+	 * 
+	 * x = Val/Max
+	 * 
+	 * VolonteFinale - Distance > PrixAchat
+	 * 
+	 * @param latitude
+	 * @param longitude
+	 * @param latitude_p
+	 * @param longitude_p
+	 * @return
+	 */
+	
+	public static float calculerDistance(float latitude, float longitude, float latitude_p, float longitude_p){
 		float resultat = 0;
 		
 		
@@ -23,10 +42,10 @@ public class OutilsCalculs {
 	}
 	
 	
-	public static float calculerDistance(Individu personne, MapItem truc){
+	public static float calculerDistance(Individu personne, MapItem mapItem){
 		float resultat = 0;
 		
-		resultat = OutilsCalculs.calculerDistance(personne.getX(), personne.getY(), truc.getX(), truc.getY());
+		resultat = OutilsCalculs.calculerDistance(personne.getLatitude(), personne.getLongitude(), mapItem.getLatitude(), mapItem.getLongitude());
 		
 		
 		return resultat;

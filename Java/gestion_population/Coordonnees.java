@@ -1,5 +1,6 @@
 package gestion_population;
 
+import com.google.gson.JsonObject;
 
 /**
  * Simple classe qui à comme paramettres x et y.
@@ -8,29 +9,40 @@ package gestion_population;
  *
  */
 public class Coordonnees {
-	private int x;
-	private int y;
+	private float latitude;
+	private float longitude;
 	
-	public Coordonnees(int x, int y) {
+	public Coordonnees(float latitude, float longitude) {
 		super();
-		this.x = x;
-		this.y = y;
+		this.latitude = latitude;
+		this.longitude = longitude;
+	}
+
+	public float getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(float latitude) {
+		this.latitude = latitude;
+	}
+
+	public float getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(float longitude) {
+		this.longitude = longitude;
 	}
 	
-	
-	public int getX() {
-		return x;
+	public JsonObject getJsonObject(){
+		JsonObject jsonOb = new JsonObject();
+		
+		
+		jsonOb.addProperty("latitude", this.latitude);
+		jsonOb.addProperty("longitude", this.longitude);
+		return jsonOb;
 	}
-	public void setX(int x) {
-		this.x = x;
-	}
-	public int getY() {
-		return y;
-	}
-	public void setY(int y) {
-		this.y = y;
-	}
-	
+
 	
 
 }

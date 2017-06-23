@@ -1,6 +1,8 @@
 package communication;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -12,22 +14,16 @@ import outils.Meteo;
 
 public class ManipulationJson {
 
+
 	/**
-	 * Envoie : PlayerInfo "cash":float "sales":int "profit":float
+	 * Voici la fonction qui lit le forecast produit par l'Arduino.
+	 * Ce json contient la meteo d'aujourd'hui et de demain, ainsi que la duree en heure depuis le debut de la partie.
 	 * 
-	 * @return
-	 */
-	public static String jsonToStringPlayerInfo() {
-		String jsonPlayerInfo = " ";
-
-		return jsonPlayerInfo;
-	}
-
-	/**
 	 * Recoie : Temps "timestamp":int Forecast "dfn" :int /days from now - 0
 	 * means today, 1 means "tomorrow" "weather": String -> Enum
 	 * 
 	 * @param jsonTemps
+	 * @author atila
 	 */
 	public static void jsonFromStringTemps(String jsonTemps, Partie laPartie) {
 		String laMeteo = " ";
@@ -56,6 +52,9 @@ public class ManipulationJson {
 	
 
 	/**
+	 * Voici la fonction pour traduire le json par rapport à nos objets.
+	 * Vous trouverez dans ce commentaire l'architecture du json Map est ses sous-element.
+	 * 
      * ------------------------------
      * Coordinates
      * {
@@ -118,9 +117,12 @@ public class ManipulationJson {
      * }
      *
 	 * @param jsonMap
-	 *            Le Strig Json recuperer du serveur
+	 *            Le Strig Json Map 
 	 * @param laPartie
-	 *            L'objet utilisé pour enregistrer les informations du Json
+	 *            LaPartie est un objet de class Partie qui est l'element central du programme, c'est lui qui fait
+	 *            le lien avec toutes les informations.
+	 *            
+	 * @author atila
 	 */
 	public static void jsonFromStringMap(String jsonMap, Partie laPartie) {
 		JsonElement jsonEl = new JsonParser().parse(jsonMap);
@@ -128,7 +130,6 @@ public class ManipulationJson {
 
 		JsonArray jsonArRanking = jsonObMap.get("ranking").getAsJsonArray();
 
-		
 		JsonObject jsonObPlayerInfo = jsonObMap.get("playerInfo").getAsJsonObject();
 		JsonObject jsonObDrinkByPlayer = jsonObMap.get("drinksByPlayer").getAsJsonObject();
 
@@ -136,8 +137,6 @@ public class ManipulationJson {
 		 * Declaration des variables
 		 */
 		int size_jsonArray = 0;
-		String a;
-		
 
 		/*------------------------------------------------------------------------------------------------------
 		 * Le ranking
@@ -150,60 +149,68 @@ public class ManipulationJson {
 
 		/*------------------------------------------------------------------------------------------------------
 		 * Les players
-		 */ 
+		 */
 
-		laPartie.getListePlayerInfo().clear(); 
-		
-		
-		JsonObject jsonObInfoPlayer; //il est à l'interieur de PlayerInfo
-		
+		laPartie.getListePlayerInfo().clear();
+
+		JsonObject jsonObInfoPlayer; // il est à l'interieur de PlayerInfo
+
 		JsonArray jsonArDrinkOffered;
 		JsonObject jsonObDrinkInfo;
-		
+
 		PlayerInfo playerInfo;
 		int cash;
 		int sales;
 		float profit;
-		
-		//DrinkInfo drinkInfo;
+
+		// DrinkInfo drinkInfo;
 		String name;
 		float price;
 		boolean hasAlcohol;
 		boolean isCold;
-		
-		
+
 		laPartie.getListeDesDrinkInfo().clear();
-				
+
 		JsonObject jsonObDrinksByPlayer = jsonObMap.get("drinksByPlayer").getAsJsonObject();
 		JsonArray jsonArDrinkInfo;
-		
-		
+
 		/*
-		
-	     *   "itemsByPlayers":{ //string id/name player
-		     *     string:[mapItem],
-		     *     string:[mapItem]
-		     *   },
-		*/
-		
+		 * 
+		 * "itemsByPlayers":{ //string id/name player string:[mapItem],
+		 * string:[mapItem] },
+		 */
+
 		laPartie.getListeItemByPlayer().clear();
-		
+
 		JsonObject jsonObItemsByPlayers = jsonObMap.get("itemsByPlayers").getAsJsonObject();
 		JsonArray jsonArMapItem;
+
+		// MapItem
 		
-		
-		//un for assez consequent mais qui permet de traiter tous les joueurs les uns apres les autres..
+		Coordonnees coordonnees = null;
+		JsonObject jsonObLocation;
+		JsonObject jsonObMapItem;
+		String kind;
+		String owner;
+		float influence;
+
+		// Coordonnees location;
+		float latitude = 0f;
+		float longitude = 0f;
+
+		// un for assez consequent mais qui permet de traiter tous les joueurs
+		// les uns apres les autres..
 		for (String playerName : laPartie.getRanking()) {
-					
+
 			jsonObInfoPlayer = jsonObPlayerInfo.get(playerName).getAsJsonObject();
 			cash = jsonObInfoPlayer.get("cash").getAsInt();
 			sales = jsonObInfoPlayer.get("sales").getAsInt();
 			profit = jsonObInfoPlayer.get("profit").getAsFloat();
-			
+
 			jsonArDrinkOffered = jsonObInfoPlayer.get("drinksOffered").getAsJsonArray();
 
 			size_jsonArray = jsonArDrinkOffered.size();
-			playerInfo = new PlayerInfo(sales, cash, profit, new HashMap<String, DrinkInfo>());
+			playerInfo = new PlayerInfo(sales, cash, profit, new ArrayList<DrinkInfo>());
 
 			for (int i = 0; i < size_jsonArray; i++) {
 				jsonObDrinkInfo = jsonArDrinkOffered.get(i).getAsJsonObject();
@@ -212,7 +219,7 @@ public class ManipulationJson {
 				hasAlcohol = jsonObDrinkInfo.get("hasAlcohol").getAsBoolean();
 				isCold = jsonObDrinkInfo.get("isCold").getAsBoolean();
 
-				playerInfo.getDrinksOffered().put(name, new DrinkInfo(name, price, hasAlcohol, isCold));
+				playerInfo.getDrinksOffered().add(new DrinkInfo(name, price, hasAlcohol, isCold));
 
 			}
 
@@ -223,51 +230,127 @@ public class ManipulationJson {
 			jsonArDrinkInfo = jsonObDrinksByPlayer.get(playerName).getAsJsonArray();
 
 			size_jsonArray = jsonArDrinkInfo.size();
+			ArrayList<DrinkInfo> drinkInfo = new ArrayList<>();
 			for (int i = 0; i < size_jsonArray; i++) {
 				jsonObDrinkInfo = jsonArDrinkInfo.get(i).getAsJsonObject();
 				name = jsonObDrinkInfo.get("name").getAsString();
 				price = jsonObDrinkInfo.get("price").getAsFloat();
 				hasAlcohol = jsonObDrinkInfo.get("hasAlcohol").getAsBoolean();
 				isCold = jsonObDrinkInfo.get("isCold").getAsBoolean();
-
-				laPartie.getListeDesDrinkInfo().put(playerName, new DrinkInfo(name, price, hasAlcohol, isCold));
+				drinkInfo.add(new DrinkInfo(name, price, hasAlcohol, isCold));
+				
 			}
-			
+			laPartie.getListeDesDrinkInfo().put(playerName, drinkInfo);
+
 			// itemsByPlayers
+			laPartie.getListeItemByPlayer().clear();
 
 			jsonArMapItem = jsonObItemsByPlayers.get(playerName).getAsJsonArray();
-			
+
 			size_jsonArray = jsonArMapItem.size();
-			JsonObject jsonObLocation;
-			
-			for(int i = 0 ; i<size_jsonArray; i++){
-				
-				String kind;
-				String owner;
-				Coordonnees location;
-				float influence;
-				
-				float x;
-				float y;
+			ArrayList<MapItem> mapItem = new ArrayList<>();
+			for (int i = 0; i < size_jsonArray; i++) {
+				jsonObMapItem = jsonArMapItem.get(i).getAsJsonObject();
+
+				kind = jsonObMapItem.get("kind").getAsString();
+				owner = jsonObMapItem.get("owner").getAsString();
+				influence = jsonObMapItem.get("influence").getAsFloat();
+				jsonObLocation = jsonObMapItem.get("location").getAsJsonObject();
+
+				latitude = jsonObLocation.get("latitude").getAsFloat();
+				longitude = jsonObLocation.get("longitude").getAsFloat();
+
+				coordonnees.setLatitude(latitude);
+				coordonnees.setLongitude(longitude);
+
+				// public MapItem(String kind, String owner, float influence,
+				// Coordonnees coordonnees) {
+				mapItem.add(new MapItem(kind, owner, influence, coordonnees));
+
 			}
+			laPartie.getListeItemByPlayer().put(playerName, mapItem);
 
 		}
+
+	}
+	
+	
+	
+	
+	
+	public static String jsonToStringMap(Partie laPartie){
 		
+		JsonObject jsonObResult = new JsonObject();
+		
+		JsonObject jsonObRegion = new JsonObject();
+		JsonObject jsonObSpan = new JsonObject();
+		JsonObject jsonObCenter = new JsonObject();
+
+		JsonArray jsonArRanking = new JsonArray();
+		JsonObject jsonObRanking = new JsonObject();
+		
+		JsonObject jsonObPlayerInfo = new JsonObject();
+		JsonObject jsonObInfoPlayer = new JsonObject(); // le playerinfo dans le playerinfo In foplayer ....
+		JsonArray jsonArDrinksOffered = new JsonArray();
+		JsonObject jsonObDrinkInfo = new JsonObject();
+
+		
+		JsonObject jsonObItemsByPlayers = new JsonObject();
+		JsonArray jsonArMapItem = new JsonArray();
+		JsonObject jsonObMapItem = new JsonObject();
+		JsonObject jsonObLocation = new JsonObject();
+		
+		
+		JsonObject jsonObDrinksByPlayers= new JsonObject();
+		JsonArray jsonArDrinkInfo = new JsonArray();
+//		JsonObject jsonObDrinkInfo = new JsonObject();
+//		JsonObject jsonObName = new JsonObject();
+//		JsonObject jsonObPrice = new JsonObject();
+//		JsonObject jsonObHasAlcohol = new JsonObject();
+//		JsonObject jsonObIsCold = new JsonObject();
+		
+		
+		
+		jsonObCenter.addProperty("latitude", laPartie.getRegion().getCenter().getLatitude());
+		jsonObCenter.addProperty("longitude", laPartie.getRegion().getCenter().getLatitude());
+		jsonObRegion.add("center", jsonObCenter);
+		
+		jsonObCenter.addProperty("latitude", laPartie.getRegion().getSpan().getLatitude_span());
+		jsonObCenter.addProperty("latitude", laPartie.getRegion().getSpan().getLongitude_span());
+		jsonObRegion.add("span", jsonObSpan);
+		
+		jsonObResult.add("region", jsonObRegion);
+		
+
+		
+		for (String playerName : laPartie.getRanking()) {
+
+			// ranking
+			jsonObRanking.addProperty(playerName, playerName);
+			jsonArRanking.add(jsonObRanking);
+
 
 			
-		
+			jsonObItemsByPlayers.add(playerName, jsonArMapItem);
+			jsonObResult.add("itemsByPlayers", jsonObItemsByPlayers);
 
+			// drinksByPlayer
+			jsonObResult.add("drinksByPlayer", jsonObDrinksByPlayers);
+		}
+
+		return jsonObResult.toString();
 	}
 
-	public static String jsonToStringMap(Partie laPartie) {
-		String result = " ";
-
-		return result;
-	}
 
 	/**
-	 * test envoie
+	 * Creer un object json cle + valeur en string
+	 * Permet de tester une requete post avec URL
+	 * URL_TEST_JSON_POST ="https://ponderosaproject.herokuapp.com/posttest";
 	 * 
+	 * @param key la clé du json
+	 * @param value la valeur du json
+	 * 
+	 * @author atila
 	 */
 
 	public static String creerUnString(String key, String value) {
