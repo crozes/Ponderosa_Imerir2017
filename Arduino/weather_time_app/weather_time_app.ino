@@ -1,13 +1,5 @@
 #include <LiquidCrystal.h>
-
-
-typedef enum {
-	SUNNY,
-	HEAT_WAVE,
-	STORM,
-	RAIN,
-	CLOUD
-} WEATHER_ST;
+#define NB_PREVISIONS 10
 
 typedef enum {
 	SUNNY_F,
@@ -67,6 +59,238 @@ BUTTON_ST button_state;
 SERIAL_ST serial_state;
 char tampon[128];
 //SERIAL variables end
+
+//FORECAST variables start
+FORECAST_ST forecast_state[NB_PREVISIONS+1];
+char forecast_buffer[NB_PREVISIONS][32];
+//FORECAST variables end
+
+// Machine à états WEATHER début
+
+void forecast_init(){
+	int next_weather;
+
+	for(int i=0;i<NB_PREVISIONS;i++){
+		next_weather= random(100);
+		if(next_weather<15){
+			forecast_state[i]=RAIN_F;
+		}else{
+			if(next_weather<35){
+				forecast_state[i]=CLOUD_F;
+			}
+			else{
+				if(next_weather<75){
+					forecast_state[i]=SUNNY_F;
+				}else{
+					if(next_weather<95){
+						forecast_state[i]=HEAT_WAVE_F;
+					}else{
+						forecast_state[i]=STORM_F;
+					}
+				}
+			}
+		}
+	}
+}
+void weather_update(){
+	if(clock_state==HOUR_12 || clock_state==HOUR_24){
+		int next_weather;
+		FORECAST_ST next_forecast_state[NB_PREVISIONS];
+		for(int i=0;i<NB_PREVISIONS;i++){
+		next_forecast_state[i] = forecast_state[i];
+			switch(forecast_state[i]){
+				case SUNNY_F:
+				case CLOUD_F:
+				case RAIN_F:
+				case STORM_F:
+				case HEAT_WAVE_F:
+					if(i==NB_PREVISIONS-1){			//si on est au bout des prévisions, on fait un random
+						next_weather= random(100);
+						if(next_weather<14){
+							next_forecast_state[i]=RAIN_F;
+						}else{
+							if(next_weather<34){
+								next_forecast_state[i]=CLOUD_F;
+							}
+							else{
+								if(next_weather<74){
+									next_forecast_state[i]=SUNNY_F;
+								}else{
+									if(next_weather<94){
+										next_forecast_state[i]=HEAT_WAVE_F;
+									}else{
+										next_forecast_state[i]=STORM_F;
+									}
+								}
+							}
+						}
+					}else{					//sinon, on regarde à la demi-journée suivante et on confirme
+						switch(forecast_state[i+1]){
+							case SUNNY_F:
+								next_weather= random(100);
+								if(next_weather<87){
+									next_forecast_state[i]=SUNNY_F;
+								}else{
+									if(next_weather<92){
+										next_forecast_state[i]=CLOUD_F;
+									}
+									else{
+										if(next_weather<97){
+											next_forecast_state[i]=HEAT_WAVE_F;
+										}
+										else{
+											if(next_weather<98){
+												next_forecast_state[i]=STORM_F;
+											}
+											else{
+												if(next_weather<99){
+													next_forecast_state[i]=RAIN_F;
+												}
+											}
+										}
+									}
+								}
+							break;
+							case HEAT_WAVE_F:
+								next_weather= random(100);
+								if(next_weather<87){
+									next_forecast_state[i]=HEAT_WAVE_F;
+								}else{
+									if(next_weather<92){
+										next_forecast_state[i]=SUNNY_F;
+									}
+									else{
+										if(next_weather<97){
+											next_forecast_state[i]=STORM_F;
+										}
+										else{
+											if(next_weather<98){
+												next_forecast_state[i]=CLOUD_F;
+											}
+											else{
+												if(next_weather<99){
+													next_forecast_state[i]=RAIN_F;
+												}
+											}
+										}
+									}
+								}
+							break;
+							case STORM_F:
+								next_weather= random(100);
+								if(next_weather<87){
+									next_forecast_state[i]=STORM_F;
+								}else{
+									if(next_weather<92){
+										next_forecast_state[i]=HEAT_WAVE_F;
+									}
+									else{
+										if(next_weather<97){
+											next_forecast_state[i]=RAIN_F;
+										}
+										else{
+											if(next_weather<98){
+												next_forecast_state[i]=CLOUD_F;
+											}
+											else{
+												if(next_weather<99){
+													next_forecast_state[i]=SUNNY_F;
+												}
+											}
+										}
+									}
+								}
+							break;
+							case RAIN_F:
+								next_weather= random(100);
+								if(next_weather<87){
+									next_forecast_state[i]=RAIN_F;
+								}else{
+									if(next_weather<92){
+										next_forecast_state[i]=STORM_F;
+									}
+									else{
+										if(next_weather<97){
+											next_forecast_state[i]=CLOUD_F;
+										}
+										else{
+											if(next_weather<98){
+												next_forecast_state[i]=HEAT_WAVE_F;
+											}
+											else{
+												if(next_weather<99){
+													next_forecast_state[i]=SUNNY_F;
+												}
+											}
+										}
+									}
+								}
+							break;
+							case CLOUD_F:
+								next_weather= random(100);
+								if(next_weather<87){
+									next_forecast_state[i]=CLOUD_F;
+								}else{
+									if(next_weather<92){
+										next_forecast_state[i]=RAIN_F;
+									}
+									else{
+										if(next_weather<97){
+											next_forecast_state[i]=SUNNY_F;
+										}
+										else{
+											if(next_weather<98){
+												next_forecast_state[i]=HEAT_WAVE_F;
+											}
+											else{
+												if(next_weather<99){
+													next_forecast_state[i]=STORM_F;
+												}
+											}
+										}
+									}
+								}
+							break;
+							default:
+							break;
+						}
+					}
+				break;
+				default:
+				//ne reien faire
+				break;
+			}
+			forecast_state[i] = next_forecast_state[i];
+		}
+	}
+}
+
+void weather_output(){
+	for(int i = 0;i<NB_PREVISIONS;i++){
+		switch(forecast_state[i]){
+			case SUNNY_F:
+				sprintf(forecast_buffer[i],"%s","sunny");
+			break;
+			case HEAT_WAVE_F:
+				sprintf(forecast_buffer[i],"%s","heatwave");
+			break;
+			case STORM_F:
+				sprintf(forecast_buffer[i],"%s","thunderstorm");
+			break;
+			case RAIN_F:
+				sprintf(forecast_buffer[i],"%s","rainny");
+			break;
+			case CLOUD_F:
+				sprintf(forecast_buffer[i],"%s","cloudy");
+			break;
+			default:
+			break;
+		}
+	}
+}
+
+// Machine à états WEATHER fin
+
 
 // Machine à états CLOCK début
 
@@ -161,11 +385,18 @@ void serial_output(){
 		case SEND_SR:
 			switch(clock_state){
 			case HOUR_24:
+			break;
 			case HOUR_12:
+			break;
 			//météo generator
 			case TIME_PP:
 				//sprintf(tampon,"{\"time\":\"%u\"}\n\0",hour_count+day_count*24);
-				sprintf(tampon,"%u\n\0",hour_count+day_count*24);
+				sprintf(tampon,"time%u",hour_count+day_count*24);
+				for(int i= 0;i<NB_PREVISIONS;i++){
+					strcat(tampon,",");
+					strcat(tampon,forecast_buffer[i]);
+				}
+				strcat(tampon,"\n\0");
 				Serial.write(tampon);
 			break;
 			default:
@@ -221,10 +452,10 @@ void display_output(){
 			lcd.setCursor(7,0);
 			lcd.print("Hours:");
 			
-			lcd.setCursor(13,0);		//clean before refresh
+			lcd.setCursor(14,0);		//clean before refresh
 			lcd.print("  ");
 			
-			lcd.setCursor(13,0);
+			lcd.setCursor(14,0);
 			lcd.print(hour_count);
 			
 			lcd.setCursor(0,1);		// set the LCD cursor	 position 
@@ -332,6 +563,7 @@ void setup(){
 	serial_init();
 	btn_init();
 	clock_init();
+	forecast_init();
 	display_init();
 }
 
@@ -345,6 +577,9 @@ void loop(){
 	
 	display_update();
 	display_output();
+	
+	weather_update();
+	weather_output();
 	
 	serial_update();
 	serial_output();
