@@ -12,35 +12,29 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import les_mains.MainTest;
 import outils.Global;
 
 public class Graph extends Application  {
-	Label Label2= new Label(); 
+	Label label2= new Label();
+	int carte_x=800;
+	int carte_y=500;
 	/**recuperation d'info depuis le serveur*/
 	////////////////////////////////////////recupMJB//////////////////////////////////////
 	/**recuperation de la meteo du jour et du budjet*/
@@ -85,13 +79,11 @@ public class Graph extends Application  {
 	/**crée les case du gridpane*/
 	private void gridPanel(int nbcol,int nblign,GridPane panel){
 		for (int i = 0; i < nbcol; i++) {
-            ColumnConstraints colConst = new ColumnConstraints();
-            colConst.setPercentWidth(100/nbcol);
+            ColumnConstraints colConst = new ColumnConstraints(carte_x/nbcol);
             panel.getColumnConstraints().add(colConst);
         }
         for (int i = 0; i < nblign; i++) {
-            RowConstraints rowConst = new RowConstraints();
-            rowConst.setPercentHeight(100/nblign);
+            RowConstraints rowConst = new RowConstraints(100);
             panel.getRowConstraints().add(rowConst);         
         }
         panel.setGridLinesVisible(true);
@@ -104,21 +96,20 @@ public class Graph extends Application  {
     	/*creation de la fenetre*/
     	primaryStage.setTitle("limonade");
         Group root=new Group();//arriere de la fenetre
-        Scene scene= new Scene(root,700,700,Color.LIGHTBLUE);//scene
+        Scene scene= new Scene(root,1000,600,Color.LIGHTBLUE);//scene
         /*creation de panel*/
         VBox page=new VBox();
         GridPane upPanel = new GridPane();
-        gridPanel(6,1,upPanel);
+        gridPanel(2,1,upPanel);
+        ColumnConstraints colConstup = new ColumnConstraints(200);
+	    upPanel.getColumnConstraints().add(colConstup);
         GridPane genPanel = new GridPane();
         ////////////seconde ligne du grid
-	    ColumnConstraints colConst = new ColumnConstraints(500);
-	    //colConst.setPercentWidth(70);
+	    ColumnConstraints colConst = new ColumnConstraints(carte_x);
 	    genPanel.getColumnConstraints().add(colConst);
-	    ColumnConstraints colConst1 = new ColumnConstraints(150);
-	    //colConst1.setPercentWidth(30);
-	    genPanel.getColumnConstraints().add(colConst);
-	    RowConstraints rowConst = new RowConstraints(500);
-	    //rowConst.setPercentHeight(100);
+	    ColumnConstraints colConst1 = new ColumnConstraints(200);
+	    genPanel.getColumnConstraints().add(colConst1);
+	    RowConstraints rowConst = new RowConstraints(carte_y);
 	    genPanel.getRowConstraints().add(rowConst);
 	    genPanel.setGridLinesVisible(true);
 	    ////////////integration des panel dans la scene
@@ -129,52 +120,52 @@ public class Graph extends Application  {
         String MJB=recupMJB();
         Label topLabel= new Label(); 
         topLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); 
-        topLabel.setStyle("-fx-background-color: white; -fx-border-color: black;");
+        topLabel.setStyle("-fx-background-color: white; -fx-border-color: black;-fx-alignment:CENTER; -fx-font-size: 15pt;");
         topLabel.setText(MJB);
         upPanel.add(topLabel, 0, 0);
         /////////////////case2///////////////
-        String heure=recupHour();
+        String heure="heure";//recupHour();
         
-        Label2.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); 
-        Label2.setStyle("-fx-background-color: white; -fx-border-color: black;-fx-alignment:CENTER; -fx-font-size: 20pt ;");
-        Label2.setText(heure);
-        upPanel.add(Label2, 1, 0);
-        /////////////////case5//////////////
+        label2.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); 
+        label2.setStyle("-fx-background-color: white; -fx-border-color: black;-fx-alignment:CENTER; -fx-font-size: 20pt ;");
+        label2.setText(heure);
+        upPanel.add(label2, 1, 0);
+        /////////////////case4//////////////
         ComboBox listJoueur=new ComboBox();
         
          ArrayList joueur=new ArrayList();
-         for(int i=0;i<=recupNbJoueur/*()*/;i++){
-        	
+         for(int i=0;i<=recupNbJoueur/*()*/;i++){/////////////////////////////	////////////////////////////////////////
      		joueur.add("joueur"+i);
      	}
 		listJoueur.getItems().addAll(
         	joueur
        );
 		listJoueur.setValue("joueur");
-        upPanel.add(listJoueur, 3, 0);
-        //case L2 1
-        for(int i=0;i<10;i++){
-        	Circle rond=new Circle();
-        	rond.setCenterX(1000f);
-        	rond.setCenterY(1000f);
-        	rond.centerXProperty();//
-        	rond.centerYProperty();
-        	rond.setRadius(10*i);
-        	rond.setFill(Color.rgb(100, 100, 100, 0.2));
-        	genPanel.add(rond,0, 0);
+        upPanel.add(listJoueur, 2, 0);
+        /////////////////////////////////case carte/////////////////////////////
+        Group carte=new Group();
+        genPanel.add(carte, 0, 0);
+        Canvas canvas=new Canvas(carte_x,carte_y);
+        GraphicsContext gc=canvas.getGraphicsContext2D();
+        //creation de la population
+        for(int i=0;i<100;i++){
+        	gc.fillOval(Math.random()*(carte_x-0), Math.random()*(carte_y-0), 10, 10);
         }
-        MAJ lol = new MAJ();
-        lol.start();
+        Circle rond=new Circle(100,100,50);
+        rond.setCenterX(800);
+        rond.setCenterY(500);
+        rond.setFill(Color.rgb(1, 1, 1, 0.4));
+        genPanel.add(rond, 0, 0);
+    	carte.getChildren().add(canvas);
+        MAJ miseAJour = new MAJ();
+        miseAJour.start();
         ////////////////////////////////////////////affichage carte et information gaphique////////
-        BackgroundImage myBI= new BackgroundImage(new Image("http://www.cartesfrance.fr/cartes/carte_france_simple.png",500,500,false,true),
+        BackgroundImage myBI= new BackgroundImage(new Image("http://cartography.oregonstate.edu/index_files/stacks_image_3198.jpg",carte_x,carte_y,false,true),
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                   BackgroundSize.DEFAULT);
-        //then you set to your node
         genPanel.setBackground(new Background(myBI));
-        /*Image image4 = new Image("http://www.cartesfrance.fr/cartes/carte_france_simple.png", 0, 100, false, false);
-        //genPanel.add(image4, 0,0);
-        /*affichage*/
         
+        /*affichage*/
         root.getChildren().add(page);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -193,7 +184,7 @@ public class Graph extends Application  {
     				  exception.printStackTrace();
     				}
     			String heure=recupHour();
-    			Platform.runLater(()->Label2.setText(heure));
+    			Platform.runLater(()->label2.setText(heure));
     		}//*/
     	}
     }
