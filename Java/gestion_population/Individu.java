@@ -77,24 +77,24 @@ public class Individu {
 		this.veutBoissonSansAlcool = veutBoissonSansAlcool;
 	}
 
-	public void setCoordonnees(int x, int y) {
-		this.coordonnees = new Coordonnees(x, y);
+	public void setCoordonnees(float latitude, float longitude) {
+		this.coordonnees = new Coordonnees(latitude, longitude);
 	}
 
-	public int getX() {
-		return this.coordonnees.getX();
+	public float getLatitude() {
+		return this.coordonnees.getLatitude();
 	}
 
-	public void setX(int x) {
-		this.coordonnees.setX(x);
+	public void setLatitude(float latitude) {
+		this.coordonnees.setLatitude(latitude);
 	}
 
-	public int getY() {
-		return this.coordonnees.getY();
+	public float getLongitude() {
+		return this.coordonnees.getLongitude();
 	}
 
-	public void getY(int y) {
-		this.coordonnees.setY(y);
+	public void setLongitude(float longitude) {
+		this.coordonnees.setLongitude(longitude);
 	}
 
 }

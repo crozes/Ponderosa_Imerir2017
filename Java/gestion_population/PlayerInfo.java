@@ -2,6 +2,10 @@ package gestion_population;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 
 public class PlayerInfo {
@@ -25,14 +29,14 @@ public class PlayerInfo {
 	int sales;
 	float cash;
 	float profit;
-	HashMap<String, DrinkInfo> drinksOffered;
+	ArrayList<DrinkInfo> drinksOffered; 
 	HashMap<String, Integer> deTest = new HashMap<>();
 	
 	public PlayerInfo(){
 
 	}
 	
-	public PlayerInfo(int sales, float cash, float profit, HashMap<String, DrinkInfo> drinksOffered) {
+	public PlayerInfo(int sales, float cash, float profit, ArrayList<DrinkInfo> drinksOffered) {
 		super();
 		this.sales = sales;
 		this.cash = cash;
@@ -63,19 +67,39 @@ public class PlayerInfo {
 	public float getProfit() {
 		return profit;
 	}
+
 	public void setProfit(float profit) {
 		this.profit = profit;
 	}
-	public HashMap<String, DrinkInfo> getDrinksOffered() {
+
+	public ArrayList<DrinkInfo> getDrinksOffered() {
 		return drinksOffered;
 	}
-	public void setDrinksOffered(HashMap<String, DrinkInfo> drinksOffered) {
+
+	public void setDrinksOffered(ArrayList<DrinkInfo> drinksOffered) {
 		this.drinksOffered = drinksOffered;
 	}
 	
+	
+	
+	
 
-	
-	
+	public JsonObject getJsonObject() {
+		JsonObject jsonOb = new JsonObject();
+		JsonArray jsonArDrinksOffered = new JsonArray();
+
+		jsonOb.addProperty("cash", this.cash);
+		jsonOb.addProperty("sales", this.sales);
+		jsonOb.addProperty("profit", this.profit);
+
+		for (int i = 0; i<this.drinksOffered.size();i++) {
+			jsonArDrinksOffered.add(drinksOffered.get(i).getJsonObject());
+		}
+
+		jsonOb.add("drinksOffered", jsonArDrinksOffered);
+
+		return jsonOb;
+	}
 
 
 }

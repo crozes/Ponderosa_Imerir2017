@@ -1,5 +1,7 @@
 package gestion_population;
 
+import com.google.gson.JsonObject;
+
 public class DrinkInfo {
 	
 	/* DrinkInfo
@@ -47,17 +49,32 @@ public class DrinkInfo {
 	public void setPrice(float price) {
 		this.price = price;
 	}
-	public boolean isHasAlcohol() {
+	public boolean getIsHasAlcohol() {
 		return hasAlcohol;
 	}
 	public void setHasAlcohol(boolean hasAlcohol) {
 		this.hasAlcohol = hasAlcohol;
 	}
-	public boolean isCold() {
+	public boolean getIsCold() {
 		return isCold;
 	}
 	public void setCold(boolean isCold) {
 		this.isCold = isCold;
+	}
+	
+	
+	
+	public JsonObject getJsonObject() {
+		JsonObject jsonOb = new JsonObject();
+
+		jsonOb.addProperty("name", this.name);
+		jsonOb.addProperty("price", this.price);
+		jsonOb.addProperty("hasAlcohol", this.hasAlcohol);
+		jsonOb.addProperty("isCold", this.isCold);
+		
+		
+
+		return jsonOb;
 	}
 	
 	

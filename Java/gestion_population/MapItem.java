@@ -1,34 +1,37 @@
 package gestion_population;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.gson.JsonObject;
+
 /**
  * Classe abstrete MapItem qui peut etre un stand ou une plublicite
  * 
  * @author atila
  *
  */
-public abstract class MapItem {
-	String nom;
-	PlayerInfo appartient_a;
+public  class MapItem {
+
 	String kind;
+	String owner;
+	float influence;
 
 	Coordonnees coordonnees;
 
-	float influence;
+	
+	
+	
+	
+	
 
-	public String getNom() {
-		return nom;
-	}
 
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
-
-	public PlayerInfo getAppartient_a() {
-		return appartient_a;
-	}
-
-	public void setAppartient_a(PlayerInfo appartient_a) {
-		this.appartient_a = appartient_a;
+	public MapItem(String kind, String owner, float influence, Coordonnees coordonnees) {
+		super();
+		this.kind = kind;
+		this.owner = owner;
+		this.influence = influence;
+		this.coordonnees = coordonnees;
 	}
 
 	public String getKind() {
@@ -39,12 +42,12 @@ public abstract class MapItem {
 		this.kind = kind;
 	}
 
-	public Coordonnees getCoordonnees() {
-		return coordonnees;
+	public String getOwner() {
+		return owner;
 	}
 
-	public void setCoordonnees(Coordonnees coordonnees) {
-		this.coordonnees = coordonnees;
+	public void setOwner(String owner) {
+		this.owner = owner;
 	}
 
 	public float getInfluence() {
@@ -55,24 +58,43 @@ public abstract class MapItem {
 		this.influence = influence;
 	}
 
-	public void setCoordonnees(int x, int y) {
-		this.coordonnees = new Coordonnees(x, y);
+	public Coordonnees getCoordonnees() {
+		return coordonnees;
 	}
 
-	public int getX() {
-		return this.coordonnees.getX();
+	public void setCoordonnees(Coordonnees coordonnees) {
+		this.coordonnees = coordonnees;
 	}
 
-	public void setX(int x) {
-		this.coordonnees.setX(x);
+	public void setCoordonnees(float latitude, float longitude) {
+		this.coordonnees = new Coordonnees(latitude, longitude);
 	}
 
-	public int getY() {
-		return this.coordonnees.getY();
+	public float getLatitude() {
+		return this.coordonnees.getLatitude();
 	}
 
-	public void getY(int y) {
-		this.coordonnees.setY(y);
+	public void setLatitude(float latitude) {
+		this.coordonnees.setLatitude(latitude);
+	}
+
+	public float getLongitude() {
+		return this.coordonnees.getLongitude();
+	}
+
+	public void setLongitude(float longitude) {
+		this.coordonnees.setLongitude(longitude);
+	}
+
+	public JsonObject getJsonObject() {
+		JsonObject jsonOb = new JsonObject();
+
+		jsonOb.addProperty("kind", this.kind);
+		jsonOb.addProperty("owner", this.owner);
+		jsonOb.addProperty("influence", this.influence);
+		jsonOb.add("location", this.coordonnees.getJsonObject());
+
+		return jsonOb;
 	}
 
 }
