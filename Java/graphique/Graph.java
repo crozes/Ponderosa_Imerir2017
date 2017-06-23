@@ -19,6 +19,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -36,8 +40,6 @@ import les_mains.MainTest;
 import outils.Global;
 
 public class Graph extends Application  {
-	int nbcol=10;
-	int nblign=1;
 	Label Label2= new Label(); 
 	/**recuperation d'info depuis le serveur*/
 	////////////////////////////////////////recupMJB//////////////////////////////////////
@@ -84,12 +86,12 @@ public class Graph extends Application  {
 	private void gridPanel(int nbcol,int nblign,GridPane panel){
 		for (int i = 0; i < nbcol; i++) {
             ColumnConstraints colConst = new ColumnConstraints();
-            colConst.setPercentWidth(100.0 / nbcol);
+            colConst.setPercentWidth(100/nbcol);
             panel.getColumnConstraints().add(colConst);
         }
         for (int i = 0; i < nblign; i++) {
             RowConstraints rowConst = new RowConstraints();
-            rowConst.setPercentHeight(100.0 / nblign);
+            rowConst.setPercentHeight(100/nblign);
             panel.getRowConstraints().add(rowConst);         
         }
         panel.setGridLinesVisible(true);
@@ -106,9 +108,20 @@ public class Graph extends Application  {
         /*creation de panel*/
         VBox page=new VBox();
         GridPane upPanel = new GridPane();
-        gridPanel(10,1,upPanel);
+        gridPanel(6,1,upPanel);
         GridPane genPanel = new GridPane();
-        gridPanel(2,1,genPanel);
+        ////////////seconde ligne du grid
+	    ColumnConstraints colConst = new ColumnConstraints(500);
+	    //colConst.setPercentWidth(70);
+	    genPanel.getColumnConstraints().add(colConst);
+	    ColumnConstraints colConst1 = new ColumnConstraints(150);
+	    //colConst1.setPercentWidth(30);
+	    genPanel.getColumnConstraints().add(colConst);
+	    RowConstraints rowConst = new RowConstraints(500);
+	    //rowConst.setPercentHeight(100);
+	    genPanel.getRowConstraints().add(rowConst);
+	    genPanel.setGridLinesVisible(true);
+	    ////////////integration des panel dans la scene
         page.getChildren().add(upPanel);
         page.getChildren().add(genPanel);
         /*contenu de la page*/
@@ -138,7 +151,7 @@ public class Graph extends Application  {
         	joueur
        );
 		listJoueur.setValue("joueur");
-        upPanel.add(listJoueur, 5, 0);
+        upPanel.add(listJoueur, 3, 0);
         //case L2 1
         for(int i=0;i<10;i++){
         	Circle rond=new Circle();
@@ -148,10 +161,18 @@ public class Graph extends Application  {
         	rond.centerYProperty();
         	rond.setRadius(10*i);
         	rond.setFill(Color.rgb(100, 100, 100, 0.2));
-        	genPanel.add(rond,2, 0);
+        	genPanel.add(rond,0, 0);
         }
         MAJ lol = new MAJ();
         lol.start();
+        ////////////////////////////////////////////affichage carte et information gaphique////////
+        BackgroundImage myBI= new BackgroundImage(new Image("http://www.cartesfrance.fr/cartes/carte_france_simple.png",500,500,false,true),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                  BackgroundSize.DEFAULT);
+        //then you set to your node
+        genPanel.setBackground(new Background(myBI));
+        /*Image image4 = new Image("http://www.cartesfrance.fr/cartes/carte_france_simple.png", 0, 100, false, false);
+        //genPanel.add(image4, 0,0);
         /*affichage*/
         
         root.getChildren().add(page);
@@ -163,7 +184,7 @@ public class Graph extends Application  {
     private class MAJ extends Thread{
     	public void run(){
     		System.out.println("coucou");
-    		while(true)
+    		/*while(true)
     		{
     			try { 
     				  Thread.sleep(1000);
@@ -173,7 +194,7 @@ public class Graph extends Application  {
     				}
     			String heure=recupHour();
     			Platform.runLater(()->Label2.setText(heure));
-    		}
+    		}//*/
     	}
     }
     
