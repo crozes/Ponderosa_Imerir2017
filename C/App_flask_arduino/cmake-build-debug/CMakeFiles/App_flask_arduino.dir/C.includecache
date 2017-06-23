@@ -6,9 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/home/gaspard/CLionProjects/App_flask_arduino/arduino-serial-lib.c
+/media/gaspard/System/Users/Gaspard Desmoulins/Desktop/Cours/Projet Intégration/repo_git/Ponderosa_Imerir2017/C/App_flask_arduino/arduino-serial-lib.c
 arduino-serial-lib.h
-/home/gaspard/CLionProjects/App_flask_arduino/arduino-serial-lib.h
+/media/gaspard/System/Users/Gaspard Desmoulins/Desktop/Cours/Projet Intégration/repo_git/Ponderosa_Imerir2017/C/App_flask_arduino/arduino-serial-lib.h
 stdio.h
 -
 unistd.h
@@ -24,11 +24,11 @@ string.h
 sys/ioctl.h
 -
 
-/home/gaspard/CLionProjects/App_flask_arduino/arduino-serial-lib.h
+/media/gaspard/System/Users/Gaspard Desmoulins/Desktop/Cours/Projet Intégration/repo_git/Ponderosa_Imerir2017/C/App_flask_arduino/arduino-serial-lib.h
 stdint.h
 -
 
-/home/gaspard/CLionProjects/App_flask_arduino/main.c
+/media/gaspard/System/Users/Gaspard Desmoulins/Desktop/Cours/Projet Intégration/repo_git/Ponderosa_Imerir2017/C/App_flask_arduino/main.c
 stdio.h
 -
 stdlib.h
@@ -38,7 +38,7 @@ fcntl.h
 string.h
 -
 arduino-serial-lib.h
-/home/gaspard/CLionProjects/App_flask_arduino/arduino-serial-lib.h
+/media/gaspard/System/Users/Gaspard Desmoulins/Desktop/Cours/Projet Intégration/repo_git/Ponderosa_Imerir2017/C/App_flask_arduino/arduino-serial-lib.h
 curl/curl.h
 -
 json-c/json.h

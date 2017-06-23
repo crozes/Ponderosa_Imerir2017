@@ -5,7 +5,7 @@
 #include "arduino-serial-lib.h"
 #include <curl/curl.h>
 #include <json-c/json.h>
-
+#define NB_PREVISIONS 10
 
 struct string {
     char *ptr;
@@ -62,18 +62,45 @@ void sendJson(char* a_envoyer){
     CURL* curl;
     CURLcode res;
     json_object *json;                                      /* json post body */
+    json_object *timestamp;
     enum json_tokener_error jerr = json_tokener_success;    /* json parse error */
     char* jsonTime[512];
+    char meteo[NB_PREVISIONS][32];
+    char * pch;
+    char * pchTemp;//sert a isoler la donnée
+
     struct string retourRequete;
     init_string(&retourRequete);
     struct curl_slist *headers = NULL; /* http headers to send with request */
 
-    sprintf(jsonTime,"%s",a_envoyer);
+    pch=strchr(a_envoyer,',');
+    pchTemp=a_envoyer+4;
+    memcpy( jsonTime, pchTemp, pch-pchTemp );
+    pch=pchTemp+1;
+    for(int i=0;i<NB_PREVISIONS;i++){
+        pchTemp=strchr(pch+1,',');
+        memcpy(meteo[i], pch, pchTemp-pch );
+        pch=pchTemp+1;
+    }
 
     /* create json object for post */
     json = json_object_new_object();
 
-    json_object_object_add(json, "time", json_object_new_string(jsonTime));
+    json_object_object_add(json, "timestamp", json_object_new_string(jsonTime));
+
+    /*Creating a json array*/
+    json_object *jarray = json_object_new_array();
+    json_object *weather[NB_PREVISIONS];
+    json_object *jint[NB_PREVISIONS];
+
+    //on forme l'array des prévisions météo
+    for(int i=0;i<NB_PREVISIONS;i++){
+        weather[i]=json_object_new_object();
+        json_object_object_add(weather[i], "weather",json_object_new_string(meteo[i]));
+        jint[i]= json_object_new_int(i);
+        json_object_object_add(weather[i],"dnf",json_object_new_string(jint[i]));
+        json_object_array_add(jarray,weather[i]);
+    }
 
 
     curl_global_init(CURL_GLOBAL_ALL);
