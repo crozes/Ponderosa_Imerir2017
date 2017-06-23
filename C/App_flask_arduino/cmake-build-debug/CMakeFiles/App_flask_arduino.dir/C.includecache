@@ -41,4 +41,6 @@ arduino-serial-lib.h
 /home/gaspard/CLionProjects/App_flask_arduino/arduino-serial-lib.h
 curl/curl.h
 -
+json-c/json.h
+-
 
