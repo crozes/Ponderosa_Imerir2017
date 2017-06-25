@@ -396,6 +396,7 @@ void serial_output(){
 					strcat(tampon,",");
 					strcat(tampon,forecast_buffer[i]);
 				}
+				strcat(tampon,";");
 				strcat(tampon,"\n\0");
 				Serial.write(tampon);
 			break;
@@ -482,7 +483,7 @@ void display_output(){
 
 void btn_init(){
 button_state=BTN_IDLE;
-in_game_hour_duration=16384; //14 seccondes par heure par défaut
+in_game_hour_duration=2048; //16384 pour 16 seccondes par heure par défaut ;8192 pour 8 sec
 btn_pin_prev_val = btn_pin_val;
 }
 
