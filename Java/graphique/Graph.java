@@ -151,11 +151,13 @@ public class Graph extends Application  {
         for(int i=0;i<100;i++){
         	gc.fillOval(Math.random()*(carte_x-0), Math.random()*(carte_y-0), 10, 10);
         }
-        Circle rond=new Circle(100,100,50);
+        gc.setFill(Color.rgb(100, 100, 100, 0.5));
+        gc.fillOval(150, 200, 50, 50);
+        /*Circle rond=new Circle(100,100,50);
         rond.setCenterX(800);
         rond.setCenterY(500);
         rond.setFill(Color.rgb(1, 1, 1, 0.4));
-        genPanel.add(rond, 0, 0);
+        genPanel.add(rond, 0, 0);*/
     	carte.getChildren().add(canvas);
         MAJ miseAJour = new MAJ();
         miseAJour.start();
