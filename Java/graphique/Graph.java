@@ -35,6 +35,9 @@ public class Graph extends Application  {
 	Label label2= new Label();
 	int carte_x=800;
 	int carte_y=500;
+	Canvas canvas=new Canvas(carte_x,carte_y);
+	int tempo=2;//variable temporaire
+	
 	/**recuperation d'info depuis le serveur*/
 	////////////////////////////////////////recupMJB//////////////////////////////////////
 	/**recuperation de la meteo du jour et du budjet*/
@@ -87,6 +90,18 @@ public class Graph extends Application  {
             panel.getRowConstraints().add(rowConst);         
         }
         panel.setGridLinesVisible(true);
+	}
+	/////////////////////////////instalation des citoyen
+	private GraphicsContext migration(int nbPop){
+		
+		GraphicsContext gc=canvas.getGraphicsContext2D();
+		for(int i=0;i<nbPop;i++){
+			gc.setFill(Color.rgb(0, 0, 0, 1));
+        	gc.fillOval(Math.random()*(carte_x-0), Math.random()*(carte_y-0), 10, 10);
+        }
+        gc.setFill(Color.rgb(100, 100, 100, /*0.5*/1));
+        gc.fillOval(150, 200, 50, 50);
+        return gc;
 	}
 	/////////////////////////////////////////start///////////////////////////////////
 				/**affichage*/
@@ -145,19 +160,10 @@ public class Graph extends Application  {
         /////////////////////////////////case carte/////////////////////////////
         Group carte=new Group();
         genPanel.add(carte, 0, 0);
-        Canvas canvas=new Canvas(carte_x,carte_y);
-        GraphicsContext gc=canvas.getGraphicsContext2D();
+        
+        
         //creation de la population
-        for(int i=0;i<100;i++){
-        	gc.fillOval(Math.random()*(carte_x-0), Math.random()*(carte_y-0), 10, 10);
-        }
-        gc.setFill(Color.rgb(100, 100, 100, 0.5));
-        gc.fillOval(150, 200, 50, 50);
-        /*Circle rond=new Circle(100,100,50);
-        rond.setCenterX(800);
-        rond.setCenterY(500);
-        rond.setFill(Color.rgb(1, 1, 1, 0.4));
-        genPanel.add(rond, 0, 0);*/
+        migration(150);
     	carte.getChildren().add(canvas);
         MAJ miseAJour = new MAJ();
         miseAJour.start();
@@ -177,7 +183,7 @@ public class Graph extends Application  {
     private class MAJ extends Thread{
     	public void run(){
     		System.out.println("coucou");
-    		/*while(true)
+    		while(true)
     		{
     			try { 
     				  Thread.sleep(1000);
@@ -185,9 +191,17 @@ public class Graph extends Application  {
     				catch (InterruptedException exception) {
     				  exception.printStackTrace();
     				}
-    			String heure=recupHour();
-    			Platform.runLater(()->label2.setText(heure));
-    		}//*/
+    			tempo++;
+    			String heure=String.valueOf(tempo);
+    			Platform.runLater(()->label2.setText(heure));//*/
+    			if(tempo==60){
+    				tempo=0;
+    				migration(150).clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+    			}else if(tempo==1){
+    				migration(150);
+    			}
+    			
+    		}
     	}
     }
     
