@@ -2,43 +2,43 @@ package gestion_population;
 
 import outils.Meteo;
 
-public class Individu {
+public class Agent {
 
 	Coordonnees coordonnees;
 
 	float motivation;
-	float distanceMax;
+
 
 	boolean veutBoissonFroide;
 	boolean veutBoissonSansAlcool;
 
-	public Individu(Coordonnees coordonnees, float motivation, float distanceMax, boolean veutBoissonFroide,
+	public Agent(Coordonnees coordonnees, float motivation, boolean veutBoissonFroide,
 			boolean veutBoissonSansAlcool) {
 		super();
 		this.coordonnees = coordonnees;
 		this.motivation = motivation;
-		this.distanceMax = distanceMax;
+
 		this.veutBoissonFroide = veutBoissonFroide;
 		this.veutBoissonSansAlcool = veutBoissonSansAlcool;
 	}
 	
 	
 	
-	
-	public float calculerMotivation(Meteo meteo){
+	public float calculerMotivation(Meteo meteo) {
 		motivation = 0;
 		float poidsMotivation = outils.OutilsCalculs.poidMeteoMotivationBoissonFroide(meteo);
-		//gestion 
-		if(this.veutBoissonFroide){
+		// gestion
+		if (this.veutBoissonFroide) {
 			poidsMotivation -= 1;
 		}
 		motivation = outils.OutilsCalculs.randomInt(outils.Global.minMotivation, outils.Global.maxMotivation);
-		
-		
-		
-		
+
 		return motivation;
 	}
+	
+	
+	
+	
 	
 	
 	

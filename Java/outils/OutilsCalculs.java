@@ -1,8 +1,10 @@
 package outils;
 
 
-import gestion_population.Individu;
+import gestion_population.Agent;
 import gestion_population.MapItem;
+
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -42,7 +44,7 @@ public class OutilsCalculs {
 	}
 	
 	
-	public static float calculerDistance(Individu personne, MapItem mapItem){
+	public static float calculerDistance(Agent personne, MapItem mapItem){
 		float resultat = 0;
 		
 		resultat = OutilsCalculs.calculerDistance(personne.getLatitude(), personne.getLongitude(), mapItem.getLatitude(), mapItem.getLongitude());
@@ -53,12 +55,15 @@ public class OutilsCalculs {
 	
 	
 	public static int randomInt(int min, int max){
-
+//		Random random = new Random();
+	
 		return ThreadLocalRandom.current().nextInt(min, max + 1);
 	}
 	
-	public static float randomFloat(int min, int max){
-
+	public static float randomFloat(float min, float max){
+//		Random random = new Random();
+//		return( min + random.nextFloat() * (max - min) );
+//		
 		return ThreadLocalRandom.current().nextFloat()* (max - min) + min;
 	}
 	
@@ -92,13 +97,13 @@ public class OutilsCalculs {
 		
 		switch (meteo){
 		case rainny:
-			return poid*=1.15;
+			return poid*=0.15;
 		case cloudy:
-			return poid*=1.3;
+			return poid*=0.3;
 		case sunny:
-			return poid*=1.75;
+			return poid*=0.75;
 		case heatwave:
-			return poid*=2;
+			return poid*=1;
 		case thunderstorm:
 			return poid*=0;
 		default:

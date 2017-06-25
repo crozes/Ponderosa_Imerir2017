@@ -99,39 +99,63 @@ public class Partie {
 		this.heureDepuisDebutJeu = heureDepuisDebutJeu;
 	}
 	
-	
-	public JsonObject getJsonObject() {
+	/**
+	 * Permet de recuperer l'objet JsonMap afin de l'envoyer au serveur
+	 * 
+	 * @return l'objet jsonMap
+	 * @author atila
+	 */
+	public JsonObject getJsonMap() {
 		JsonObject jsonOb = new JsonObject();
-		//JsonArray jsonArRanking = new JsonArray();
+		// JsonArray jsonArRanking = new JsonArray();
 		JsonArray jsonArRanking = new JsonArray();
 		JsonObject jsonObPlayerInfo = new JsonObject();
 		JsonObject jsonObItempByPlayers = new JsonObject();
+		JsonObject jsonObDrinksByPlayers = new JsonObject();
 
 		for (String playerName : this.ranking) {
 			JsonPrimitive element = new JsonPrimitive(playerName);
 			jsonArRanking.add(element);
 			jsonObPlayerInfo.add(playerName, this.listePlayerInfo.get(playerName).getJsonObject());
 			jsonObItempByPlayers.add(playerName, getAllMapItems(playerName));
+			jsonObDrinksByPlayers.add("drinksByPlayer", getAllDrinksInfo(playerName));
 		}
 
-		
 		jsonOb.add("region", this.region.getJsonObject());
 		jsonOb.add("ranking", jsonArRanking);
-		
-		
+
 		jsonOb.add("playerInfo", jsonObPlayerInfo);
 
 		return jsonOb;
 	}
-	
-	private JsonArray getAllMapItems(String playerName){
+
+	/**
+	 * Utilise par getJsonMap()
+	 * @param playerName
+	 * @return une JsonArray de tous les MapItem du joueur
+	 */
+	private JsonArray getAllMapItems(String playerName) {
 		JsonArray jsonAr = new JsonArray();
-		
-		for(MapItem mapItem : this.listeItemByPlayer.get(playerName)){
+
+		for (MapItem mapItem : this.listeItemByPlayer.get(playerName)) {
 			jsonAr.add(mapItem.getJsonObject());
 		}
-		
-		
+
+		return jsonAr;
+	}
+
+	/**
+	 * Utilise par getJsonMap()
+	 * @param playerName
+	 * @return une JsonArray de tous les DrinkInfo du joueur
+	 */
+	private JsonArray getAllDrinksInfo(String playerName) {
+		JsonArray jsonAr = new JsonArray();
+
+		for (DrinkInfo drinkInfo : this.listeDesDrinkInfo.get(playerName)) {
+			jsonAr.add(drinkInfo.getJsonObject());
+		}
+
 		return jsonAr;
 	}
 

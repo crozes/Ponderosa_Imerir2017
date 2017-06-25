@@ -25,5 +25,11 @@ public final class Global {
 	public static final int minMouv = 100;
 	public static final int maxMouv = 1000;
 	
+	
+	public static final int clientMinParJoueur = 50;
+	public static final int clientMaxParJoueur = 100;
+	
+	public static final float clientMinMotivation = 500;
+	public static final float clientMaxMotivation = 1500;
 
 }

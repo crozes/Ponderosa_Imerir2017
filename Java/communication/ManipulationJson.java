@@ -276,70 +276,70 @@ public class ManipulationJson {
 	
 	
 	
-	
-	
-	public static String jsonToStringMap(Partie laPartie){
-		
-		JsonObject jsonObResult = new JsonObject();
-		
-		JsonObject jsonObRegion = new JsonObject();
-		JsonObject jsonObSpan = new JsonObject();
-		JsonObject jsonObCenter = new JsonObject();
-
-		JsonArray jsonArRanking = new JsonArray();
-		JsonObject jsonObRanking = new JsonObject();
-		
-		JsonObject jsonObPlayerInfo = new JsonObject();
-		JsonObject jsonObInfoPlayer = new JsonObject(); // le playerinfo dans le playerinfo In foplayer ....
-		JsonArray jsonArDrinksOffered = new JsonArray();
-		JsonObject jsonObDrinkInfo = new JsonObject();
-
-		
-		JsonObject jsonObItemsByPlayers = new JsonObject();
-		JsonArray jsonArMapItem = new JsonArray();
-		JsonObject jsonObMapItem = new JsonObject();
-		JsonObject jsonObLocation = new JsonObject();
-		
-		
-		JsonObject jsonObDrinksByPlayers= new JsonObject();
-		JsonArray jsonArDrinkInfo = new JsonArray();
+//	
+//	
+//	public static String jsonToStringMap(Partie laPartie){
+//		
+//		JsonObject jsonObResult = new JsonObject();
+//		
+//		JsonObject jsonObRegion = new JsonObject();
+//		JsonObject jsonObSpan = new JsonObject();
+//		JsonObject jsonObCenter = new JsonObject();
+//
+//		JsonArray jsonArRanking = new JsonArray();
+//		JsonObject jsonObRanking = new JsonObject();
+//		
+//		JsonObject jsonObPlayerInfo = new JsonObject();
+//		JsonObject jsonObInfoPlayer = new JsonObject(); // le playerinfo dans le playerinfo In foplayer ....
+//		JsonArray jsonArDrinksOffered = new JsonArray();
 //		JsonObject jsonObDrinkInfo = new JsonObject();
-//		JsonObject jsonObName = new JsonObject();
-//		JsonObject jsonObPrice = new JsonObject();
-//		JsonObject jsonObHasAlcohol = new JsonObject();
-//		JsonObject jsonObIsCold = new JsonObject();
-		
-		
-		
-		jsonObCenter.addProperty("latitude", laPartie.getRegion().getCenter().getLatitude());
-		jsonObCenter.addProperty("longitude", laPartie.getRegion().getCenter().getLatitude());
-		jsonObRegion.add("center", jsonObCenter);
-		
-		jsonObCenter.addProperty("latitude", laPartie.getRegion().getSpan().getLatitude_span());
-		jsonObCenter.addProperty("latitude", laPartie.getRegion().getSpan().getLongitude_span());
-		jsonObRegion.add("span", jsonObSpan);
-		
-		jsonObResult.add("region", jsonObRegion);
-		
-
-		
-		for (String playerName : laPartie.getRanking()) {
-
-			// ranking
-			jsonObRanking.addProperty(playerName, playerName);
-			jsonArRanking.add(jsonObRanking);
-
-
-			
-			jsonObItemsByPlayers.add(playerName, jsonArMapItem);
-			jsonObResult.add("itemsByPlayers", jsonObItemsByPlayers);
-
-			// drinksByPlayer
-			jsonObResult.add("drinksByPlayer", jsonObDrinksByPlayers);
-		}
-
-		return jsonObResult.toString();
-	}
+//
+//		
+//		JsonObject jsonObItemsByPlayers = new JsonObject();
+//		JsonArray jsonArMapItem = new JsonArray();
+//		JsonObject jsonObMapItem = new JsonObject();
+//		JsonObject jsonObLocation = new JsonObject();
+//		
+//		
+//		JsonObject jsonObDrinksByPlayers= new JsonObject();
+//		JsonArray jsonArDrinkInfo = new JsonArray();
+////		JsonObject jsonObDrinkInfo = new JsonObject();
+////		JsonObject jsonObName = new JsonObject();
+////		JsonObject jsonObPrice = new JsonObject();
+////		JsonObject jsonObHasAlcohol = new JsonObject();
+////		JsonObject jsonObIsCold = new JsonObject();
+//		
+//		
+//		
+//		jsonObCenter.addProperty("latitude", laPartie.getRegion().getCenter().getLatitude());
+//		jsonObCenter.addProperty("longitude", laPartie.getRegion().getCenter().getLatitude());
+//		jsonObRegion.add("center", jsonObCenter);
+//		
+//		jsonObCenter.addProperty("latitude", laPartie.getRegion().getSpan().getLatitude_span());
+//		jsonObCenter.addProperty("latitude", laPartie.getRegion().getSpan().getLongitude_span());
+//		jsonObRegion.add("span", jsonObSpan);
+//		
+//		jsonObResult.add("region", jsonObRegion);
+//		
+//
+//		
+//		for (String playerName : laPartie.getRanking()) {
+//
+//			// ranking
+//			jsonObRanking.addProperty(playerName, playerName);
+//			jsonArRanking.add(jsonObRanking);
+//
+//
+//			
+//			jsonObItemsByPlayers.add(playerName, jsonArMapItem);
+//			jsonObResult.add("itemsByPlayers", jsonObItemsByPlayers);
+//
+//			// drinksByPlayer
+//			jsonObResult.add("drinksByPlayer", jsonObDrinksByPlayers);
+//		}
+//
+//		return jsonObResult.toString();
+//	}
 
 
 	/**

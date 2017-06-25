@@ -18,7 +18,9 @@ public enum Meteo {
 	cloudy,
 	sunny,
 	heatwave,
-	thunderstorm;
+	thunderstorm,
+	matin,
+	soir;
 }
 
 
