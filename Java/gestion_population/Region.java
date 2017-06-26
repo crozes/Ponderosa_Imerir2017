@@ -10,6 +10,10 @@ public class Region {
 	private CoordonneesSpan span;
 	
 	
+	public Region(){
+		
+	}
+	
 	public Region(float latitude_center, float longitude_center, float latitude_span, float longitude_span) throws ValeurPositive {
 
 		super();

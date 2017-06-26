@@ -7,30 +7,79 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
-import outils.*;
+import outils.Meteo;
 
 
 public class Partie {
 
-	private MapItem laMapDesObjets[][];
-	private Population mapDeLaPopulation;
-	
-	private HashMap<String, ArrayList<MapItem> > listeItemByPlayer;
-	private HashMap<String, PlayerInfo> listePlayerInfo;
 	private Meteo meteoDuJour;
 	private Meteo meteoDeDemain;
 	private int heureDepuisDebutJeu;
-	private HashMap<String, ArrayList<DrinkInfo>> listeDesDrinkInfo; //joueur drinkinfo
-	private ArrayList<String> ranking;
+	
 	private Region region;
+	private ArrayList<String> ranking;
+	
+	private HashMap<String, ArrayList<MapItem> > listeItemByPlayer;
+	private HashMap<String, PlayerInfo> listePlayerInfo;
+	private HashMap<String, ArrayList<DrinkInfo>> listeDesDrinkInfo; //joueur drinkinfo
+	
+	
+
+	private ArrayList<MapItem> laMapDesObjets;
+	private Population mapDeLaPopulation;
+	
+	
+	public Partie(int latitudeMax, int LatitudeMin, int longitudeMax, int LongitudeMin){
+		this.region = new Region();
+		this.ranking = new ArrayList<String>();
+		
+		this.listeItemByPlayer = new HashMap<String, ArrayList<MapItem> >();
+		this.listePlayerInfo = new HashMap<String, PlayerInfo>();
+		this.listeDesDrinkInfo = new HashMap<String, ArrayList<DrinkInfo>>();
+		
+		this.laMapDesObjets = new ArrayList<MapItem>();
+		
+		this.mapDeLaPopulation = new Population(latitudeMax, LatitudeMin, longitudeMax, LongitudeMin);
+		
+
+	}
+	
+	
+	
 
 
-	
-	
-	
-	
-	
+	public Partie(ArrayList<MapItem> laMapDesObjets, Population mapDeLaPopulation,
+			HashMap<String, ArrayList<MapItem>> listeItemByPlayer, HashMap<String, PlayerInfo> listePlayerInfo,
+			Meteo meteoDuJour, Meteo meteoDeDemain, int heureDepuisDebutJeu,
+			HashMap<String, ArrayList<DrinkInfo>> listeDesDrinkInfo, ArrayList<String> ranking, Region region) {
+		super();
+		this.laMapDesObjets = laMapDesObjets;
+		this.mapDeLaPopulation = mapDeLaPopulation;
+		this.listeItemByPlayer = listeItemByPlayer;
+		this.listePlayerInfo = listePlayerInfo;
+		this.meteoDuJour = meteoDuJour;
+		this.meteoDeDemain = meteoDeDemain;
+		this.heureDepuisDebutJeu = heureDepuisDebutJeu;
+		this.listeDesDrinkInfo = listeDesDrinkInfo;
+		this.ranking = ranking;
+		this.region = region;
+	}
 
+	public ArrayList<MapItem> getLaMapDesObjets() {
+		return laMapDesObjets;
+	}
+
+	public void setLaMapDesObjets(ArrayList<MapItem> laMapDesObjets) {
+		this.laMapDesObjets = laMapDesObjets;
+	}
+
+	public Population getMapDeLaPopulation() {
+		return mapDeLaPopulation;
+	}
+
+	public void setMapDeLaPopulation(Population mapDeLaPopulation) {
+		this.mapDeLaPopulation = mapDeLaPopulation;
+	}
 
 	public HashMap<String, ArrayList<MapItem>> getListeItemByPlayer() {
 		return listeItemByPlayer;
@@ -100,7 +149,7 @@ public class Partie {
 	}
 	
 	/**
-	 * Permet de recuperer l'objet JsonMap afin de l'envoyer au serveur
+	 * Permet de creer l'objet JsonMap afin de l'envoyer au serveur
 	 * 
 	 * @return l'objet jsonMap
 	 * @author atila

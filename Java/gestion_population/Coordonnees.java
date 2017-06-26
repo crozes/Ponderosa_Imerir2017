@@ -44,5 +44,8 @@ public class Coordonnees {
 	}
 
 	
+	public String toString(){
+		return ("Latitude:" + this.latitude + " Longitude:" + this.longitude + " .");
+	}
 
 }

@@ -1,14 +1,12 @@
 package les_mains;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
-import communication.*;
-import outils.Global;
-import netscape.javascript.JSObject;
-import com.google.gson.*;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.TestGenerator;
+import communication.Communication;
 import communication.ManipulationJson;
+import outils.Global;
 
 public class MainTest {
 

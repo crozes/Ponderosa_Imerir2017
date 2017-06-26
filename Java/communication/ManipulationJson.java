@@ -1,18 +1,24 @@
 package communication;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import gestion_population.*;
+import gestion_population.Coordonnees;
+import gestion_population.DrinkInfo;
+import gestion_population.MapItem;
+import gestion_population.Partie;
+import gestion_population.PlayerInfo;
 import outils.Meteo;
 
 public class ManipulationJson {
+
+
+
+
 
 
 	/**
@@ -131,7 +137,7 @@ public class ManipulationJson {
 		JsonArray jsonArRanking = jsonObMap.get("ranking").getAsJsonArray();
 
 		JsonObject jsonObPlayerInfo = jsonObMap.get("playerInfo").getAsJsonObject();
-		JsonObject jsonObDrinkByPlayer = jsonObMap.get("drinksByPlayer").getAsJsonObject();
+
 
 		/*------------------------------------------------------------------------------------------------------
 		 * Declaration des variables
@@ -187,7 +193,6 @@ public class ManipulationJson {
 
 		// MapItem
 		
-		Coordonnees coordonnees = null;
 		JsonObject jsonObLocation;
 		JsonObject jsonObMapItem;
 		String kind;
@@ -260,18 +265,12 @@ public class ManipulationJson {
 				latitude = jsonObLocation.get("latitude").getAsFloat();
 				longitude = jsonObLocation.get("longitude").getAsFloat();
 
-				coordonnees.setLatitude(latitude);
-				coordonnees.setLongitude(longitude);
-
 				// public MapItem(String kind, String owner, float influence,
 				// Coordonnees coordonnees) {
-				mapItem.add(new MapItem(kind, owner, influence, coordonnees));
-
+				mapItem.add(new MapItem(kind, owner, influence, new Coordonnees(latitude, longitude)));
 			}
 			laPartie.getListeItemByPlayer().put(playerName, mapItem);
-
 		}
-
 	}
 	
 	
