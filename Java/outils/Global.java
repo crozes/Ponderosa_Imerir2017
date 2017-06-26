@@ -29,7 +29,10 @@ public final class Global {
 	public static final int clientMinParJoueur = 50;
 	public static final int clientMaxParJoueur = 100;
 	
-	public static final float clientMinMotivation = 500;
-	public static final float clientMaxMotivation = 1500;
+	public static final float clientMinMotivation = 5;
+	public static final float clientMaxMotivation = 75;
+	
+	public static final int clientAlcoloMatin = 25;
+	public static final int clientAlcoloSoir = 75;
 
 }

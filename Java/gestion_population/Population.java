@@ -3,8 +3,6 @@ package gestion_population;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.sun.javafx.scene.control.GlobalMenuAdapter;
-
 import outils.Global;
 import outils.Meteo;
 
@@ -19,23 +17,41 @@ public class Population {
 	private int nombreDeClient;
 	
 	
+	public float test_motivationMax= 0;
+	public float test_motivationMin = 1000000;
+	
+	
+	public Population(int latitudeMax, int LatitudeMin, int longitudeMax, int LongitudeMin){
+		this.latitudeMax = latitudeMax;
+		this.LatitudeMin = LatitudeMin;
+		this.longitudeMax = longitudeMax;
+		this.LongitudeMin = LongitudeMin;
+		
+		this.population = new ArrayList<Agent>();
+	}
+	
 	public Population(int latitudeMax, int LatitudeMin, int longitudeMax, int LongitudeMin, int nbJoueur, Meteo meteo, Meteo periodeJournee){
 		
 		this.population= new ArrayList<Agent>();
 		nombreDeClient = calculDuNombreDeClient( nbJoueur,  meteo,  periodeJournee);
 		
 		for(int i = 0 ; i<nombreDeClient; i++){
-			this.population.add(new Agent(calculerPositionClient(meteo, periodeJournee),
-					calculerMotivationClient(meteo, periodeJournee), calculerBoissonFroideClient(meteo, periodeJournee),
-					calculerBoissonAlcoolCLient(meteo, periodeJournee)));
+			this.population.add( this.creerUnAgent(meteo, periodeJournee) );
 		}
 	}
 	
 	
 	private Agent creerUnAgent(Meteo meteo, Meteo periodeJournee) {
-		Agent client = new Agent(calculerPositionClient(meteo, periodeJournee), calculerMotivationClient(meteo, periodeJournee),
-				calculerBoissonFroideClient(meteo, periodeJournee), calculerBoissonAlcoolCLient(meteo, periodeJournee));
+		Agent client = new Agent(meteo, periodeJournee);
 
+		client.setCoordonnees(calculerPositionClient(meteo, periodeJournee));
+		
+		if(client.getMotivation()>this.test_motivationMax){
+			test_motivationMax=client.getMotivation();
+		}
+		if(client.getMotivation()<this.test_motivationMin){
+			test_motivationMin=client.getMotivation();
+		}
 		return client;
 	}
 	
@@ -48,56 +64,16 @@ public class Population {
 		return (new Coordonnees(latitude, longitude));
 	}
 	
-	private float calculerMotivationClient(Meteo meteo, Meteo periodeJournee){
+
+	
+	public void genererPopulation(int latitudeMax, int LatitudeMin, int longitudeMax, int LongitudeMin, int nbJoueur,Meteo meteo, Meteo periodeJournee ){
+		nombreDeClient = calculDuNombreDeClient( nbJoueur,  meteo,  periodeJournee);
 		
-		if(meteo == Meteo.heatwave){
-			return 0f;
-		}
-		else{
-			float motivation = outils.OutilsCalculs.randomFloat(Global.clientMinMotivation, Global.clientMinMotivation);
-			
-			motivation *= outils.OutilsCalculs.poidMeteoMotivationBoissonFroide(meteo);
-			
-			return motivation;
+		for(int i = 0 ; i<nombreDeClient; i++){
+			this.population.add( this.creerUnAgent(meteo, periodeJournee) );
 		}
 	}
-	
-	/**
-	 * Lance un rand de 0 a 1, s'il est inferieur a la valeur lie a la meteo (Déplacement	15%rainny 30%cloudy 75%sunny 100%heatwave 0%thunderstorm
-	 * @param meteo
-	 * @param periodeJournee
-	 * @return
-	 */
-	private boolean calculerBoissonFroideClient(Meteo meteo, Meteo periodeJournee){
-		
-		float des = outils.OutilsCalculs.randomFloat(0, 1);
-		
-		if(outils.OutilsCalculs.poidMeteoParcourBoissonFroide(meteo)>des){
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-	
-	
-	/**
-	 * Prend en comtpe si on est le matin ou le soir (plus d'allcool le soir), prend en compte la meteo pour les valeur.
-	 * 
-	 * @param meteo
-	 * @param periodeJournee
-	 * @return
-	 */
-	private boolean calculerBoissonAlcoolCLient(Meteo meteo, Meteo periodeJournee){
-		int des = outils.OutilsCalculs.randomInt(0, 1);
-		
-		if (des > 0 ){
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
+
 	
 	/**
 	 * Renvoie le nombre de client calculé par rapport aux nombres des joueurs, la meteo du jour et la periode de la journee
@@ -118,14 +94,30 @@ public class Population {
 		return nbClient;
 	}
 	
-	/**
-	 * Generation de la population
-	 */
-	
-	
-	/**
-	 * La population ce déplace
-	 */
+	public String toString(){
+		String toReturn = "";
+		int boisson_froide = 0;
+		int boisson_sans_alcool =0;
+
+
+		for(Agent a : population){
+			
+			toReturn += a.coordonnees.toString();
+			toReturn += ("Motivation:" + a.motivation + "   Boisson froide: " + a.veutBoissonFroide + "   sansAlcool: " + a.veutBoissonSansAlcool);
+			if(a.veutBoissonFroide==true){
+				boisson_froide++;
+			}
+			if(a.veutBoissonSansAlcool==true){
+				boisson_sans_alcool++;
+			}
+			toReturn += "  Distance avec centre: "+outils.OutilsCalculs.calculerDistance(a.getCoordonnees(), new Coordonnees(0f, 0f));
+			toReturn += "\n";
+		}
+		
+		toReturn += ("Nombre d'agent sur la map:" + population.size() + "  veut boisson froide :" + boisson_froide
+				+ "   sans alcool :" + boisson_sans_alcool);
+		return toReturn;
+	}
 
 	
 }

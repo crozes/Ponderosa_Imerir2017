@@ -1,11 +1,11 @@
 package outils;
 
 
-import gestion_population.Agent;
-import gestion_population.MapItem;
-
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+
+import gestion_population.Agent;
+import gestion_population.Coordonnees;
+import gestion_population.MapItem;
 
 
 
@@ -16,9 +16,7 @@ public class OutilsCalculs {
 	
 	
 	
-	/**
-	 * influencePub = pub1/distance1² + pu2/dis2² + pubN/distanceN²
-	 * 
+	/** 
 	 * distance = racineCarre( (xa-xb)+(ya-yb) )
 	 * 
 	 * diviser par X motiv entre chaque bar
@@ -35,77 +33,103 @@ public class OutilsCalculs {
 	 */
 	
 	public static float calculerDistance(float latitude, float longitude, float latitude_p, float longitude_p){
-		float resultat = 0;
 		
-		
-		
-		
-		return resultat;
+		return  (float) Math.sqrt( Math.pow((latitude-latitude_p), 2) + Math.pow((longitude+longitude_p),2) );
 	}
 	
-	
+	/**
+	 * Permet d'utiliser la fonction distance avec un cliet et une map item
+	 * @param personne
+	 * @param mapItem
+	 * @return
+	 */
 	public static float calculerDistance(Agent personne, MapItem mapItem){
-		float resultat = 0;
 		
-		resultat = OutilsCalculs.calculerDistance(personne.getLatitude(), personne.getLongitude(), mapItem.getLatitude(), mapItem.getLongitude());
+		return  OutilsCalculs.calculerDistance(personne.getLatitude(), personne.getLongitude(), mapItem.getLatitude(), mapItem.getLongitude());
+	}
+	
+	public static float calculerDistance(Coordonnees personne, Coordonnees mapItem){
 		
-		
-		return resultat;
+		return  OutilsCalculs.calculerDistance(personne.getLatitude(), personne.getLongitude(), mapItem.getLatitude(), mapItem.getLongitude());
 	}
 	
 	
+	/**
+	 * Renvoie un int aleatoire entre min et max
+	 * @param min
+	 * @param max
+	 * @return int entre min(inclu) et max(inclu)
+	 */
 	public static int randomInt(int min, int max){
 //		Random random = new Random();
 	
 		return ThreadLocalRandom.current().nextInt(min, max + 1);
 	}
 	
+	/**
+	 * Renvoie un float aleatoire entre min et max
+	 * @param min
+	 * @param max
+	 * @return float entre min(inclu) et max(inclu)
+	 */
 	public static float randomFloat(float min, float max){
 //		Random random = new Random();
 //		return( min + random.nextFloat() * (max - min) );
-//		
+
+		System.out.println(min +"   " +max +"    "+(ThreadLocalRandom.current().nextFloat()* (max - min) + min ) );
 		return ThreadLocalRandom.current().nextFloat()* (max - min) + min;
 	}
 	
 	
 	
+	/**
+	 * Retourne le poid de la meteo sur le déplacement (definie par les commites)
+	 * Si la meteo est "tempete" le retour est automatiquement 0
+	 * Déplacement	10%rainny 40%cloudy 50%sunny 20%heatwave 0%thunderstorm
+	 * @param meteo
+	 * @return Valeur du poid de la meteo sur la motivation
+	 */
 	public static float poidMeteoParcourBoissonFroide(Meteo meteo){
 		float poid = 1;
-	 
-//		Déplacement	10%rainny 40%cloudy 50%sunny 20%heatwave 0%thunderstorm
-		 
+	 	 
 		switch (meteo){
 		case rainny:
-			return poid*= 1.1;
+			return poid *= 1.1;
 		case cloudy:
-			return poid*= 1.4;
+			return poid *= 1.4;
 		case sunny:
-			return poid*= 1.5;
+			return poid *= 1.5;
 		case heatwave:
-			return poid*= 1.2;
+			return poid *= 1.2;
 		case thunderstorm:
-			return 0;
+			return poid *=0;
 		default:
 			return poid;
 		}
 	}
 
+	/**
+	 * Renvoie le poids de l'envie de boisson froide ou chaude selon la meteo
+	 * Durant la canicule les clients veulent tous des boissons froide
+	 * @param meteo
+	 * @return Pourcentage d'envie d'une boisson froide
+	 */
 	public static float poidMeteoMotivationBoissonFroide(Meteo meteo){
-		float poid = 1;
+		float poid = 100;
 		
-//		Consommation Clients 15% 30% 75%	100% 0%
+//		Consommation Clients rainny:15% cloudy:30% sunny:75% heatwave:100% thunderstorm:0%
 		
 		switch (meteo){
 		case rainny:
-			return poid*=0.15;
+			return poid *=0.15;
 		case cloudy:
-			return poid*=0.3;
+			return poid *=0.3;
 		case sunny:
-			return poid*=0.75;
+			return poid *=0.75;
 		case heatwave:
-			return poid*=1;
+			return poid *=1;
 		case thunderstorm:
-			return poid*=0;
+			return poid *=0;
 		default:
 			return poid; 
 		}	
