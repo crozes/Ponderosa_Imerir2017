@@ -113,7 +113,7 @@ int sendJson(char* a_envoyer){
             json_object_object_add(weather[i],"dnf",json_object_new_int(i));
             json_object_array_add(jarray,weather[i]);
         }
-        json_object_object_add(json, "Temps", jarray);
+        json_object_object_add(json, "weather", jarray);
 
         curl_global_init(CURL_GLOBAL_ALL);
 
