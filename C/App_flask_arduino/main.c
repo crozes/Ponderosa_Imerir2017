@@ -57,7 +57,7 @@ int sendJson(char* a_envoyer){
 
 
 
-    char *url = "https://ponderosaproject.herokuapp.com/postHour";
+    char *url = "https://ponderosaproject.herokuapp.com/metrology";
 
     CURL* curl;
     CURLcode res;
@@ -164,7 +164,7 @@ int main (int argc, char *argv[]){
     char buffer[1024];
     int longueurBuffer=0;
 
-    char *portname = "/dev/ttyACM1";
+    char *portname = "/dev/ttyACM0";
     int fd = open (portname, O_RDWR | O_NOCTTY | O_SYNC);
 
 
