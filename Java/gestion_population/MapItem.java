@@ -8,13 +8,13 @@ import com.google.gson.JsonObject;
  * @author atila
  *
  */
-public  class MapItem {
+public abstract class MapItem {
 
-	String kind;
-	String owner;
-	float influence;
+	private String kind;
+	private String owner;
+	private float influence;
 
-	Coordonnees coordonnees;
+	private Coordonnees coordonnees;
 
 	
 	

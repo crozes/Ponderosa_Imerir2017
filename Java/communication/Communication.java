@@ -1,6 +1,5 @@
 package communication;
 
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -17,7 +16,6 @@ import java.net.URL;
  *
  */
 public class Communication {
-	
 
 	/**
 	 * 
@@ -26,10 +24,10 @@ public class Communication {
 	public static String getRecevoir(String URL_Serveur) {
 
 		URL url;
-		HttpURLConnection connection =null;
+		HttpURLConnection connection = null;
 		BufferedReader in = null;
 		try {
-			url= new URL(URL_Serveur);
+			url = new URL(URL_Serveur);
 			connection = (HttpURLConnection) url.openConnection();
 
 			System.out.println("< Recuperation du get");
@@ -49,8 +47,8 @@ public class Communication {
 			in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
 			String resultat = org.apache.commons.io.IOUtils.toString(in);
-			System.out.println("get recuperer = " + resultat +" >");
-		
+			System.out.println("get recuperer = " + resultat + " >");
+
 			return resultat;
 
 		} catch (MalformedURLException e) {
@@ -63,69 +61,60 @@ public class Communication {
 		}
 
 		return " ";
-		
+
 	}
-	
-	
+
 	/**
 	 * 
 	 * @param toPost
 	 */
-	public static void postEnvoyer(String toPost, String URL_Serveur) {
+	public static String postEnvoyer(String toPost, String URL_Serveur) {
 		URL url;
-		HttpURLConnection connection =null;
-
+		HttpURLConnection connection = null;
 
 		try {
-			url= new URL(URL_Serveur);
+			url = new URL(URL_Serveur);
 			connection = (HttpURLConnection) url.openConnection();
-		
 
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("Content-Type", "application/json");
-			
+
 			connection.setRequestProperty("Content-Length", "" + Integer.toString(toPost.length()));
-			connection.setRequestProperty( "charset", "utf-8");
-			
-			connection.setInstanceFollowRedirects( false );
-			connection.setUseCaches( false );
+			connection.setRequestProperty("charset", "utf-8");
+
+			connection.setInstanceFollowRedirects(false);
+			connection.setUseCaches(false);
 			connection.setDoInput(true);
 			connection.setDoOutput(true);
-			
-			
+
 			// Send request
 			DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-			
+
 			wr.write(toPost.getBytes());
 			wr.flush();
 			wr.close();
-			
 
-			
-			
 			System.out.println("Envoie: " + toPost);
-			int reponse = connection.getResponseCode() ;
+			int reponse = connection.getResponseCode();
 			System.out.println("Code reponse " + reponse + " Reponse " + connection.getResponseMessage());
 
 			InputStream in = null;
-			
-			if(reponse==200){
+
+			if (reponse == 200) {
 				in = new BufferedInputStream(connection.getInputStream());
-			}
-			else {
+			} else {
 				in = new BufferedInputStream(connection.getErrorStream());
 				System.out.println("\nMauvaise data : ");
 			}
 			String result = org.apache.commons.io.IOUtils.toString(in, "UTF-8");
 			System.out.println("result " + result);
-
+			return result;
 
 		} catch (Exception e) {
 
 			e.printStackTrace();
-		} 
+			return "Error in post : " + toPost + " url : " + URL_Serveur;
+		}
 	}
 
-
-	
 }

@@ -10,8 +10,10 @@ import com.google.gson.JsonParser;
 import gestion_population.Coordonnees;
 import gestion_population.DrinkInfo;
 import gestion_population.MapItem;
-import gestion_population.Partie;
+import gestion_population.TheGame;
 import gestion_population.PlayerInfo;
+import gestion_population.Publicite;
+import gestion_population.Stand;
 import outils.Meteo;
 
 public class ManipulationJson {
@@ -31,7 +33,7 @@ public class ManipulationJson {
 	 * @param jsonTemps
 	 * @author atila
 	 */
-	public static void jsonFromStringTemps(String jsonTemps, Partie laPartie) {
+	public static void jsonFromStringTemps(String jsonTemps, TheGame laPartie) {
 		String laMeteo = " ";
 		JsonElement jsonEl = new JsonParser().parse(jsonTemps);
 		JsonObject jsonOb = jsonEl.getAsJsonObject();
@@ -130,10 +132,10 @@ public class ManipulationJson {
 	 *            
 	 * @author atila
 	 */
-	public static void jsonFromStringMap(String jsonMap, Partie laPartie) {
+	public static void jsonFromStringMap(String jsonMap, TheGame laPartie) {
 		JsonElement jsonEl = new JsonParser().parse(jsonMap);
-		JsonObject jsonObMap = jsonEl.getAsJsonObject();
-
+		JsonObject jsonObMape = jsonEl.getAsJsonObject();
+		JsonObject jsonObMap = jsonObMape.get("map").getAsJsonObject();
 		JsonArray jsonArRanking = jsonObMap.get("ranking").getAsJsonArray();
 
 		JsonObject jsonObPlayerInfo = jsonObMap.get("playerInfo").getAsJsonObject();
@@ -186,7 +188,7 @@ public class ManipulationJson {
 		 * string:[mapItem] },
 		 */
 
-		laPartie.getListeItemByPlayer().clear();
+		
 
 		JsonObject jsonObItemsByPlayers = jsonObMap.get("itemsByPlayers").getAsJsonObject();
 		JsonArray jsonArMapItem;
@@ -248,8 +250,7 @@ public class ManipulationJson {
 			laPartie.getListeDesDrinkInfo().put(playerName, drinkInfo);
 
 			// itemsByPlayers
-			laPartie.getListeItemByPlayer().clear();
-
+			laPartie.getListeMapItemJoueur().clear();
 			jsonArMapItem = jsonObItemsByPlayers.get(playerName).getAsJsonArray();
 
 			size_jsonArray = jsonArMapItem.size();
@@ -267,9 +268,20 @@ public class ManipulationJson {
 
 				// public MapItem(String kind, String owner, float influence,
 				// Coordonnees coordonnees) {
-				mapItem.add(new MapItem(kind, owner, influence, new Coordonnees(latitude, longitude)));
+
+				
+				if(kind == "ad"){
+					mapItem.add(new Publicite(kind, owner, influence, new Coordonnees(latitude, longitude)));
+				}else{ //c'est un stand
+					mapItem.add(new Stand(kind, owner, influence, new Coordonnees(latitude, longitude)));
+					laPartie.getListeDesStand().put(playerName, ( new Stand(kind, owner, influence, new Coordonnees(latitude, longitude)) ) );
+					
+				}
+				
+				
 			}
-			laPartie.getListeItemByPlayer().put(playerName, mapItem);
+				laPartie.getListeMapItemJoueur().put(playerName, mapItem);
+			
 		}
 	}
 	

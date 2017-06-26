@@ -21,6 +21,9 @@ public enum Meteo {
 	thunderstorm,
 	matin,
 	soir;
+	
 }
+
+
 
 
