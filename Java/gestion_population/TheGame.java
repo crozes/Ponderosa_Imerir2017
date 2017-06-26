@@ -26,7 +26,8 @@ public class TheGame {
 	private HashMap<String, PlayerInfo> listePlayerInfo;
 	private HashMap<String, ArrayList<DrinkInfo>> listeDesDrinkInfo; // joueur
 																		// drinkinfo
-
+	private HashMap<String, Stand> listeDesStand;
+	
 	private ArrayList<MapItem> laMapDesObjets;
 	private Population mapDeLaPopulation;
 
@@ -37,7 +38,9 @@ public class TheGame {
 		this.listeMapItemJoueur = new HashMap<String, ArrayList<MapItem>>();
 		this.listePlayerInfo = new HashMap<String, PlayerInfo>();
 		this.listeDesDrinkInfo = new HashMap<String, ArrayList<DrinkInfo>>();
-
+		this.listeDesStand = new HashMap<String, Stand>();
+		
+		
 		this.laMapDesObjets = new ArrayList<MapItem>();
 
 		this.mapDeLaPopulation = new Population(latitudeMax, LatitudeMin, longitudeMax, LongitudeMin);
@@ -67,6 +70,14 @@ public class TheGame {
 	
 	
 	
+
+	public HashMap<String, Stand> getListeDesStand() {
+		return listeDesStand;
+	}
+
+	public void setListeDesStand(HashMap<String, Stand> listeDesStand) {
+		this.listeDesStand = listeDesStand;
+	}
 
 	public int getJourActuel() {
 		return jourActuel;

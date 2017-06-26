@@ -108,11 +108,21 @@ public class Population {
 	public void faireBoireLaPopulation(Meteo meteo, Meteo periodeJournee, ArrayList<String> ranking,
 			HashMap<String, ArrayList<MapItem>> listeItemByPlayer) {
 		for (Agent client : this.population) {
-			for (String playerName : ranking) {
-				for (MapItem mapItem : listeItemByPlayer.get(playerName))
-					client.calculerGainVolonteFinaleParUnePub(playerName, mapItem);
+			while(client.getIsaBueAujourdhui()==false && client.getMotivation()>outils.Global.minMotivationAvantDeNePlusVouloirBoire && client.getListeDesStand().size()>0){
+				for (String playerName : ranking) {
+					for (MapItem mapItem : listeItemByPlayer.get(playerName))
+						client.calculerGainVolonteFinaleParUnePub(playerName, mapItem);
+				}
+				//on recupere le meilleur stand
 			}
+			//Le client  a bue, il n'a plus soif, on peut le retirer du jeu
+			//
+			if (client.getIsaBueAujourdhui() == true){
+				this.population.remove(client);
+			}
+
 		}
+
 	}
 
 	/**
@@ -133,6 +143,13 @@ public class Population {
 		}
 
 		return nbClient;
+	}
+	
+	
+	public void mouvementDuMidi(Meteo meteo, Meteo periodeJournee){
+		for(Agent client : this.population){
+			client.setCoordonnees(this.calculerPositionClient(meteo, periodeJournee));
+		}
 	}
 
 	public String toString() {

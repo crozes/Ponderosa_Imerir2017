@@ -28,7 +28,7 @@ public final class Global {
 	public static final int clientMinParJoueur = 50;
 	public static final int clientMaxParJoueur = 100;
 
-	public static final float clientMinMotivation = 5;
+	public static final float clientMinMotivation = 20;
 	public static final float clientMaxMotivation = 75;
 
 	public static final int clientAlcoloMatin = 25;
@@ -38,5 +38,12 @@ public final class Global {
 
 	public static final int poidInfluencePub = 100;
 	public static final int poidDistancePerteVolonteFinale = 100;
+	
+	public static final int volonteMinPourAllerVersUnStand = 1500;
+	
+	public static final int dureerDuSleep = 10000;
+	
+	public static final int minMotivationAvantDeNePlusVouloirBoire = 10;
+	
 
 }

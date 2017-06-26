@@ -10,8 +10,8 @@ public class Agent {
 	private Coordonnees coordonnees;
 
 	private float motivation;
-	private HashMap<String, Float> volonteFinale; // definie la volonte de boire
-													// une boisson
+	private HashMap<String, Stand> listeDesStand ; // definie la volonte de boire une boisson
+	private HashMap<String, Float> listeDeLaVolontePourStand; //
 
 	private boolean veutBoissonFroide;
 	private boolean veutBoissonSansAlcool;
@@ -33,7 +33,8 @@ public class Agent {
 		this.calculerEnvieBoissonSansAlcool(meteo, periodeJournee);
 
 		this.aBueAujourdhui = false;
-		this.volonteFinale = new HashMap<String, Float>();
+		this.listeDeLaVolontePourStand =  new HashMap<String, Float>();
+		this.listeDesStand = new HashMap<String, Stand>();
 		this.coordonnees = new Coordonnees(0f, 0f);
 	}
 
@@ -122,15 +123,15 @@ public class Agent {
 	 * @param mapItem
 	 */
 	public void calculerGainVolonteFinaleParUnePub(String playerName, MapItem mapItem) {
-		if (this.volonteFinale.get(playerName) == null) {
-			this.volonteFinale.put(playerName, 0f);
+		if (this.listeDeLaVolontePourStand.get(playerName) == null) {
+			this.listeDeLaVolontePourStand.put(playerName, 0f);
 		}
 
-		float volonteFinale = this.volonteFinale.get(playerName).floatValue();
+		float volonteFinale = this.listeDeLaVolontePourStand.get(playerName).floatValue();
 		volonteFinale += ((this.calculerInfluancePub(mapItem) * outils.Global.poidInfluencePub)
 				- (outils.OutilsCalculs.calculerDistance(this, mapItem)
 						* outils.Global.poidDistancePerteVolonteFinale));
-		this.volonteFinale.put(playerName, volonteFinale);
+		this.listeDeLaVolontePourStand.put(playerName, volonteFinale);
 	}
 
 	/**
@@ -146,8 +147,70 @@ public class Agent {
 		return (float) ((Math.pow(mapItem.getInfluence(), 2) * outils.Global.poidInfluencePub)
 				/ (Math.pow(distance, 2)));
 	}
+	
+	
+	/**
+	 * Trouve le meilleur Stand
+	 * @return
+	 */
+	public String trierStandSelonVolonteFinale(){
+		String standMeilleur = null;
+		for(String cle : this.listeDeLaVolontePourStand.keySet()){
+			if (standMeilleur ==null){
+				standMeilleur = cle;
+			}
+			
+			if(this.listeDeLaVolontePourStand.get(standMeilleur)<this.listeDeLaVolontePourStand.get(cle)){
+				if(this.listeDesStand.get(cle) >
+				standMeilleur = cle;
+			}
+			
+		}
+		return standMeilleur;
+	}
+	
+	private float coutDuDeplacementVers(Coordonnees coordonneesStand){
+		float distanceMaximun = outils.OutilsCalculs.calculerDistance(this.coordonnees, coordonneesStand);
+		distanceMaximun *=outils.Global.poidDistancePerteVolonteFinale;
+		
+		return distanceMaximun;
+	}
+	
+	/**
+	 * Calcule s'il restera sufisament de volonte finale pour boire un verre
+	 * dans le stand choisie
+	 * 
+	 * @param stand
+	 * @return vrai s'il serait peut etre possible de boire dans le stand
+	 *         choisie, faux sinon
+	 */
+	private boolean peutSeDeplacerVersCeBar(Stand stand){
+		if(this.listeDeLaVolontePourStand.get(stand.getOwner())-coutDuDeplacementVers(stand.getCoordonnees())>outils.Global.volonteMinPourAllerVersUnStand){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
 
-	public boolean isaBueAujourdhui() {
+	public HashMap<String, Stand> getListeDesStand() {
+		return listeDesStand;
+	}
+
+	public void setListeDesStand(HashMap<String, Stand> listeDesStand) {
+		this.listeDesStand = listeDesStand;
+	}
+
+	public HashMap<String, Float> getListeDeLaVolontePourStand() {
+		return listeDeLaVolontePourStand;
+	}
+
+	public void setListeDeLaVolontePourStand(HashMap<String, Float> listeDeLaVolontePourStand) {
+		this.listeDeLaVolontePourStand = listeDeLaVolontePourStand;
+	}
+
+	public boolean getIsaBueAujourdhui() {
 		return aBueAujourdhui;
 	}
 
