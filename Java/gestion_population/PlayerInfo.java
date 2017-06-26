@@ -25,11 +25,11 @@ public class PlayerInfo {
      *   "isCold":bool
      * } 
     */
-	int sales;
-	float cash;
-	float profit;
-	ArrayList<DrinkInfo> drinksOffered; 
-	HashMap<String, Integer> deTest = new HashMap<>();
+	private int sales;
+	private float cash;
+	private float profit;
+	private ArrayList<DrinkInfo> drinksOffered; 
+	private HashMap<String, Integer> deTest = new HashMap<>();
 	
 	public PlayerInfo(){
 

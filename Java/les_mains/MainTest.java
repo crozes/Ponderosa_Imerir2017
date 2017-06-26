@@ -19,7 +19,7 @@ public class MainTest {
 		
 		System.out.println("\n\n On lanche une demande get \n ");
 		String plop = testGet();
-
+		System.out.println(plop);
 		
 		
 		System.out.println("\n\n On lance un post qui pour m'a part me fait perdre à chaque fois");
