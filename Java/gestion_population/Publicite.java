@@ -7,4 +7,5 @@ public class Publicite extends MapItem {
 		// TODO Auto-generated constructor stub
 	}
 
+	
 }

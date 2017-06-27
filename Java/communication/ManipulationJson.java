@@ -315,6 +315,7 @@ public class ManipulationJson {
 					}else{ //c'est un stand
 						mapItem.add(new Stand(kind, owner, influence, new Coordonnees(latitude, longitude)));
 						laPartie.getListeDesStand().put(playerName, ( new Stand(kind, owner, influence, new Coordonnees(latitude, longitude)) ) );	
+						System.out.println("bbbbbbbbbbb");
 					}
 //					i++;
 				}

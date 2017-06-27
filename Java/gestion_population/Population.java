@@ -93,6 +93,14 @@ public class Population {
 			int nbJoueur, Meteo meteo, Meteo periodeJournee, HashMap<String, Stand> listeDesStand) {
 		nombreDeClient = calculDuNombreDeClient(nbJoueur, meteo, periodeJournee);
 
+		//on fixe la taille de la map
+		this.latitudeMax = latitudeMax;
+		this.LatitudeMin = LatitudeMin;
+		this.longitudeMax = longitudeMax;
+		this.LongitudeMin = LongitudeMin;
+		
+		outils.ToString.toString("On genere les pigeons");
+		
 		for (int i = 0; i < nombreDeClient; i++) {
 			this.population.add(this.creerUnAgent(meteo, periodeJournee, listeDesStand));
 		}
@@ -159,26 +167,40 @@ public class Population {
 	 * @param listeItemByPlayer
 	 */
 	public void faireBoireLaPopulation(Meteo meteo, TheGame laPartie) {
-
-		for (Agent client : this.population) {
-			while(client.getIsaBueAujourdhui()==false && client.getMotivation()>outils.Global.minMotivationAvantDeNePlusVouloirBoire && client.getListeDesStandNonVisite().size()>0){
+		int numeroClient = 0;
+		Agent client;
+		//for (Agent client : this.population) {
+		for(int i_client = 0; i_client<this.population.size(); i_client++){
+			client = this.population.get(i_client);
+			numeroClient++;
+			outils.ToString.toString("On s'occupe du client : " + numeroClient + " sur : " + population.size());
+			outils.ToString.toString("aBue = " + client.getIsaBueAujourdhui() + " motivation : "+ client.getMotivation() + 
+					" motivation min autorise : " + outils.Global.minMotivationAvantDeNePlusVouloirBoire +
+				" nombre de stand qu'il reste a visiter : " + client.getListeDesStandNonVisite().size()	);
+			do{
 			
 			
 				//on genere la volontéFinale
 				client.generationDeLaVolonteFinale(laPartie.getListeMapItemJoueur());
 					
 				//on cherche sur qu'elle bar on va.
-				int i_stand = 0;
-				while (i_stand < client.getListeDesStandTrie().size() && client.peutSeDeplacerVersCeBar(laPartie, client.getListeDesStandTrie().get(i_stand))){
+				int i_stand = -1;
+				boolean peutSeDeplacer = false;
+				do{
 					i_stand++;
-				}
+					outils.ToString.toString("i : " + i_stand + " size : " + client.getListeDesStandTrie().size() +"probleme d'index Population faireBoire...");
+					peutSeDeplacer = client.peutSeDeplacerVersCeBar(laPartie, client.getListeDesStandTrie().get(i_stand));
+					
+				}while (i_stand < client.getListeDesStandTrie().size()-1 && peutSeDeplacer == false );
 				
 				//le client passe sa commande
+				outils.ToString.toString("Le client :" + numeroClient + " passe commande chez : " + client.getListeDesStandTrie().get(i_stand));
 				client.commanderUneBoisson(laPartie, client.getListeDesStandTrie().get(i_stand));
 				
-			}
+			}while(client.getIsaBueAujourdhui()==false && client.getMotivation()>outils.Global.minMotivationAvantDeNePlusVouloirBoire && client.getListeDesStandNonVisite().size()>0);
 			//Le client  a bue, il n'a plus soif, on peut le retirer du jeu
 			if (client.getIsaBueAujourdhui() == true){
+				outils.ToString.toString("On a retirer un client. Il reste : "+ population.size()+" clients");
 				this.population.remove(client);
 			}
 

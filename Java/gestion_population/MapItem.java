@@ -93,5 +93,10 @@ public abstract class MapItem {
 
 		return jsonOb;
 	}
+	
+	
+	public String toString(){
+		return ("   " + " type : " + this.kind + " influence : " + this.influence);
+	}
 
 }

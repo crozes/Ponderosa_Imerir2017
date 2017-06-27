@@ -41,9 +41,10 @@ public class DrinkInfo {
 		if (this.isPlusEnStock == true) {
 			return false;
 		} else {
-			String result = Communication.postEnvoyer(this.getJsonObjectSale(playerName, 1).toString(),
-					outils.Global.URL_POST_REQUEST_FOR_SELLING);
-			int reponse = ManipulationJson.jsonFromStringSale(result);
+//			String result = Communication.postEnvoyer(this.getJsonObjectSale(playerName, 1).toString(),
+//					outils.Global.URL_POST_REQUEST_FOR_SELLING);
+//			int reponse = ManipulationJson.jsonFromStringSale(result);
+			int reponse = 1;
 			if (reponse < quantity) {
 				this.isPlusEnStock = true;
 				return false;
@@ -132,4 +133,8 @@ public class DrinkInfo {
 		return jsonOb;
 	}
 
+	public String toString(){
+		return ("Drink nom : " + this.name + " prix : " + this.price + " cout en volonte : " + this.coutEnVolonteFinalePourBoire);
+	}
+	
 }
