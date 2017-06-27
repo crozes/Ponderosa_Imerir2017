@@ -35,12 +35,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import outils.Global;
+import testPoubelle.Main_pour_blaguer;
 
-public class Graph extends Application  {
+public  class Graph extends Application {
 	Label label2= new Label();
 	int carte_x=800;
 	int carte_y=500;
 	Canvas canvas=new Canvas(carte_x,carte_y);
+	TheGame game = Main_pour_blaguer.laPartie;
 	int tempo=2;//variable temporaire
 	
 	/**recuperation de l'heure*/
@@ -90,46 +92,56 @@ public class Graph extends Application  {
 	/////////////////////////////////////////start///////////////////////////////////
 				/**affichage*/
 	
-    public void start(Stage primaryStage) { 
-
+    public void start(Stage primaryStage ) { 
+    	
     	/*variable de test*/
     	int recupNbJoueur=10;
+ 
     	/*creation de la fenetre*/
     	primaryStage.setTitle("limonade.io");
         Group root=new Group();//arriere de la fenetre
         Scene scene= new Scene(root,1000,600,Color.LIGHTBLUE);//scene
-        /*creation de panel*/
+        
+        /*creation du premier panel*/
         VBox page=new VBox();
         GridPane upPanel = new GridPane();
-        gridPanel(2,1,upPanel);
-        ColumnConstraints colConstup = new ColumnConstraints(200);
-	    upPanel.getColumnConstraints().add(colConstup);
+        ColumnConstraints colConstUp = new ColumnConstraints(carte_x/2);
+        upPanel.getColumnConstraints().add(colConstUp);
+        ColumnConstraints colConstUp1 = new ColumnConstraints(carte_x/2);
+	    upPanel.getColumnConstraints().add(colConstUp1);
+        RowConstraints rowConst = new RowConstraints(100);
+        upPanel.getRowConstraints().add(rowConst);    
         GridPane genPanel = new GridPane();
+        
         ////////////seconde ligne du grid
-	    ColumnConstraints colConst = new ColumnConstraints(carte_x);
-	    genPanel.getColumnConstraints().add(colConst);
-	    ColumnConstraints colConst1 = new ColumnConstraints(200);
-	    genPanel.getColumnConstraints().add(colConst1);
-	    RowConstraints rowConst = new RowConstraints(carte_y);
-	    genPanel.getRowConstraints().add(rowConst);
+	    ColumnConstraints colConstGen = new ColumnConstraints(carte_x);
+	    genPanel.getColumnConstraints().add(colConstGen);
+	    ColumnConstraints colConstGen1 = new ColumnConstraints(200);
+	    genPanel.getColumnConstraints().add(colConstGen1);
+	    RowConstraints rowConstGen = new RowConstraints(carte_y);
+	    genPanel.getRowConstraints().add(rowConstGen);
 	    genPanel.setGridLinesVisible(true);
+	    
 	    ////////////integration des panel dans la scene
         page.getChildren().add(upPanel);
         page.getChildren().add(genPanel);
+        
         /*contenu de la page*/
+        
         /////////////////case1////////////////
-        String MJB="info patie";//recupMJB();
+        String MJB="meteo : "+game.getMeteoDuJour()+"\nnb de player : "+game.getRanking().size()+"\npopulation : ??";
         Label topLabel= new Label(); 
         topLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); 
         topLabel.setStyle("-fx-background-color: white; -fx-border-color: black;-fx-alignment:CENTER; -fx-font-size: 15pt;");
         topLabel.setText(MJB);
         upPanel.add(topLabel, 0, 0);
+        
         /////////////////case2///////////////
-        
-        
         label2.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); 
         label2.setStyle("-fx-background-color: white; -fx-border-color: black;-fx-alignment:CENTER; -fx-font-size: 20pt ;");
-        label2.setText(ranking.get(1).toString());/*************ICI*******************/
+        int jour=game.getHeureDepuisDebutJeu()%24;
+        int heure=game.getHeureDepuisDebutJeu()-(24*jour);
+        label2.setText(String.valueOf("jour : "+jour+ "\nheure : "+heure));
         upPanel.add(label2, 1, 0);
         
         /////////////////////////////////case carte/////////////////////////////
@@ -137,23 +149,25 @@ public class Graph extends Application  {
         genPanel.add(carte, 0, 0);
         ////////////////////////////////case infoJoueur/////////////////////////////////////////
         TreeItem<String> listJoueur = new TreeItem<String>("id joueur");
-       
-        TreeItem<String> infoJoueur = new TreeItem<String>("infoJoueur(id)");
-        TreeItem<String> drinkInfo = new TreeItem<String>("Drink Info");
-       	listJoueur.setExpanded(true);
-        infoJoueur.getChildren().addAll(
-            new TreeItem<String>("infoJoueur(fric)"),
-            new TreeItem<String>("infoJoueur(vente)"),
-            new TreeItem<String>("infoJoueur(profit)")
-        );
-        drinkInfo.getChildren().addAll(
-                new TreeItem<String>("nom"),
-                new TreeItem<String>("prix"),
-                new TreeItem<String>("alchool"),
-                new TreeItem<String>("froid")
+        for(int i=0;i<game.getRanking().size();i++){
+            TreeItem<String> infoJoueur = new TreeItem<String>(game.getRanking().get(i));
+            TreeItem<String> drinkInfo = new TreeItem<String>("Drink Info");
+           	listJoueur.setExpanded(true);
+            infoJoueur.getChildren().addAll(
+                new TreeItem<String>("infoJoueur(cash)"),
+                new TreeItem<String>("infoJoueur(vente)"),
+                new TreeItem<String>("infoJoueur(profit)")
             );
-        infoJoueur.getChildren().addAll(drinkInfo);
-        listJoueur.getChildren().addAll(infoJoueur);
+            drinkInfo.getChildren().addAll(
+                    new TreeItem<String>("nom"),
+                    new TreeItem<String>("prix"),
+                    new TreeItem<String>("alchool"),
+                    new TreeItem<String>("froid")
+                );
+            infoJoueur.getChildren().addAll(drinkInfo);
+            listJoueur.getChildren().addAll(infoJoueur);
+        }
+
         TreeView<String> treeView = new TreeView<String>(listJoueur);
         genPanel.add(treeView, 1, 0);
         //creation de la population
@@ -185,10 +199,10 @@ public class Graph extends Application  {
     				catch (InterruptedException exception) {
     				  exception.printStackTrace();
     				}
-    			Platform.runLater(()->label2.setText(hourJour(recupHour())));
+    			Platform.runLater(()->label2.setText(String.valueOf("jour\nheure:"+game.getHeureDepuisDebutJeu())));
     			boolean refresh=true;
-    			if((recupHour()%12)==0){
-    				
+    			if((tempo%12)==0){
+    				tempo++;
     				migration(150).clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     				if(refresh==true){
     					migration(150);
@@ -196,6 +210,7 @@ public class Graph extends Application  {
     
     			}else{
     				refresh=false;
+    				tempo++;
     			}
     			
     		}
@@ -204,9 +219,7 @@ public class Graph extends Application  {
     
     //////////////////////////////////main///////////////////////////////////////////////
 	public static void main(String[] args) {
-		 
 		launch(Graph.class,args);
    }
-	
 	
 }
