@@ -110,7 +110,7 @@ int sendJson(char* a_envoyer){
         for(int i=0;i<NB_PREVISIONS;i++){
             weather[i]=json_object_new_object();
             json_object_object_add(weather[i], "weather",json_object_new_string(meteo[i]));
-            json_object_object_add(weather[i],"dnf",json_object_new_int(i));
+            json_object_object_add(weather[i],"dfn",json_object_new_int(i));
             json_object_array_add(jarray,weather[i]);
         }
         json_object_object_add(json, "weather", jarray);
