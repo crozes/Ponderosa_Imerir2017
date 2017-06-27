@@ -91,5 +91,15 @@ public class Region {
 
 		return jsonOb;
 	}
+	
+	public String toString(){
+		if(this.center != null && this.span!= null){
+			String toReturn = (this.center.toString() + " " + this.span.toString());
+			return toReturn;
+		}
+		else{
+			return "Objet null";
+		}
+	}
 
 }

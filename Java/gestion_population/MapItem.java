@@ -15,7 +15,7 @@ public abstract class MapItem {
 	private float influence;
 
 	private Coordonnees coordonnees;
-
+	
 	
 	
 	

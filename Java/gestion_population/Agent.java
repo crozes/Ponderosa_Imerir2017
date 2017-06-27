@@ -1,7 +1,9 @@
 package gestion_population;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import communication.Communication;
 import outils.Global;
 import outils.Meteo;
 
@@ -10,8 +12,9 @@ public class Agent {
 	private Coordonnees coordonnees;
 
 	private float motivation;
-	private HashMap<String, Stand> listeDesStand ; // definie la volonte de boire une boisson
+	private HashMap<String, Stand> listeDesStandNonVisite ; // definie la volonte de boire une boisson
 	private HashMap<String, Float> listeDeLaVolontePourStand; //
+	private ArrayList<String> listeDesStandTrie;
 
 	private boolean veutBoissonFroide;
 	private boolean veutBoissonSansAlcool;
@@ -24,7 +27,7 @@ public class Agent {
 	 * @param meteo
 	 * @param periodeJournee
 	 */
-	public Agent(Meteo meteo, Meteo periodeJournee) {
+	public Agent(Meteo meteo, Meteo periodeJournee, HashMap<String, Stand> listeDesStand) {
 
 		this.motivation = this.calculerMotivationClient(meteo, periodeJournee);
 
@@ -34,7 +37,8 @@ public class Agent {
 
 		this.aBueAujourdhui = false;
 		this.listeDeLaVolontePourStand =  new HashMap<String, Float>();
-		this.listeDesStand = new HashMap<String, Stand>();
+		this.listeDesStandNonVisite = new HashMap<String, Stand>(listeDesStand);
+		this.listeDesStandTrie = new ArrayList<>();
 		this.coordonnees = new Coordonnees(0f, 0f);
 	}
 
@@ -115,6 +119,7 @@ public class Agent {
 			}
 		}
 	}
+	
 
 	/**
 	 * Calcul du bonus de volonte finale d'une pub sur un client
@@ -154,18 +159,20 @@ public class Agent {
 	 * @return
 	 */
 	public String trierStandSelonVolonteFinale(){
+		
+		
 		String standMeilleur = null;
-		for(String cle : this.listeDeLaVolontePourStand.keySet()){
-			if (standMeilleur ==null){
-				standMeilleur = cle;
-			}
-			
-			if(this.listeDeLaVolontePourStand.get(standMeilleur)<this.listeDeLaVolontePourStand.get(cle)){
-				if(this.listeDesStand.get(cle) >
-				standMeilleur = cle;
-			}
-			
-		}
+//		for(String cle : this.listeDeLaVolontePourStand.keySet()){
+//			if (standMeilleur ==null){
+//				standMeilleur = cle;
+//			}
+//			
+//			if(this.listeDeLaVolontePourStand.get(standMeilleur)<this.listeDeLaVolontePourStand.get(cle)){
+//				if(this.listeDesStand.get(cle) >
+//				standMeilleur = cle;
+//			}
+//			
+//		}
 		return standMeilleur;
 	}
 	
@@ -184,7 +191,9 @@ public class Agent {
 	 * @return vrai s'il serait peut etre possible de boire dans le stand
 	 *         choisie, faux sinon
 	 */
-	private boolean peutSeDeplacerVersCeBar(Stand stand){
+	public boolean peutSeDeplacerVersCeBar(TheGame quaranteDeux,String debitDeBoisson){
+		
+		Stand stand = this.listeDesStandNonVisite.get(debitDeBoisson);
 		if(this.listeDeLaVolontePourStand.get(stand.getOwner())-coutDuDeplacementVers(stand.getCoordonnees())>outils.Global.volonteMinPourAllerVersUnStand){
 			return true;
 		}
@@ -193,13 +202,98 @@ public class Agent {
 		}
 	}
 	
+	/**
+	 * tente de boire une boisson dans le stand d'un joueur
+	 * @param player
+	 * @return
+	 */
+	public boolean commanderUneBoisson(TheGame leMonde, String debitDeBoisson){
+		float coutBoissonVF;
+		int i_drinks = 0;
+		String enStock = "";
+		
+		ArrayList<DrinkInfo> boissonPropose = new ArrayList<>(leMonde.getListePlayerInfo().get(debitDeBoisson).getDrinksOffered());
+		while(this.aBueAujourdhui==false && i_drinks<boissonPropose.size()){
+			coutBoissonVF = boissonPropose.get(i_drinks).getCoutEnVolonteFinalePourBoire();
+			if(this.listeDeLaVolontePourStand.get(debitDeBoisson)>coutBoissonVF){
+				if(this.veutBoissonFroide == boissonPropose.get(i_drinks).getIsCold() 
+						&&	this.veutBoissonSansAlcool == boissonPropose.get(i_drinks).getIsHasAlcohol()){
+					enStock = Communication.postEnvoyer(boissonPropose.get(i_drinks).getJsonObjectSale(debitDeBoisson).toString(), outils.Global.URL_POST_REQUEST_FOR_SELLING);
+					if(enStock=="1"){
+						this.aBueAujourdhui=true;
+						boissonPropose.get(i_drinks).uneVente();
+						return true;
+					}	
+				}
+			}
+			i_drinks++;
+		}
+		
+		this.listeDesStandNonVisite.remove(debitDeBoisson);
+		return false;
 
-	public HashMap<String, Stand> getListeDesStand() {
-		return listeDesStand;
+	}
+	
+
+	
+	/**
+	 * 
+	 * @param listeItemByPlayer
+	 */
+	public void generationDeLaVolonteFinale(HashMap<String, ArrayList<MapItem>> listeItemByPlayer){
+		this.listeDeLaVolontePourStand = new HashMap<String, Float>();
+		float volonte =0f;
+		
+		for(String playerName : this.listeDesStandNonVisite.keySet()){
+			this.listeDeLaVolontePourStand.put(playerName, 0f);
+			volonte =0f;
+			for(MapItem mapItem : listeItemByPlayer.get(playerName)){
+				volonte += this.calculerInfluancePub(mapItem);
+				this.listeDeLaVolontePourStand.put(playerName, volonte);
+			}
+		}
+		
+		//on recupere la liste des stand trie
+		
+		this.listeDesStandTrie = trierCleHasmapStringFloatDescendant(this.listeDeLaVolontePourStand);
+		
+	}
+	
+	/**
+	 * Renvoie une arraylist avec les cle de la HasMap, de la meilleure valeur, à la plus mauvaise.
+	 * @param aTrier
+	 * @return
+	 */
+	public ArrayList<String> trierCleHasmapStringFloatDescendant(HashMap<String, Float> aTrier){
+		ArrayList<String> retourHasmap = new ArrayList<String>();
+		String cleMeilleureValeur = "";
+		float meilleureValeur;
+		while(!aTrier.isEmpty()){
+			meilleureValeur=0f;
+			for(String cle : aTrier.keySet()){
+				if(aTrier.get(cle)>meilleureValeur){
+					meilleureValeur = aTrier.get(cle);
+					cleMeilleureValeur = cle;
+				}
+			}
+			retourHasmap.add(cleMeilleureValeur);
+			aTrier.remove(cleMeilleureValeur);
+		}
+		
+		return retourHasmap;
 	}
 
-	public void setListeDesStand(HashMap<String, Stand> listeDesStand) {
-		this.listeDesStand = listeDesStand;
+	
+	
+
+	
+	
+	public HashMap<String, Stand> getListeDesStandNonVisite() {
+		return listeDesStandNonVisite;
+	}
+
+	public void setListeDesStandNonVisite(HashMap<String, Stand> listeDesStand) {
+		this.listeDesStandNonVisite = listeDesStand;
 	}
 
 	public HashMap<String, Float> getListeDeLaVolontePourStand() {
@@ -269,5 +363,15 @@ public class Agent {
 	public void setLongitude(float longitude) {
 		this.coordonnees.setLongitude(longitude);
 	}
+
+	public ArrayList<String> getListeDesStandTrie() {
+		return listeDesStandTrie;
+	}
+
+	public void setListeDesStandTrie(ArrayList<String> listeDesStandTrie) {
+		this.listeDesStandTrie = listeDesStandTrie;
+	}
+	
+	
 
 }

@@ -1,0 +1,20 @@
+{"map":
+{
+"region": {"center": {"longitude": 400.0, "latitude": 250.0}, "span": {"longitudeSpan": 800.0, "latitudeSpan": 500.0}},
+"ranking": ["Toto","Titi"],
+"playerInfo":{
+             "Toto": {"profit": 0, "cash": 100.0, "sales": 0, "drinksOffered": [{"name": "Margarita", "price": 10, "hasAlcohol":true, "isCold":true},{"name": "Limonade", "price": 1, "hasAlcohol":false, "isCold":true}]},
+             "Titi": {"profit": 0, "cash": 100.0, "sales": 0, "drinksOffered": [{"name": "Margarita", "price": 10, "hasAlcohol":true, "isCold":true},{"name": "Limonade", "price": 1, "hasAlcohol":false, "isCold":true}]}
+             },
+"itemsByPlayers":{
+                  "Toto": [{"location": {"longitude": 56.0, "latitude": 25.0}, "owner": "Toto", "influence": 10.0, "kind": "stand"},
+                          {"location": {"longitude": 50.0, "latitude": 12.0}, "owner": "Toto", "influence": 2.0, "kind": "ad"}],
+                  "Titi": [{"location": {"longitude": 30.0, "latitude": 12.0}, "owner": "Titi", "influence": 10.0, "kind": "stand"}]
+                 },
+"drinksByPlayer":{
+                  "Toto":[{"name": "Margarita", "price": 10, "hasAlcohol":true, "isCold":true},{"name": "Limonade", "price": 1, "hasAlcohol":false, "isCold":true}],
+                  "Titi":[{"name": "Margarita", "price": 10, "hasAlcohol":true, "isCold":true},{"name": "Limonade", "price": 1, "hasAlcohol":false, "isCold":true}]
+                  }
+}
+}
+

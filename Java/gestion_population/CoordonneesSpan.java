@@ -66,4 +66,8 @@ public class CoordonneesSpan {
 		return jsonOb;
 	}
 
+	public String toString(){
+		return ("Latitude:" + this.latitude_span + " Longitude:" + this.longitude_span + " .");
+	}
+	
 }

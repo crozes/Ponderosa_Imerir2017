@@ -19,6 +19,10 @@ public class Population {
 
 	public float test_motivationMax = 0;
 	public float test_motivationMin = 1000000;
+	
+	public Population(){
+		this.population = new ArrayList<Agent>();
+	}
 
 	public Population(float latitudeMax, float LatitudeMin, float longitudeMax, float LongitudeMin) {
 		this.latitudeMax = latitudeMax;
@@ -30,18 +34,18 @@ public class Population {
 	}
 
 	public Population(float latitudeMax, float LatitudeMin, float longitudeMax, float LongitudeMin, int nbJoueur,
-			Meteo meteo, Meteo periodeJournee) {
+			Meteo meteo, Meteo periodeJournee, HashMap<String, Stand> listeDesStand) {
 
 		this.population = new ArrayList<Agent>();
 		nombreDeClient = calculDuNombreDeClient(nbJoueur, meteo, periodeJournee);
 
 		for (int i = 0; i < nombreDeClient; i++) {
-			this.population.add(this.creerUnAgent(meteo, periodeJournee));
+			this.population.add(this.creerUnAgent(meteo, periodeJournee, listeDesStand));
 		}
 	}
 
-	private Agent creerUnAgent(Meteo meteo, Meteo periodeJournee) {
-		Agent client = new Agent(meteo, periodeJournee);
+	private Agent creerUnAgent(Meteo meteo, Meteo periodeJournee, HashMap<String, Stand> listeDesStand) {
+		Agent client = new Agent(meteo, periodeJournee,listeDesStand);
 
 		client.setCoordonnees(calculerPositionClient(meteo, periodeJournee));
 
@@ -86,11 +90,11 @@ public class Population {
 	 *            augmente l'envie de boisson alcooliser le soir
 	 */
 	public void genererPopulation(float latitudeMax, float LatitudeMin, float longitudeMax, float LongitudeMin,
-			int nbJoueur, Meteo meteo, Meteo periodeJournee) {
+			int nbJoueur, Meteo meteo, Meteo periodeJournee, HashMap<String, Stand> listeDesStand) {
 		nombreDeClient = calculDuNombreDeClient(nbJoueur, meteo, periodeJournee);
 
 		for (int i = 0; i < nombreDeClient; i++) {
-			this.population.add(this.creerUnAgent(meteo, periodeJournee));
+			this.population.add(this.creerUnAgent(meteo, periodeJournee, listeDesStand));
 		}
 	}
 
@@ -99,24 +103,81 @@ public class Population {
 	 * le matin et qu'il n'a pas trouver de boisson a son gout (par rapport au
 	 * stock) il n'essaira pas dis retourner le soir (il boude)
 	 * 
+	 * La pub et sa motivation creer sa volontéFinale de vouloir boire dans un bar
+	 * il va dans le bar qui lui procure la plus grande volonte finale et qui n'est pas trop loin pour qu'il lui reste
+	 * de la volontéFinale une fois arrivé
+	 * 
+	 * se deplacer diminue ca volonté finale, donc avant de se deplacer, on voie si 
+	 * sa volonté finale ne sera pas trop basse
+	 * 
+	 * une fois arrivé il voie s'il y a une boisson qu'il aimerai boire par rapport a ces envie et
+	 * aussi s'il lui reste suffisament de volonté de commandé. Il tente de boire la boisson la plus chere selon ca volonté
+	 * Une boisson à un tot de consomation de volontéFinale calculé par rapport a son prix
+	 * 
+	 * 
+	 * s'il peut boire il fait la demande, s'il y a du stock (requete au serveur) il boit et on le retire de la population
+	 * 
+	 * s'il n'a pas bue, il divise sa motivation par 2 et recherche un nouveau bar (et tout recommence)
+	 * 
+	 * 
+	 * 
+	 * Explication du fonctionnement de cette grosse fonction :
+	 * On agit client par client
+	 * tant que le client n'a pas bu, a la volonté de continué, a encore un stand qu'il peut visiter
+	 * 	on calcule la volontéFInale de chaque stand pour le client
+	 * 	on recupere la liste trie des stand par ordre de volonté finale
+	 *  
+	 *  on voie si on peut allé au premier sinon on va au suivant ...
+	 *  
+	 *  on va au bar -> changement de coordonnees on est sur le bar
+	 *  
+	 *  on essaie de boire
+	 *  	post boire
+	 *  	oui 
+	 *  		-> stand -> recipe +1 vente
+	 *			-> on retire l'agent
+	 *
+	 *  	non -> on essaie boisson suivante
+	 *  		il n'y a pas de boisson	
+	 *  			-> on retire le stand 
+	 *  			-> on relance sur les stand qu'il reste		
+	 *  
+	 *  
+	 *  
+	 *  
+	 *  
+	 *  Population : faireBoireLaPopulation
+	 *  	Agent : generationDeLaVolonteFinale
+	 *  		Agent : calculerInfluancePub
+	 *  		Agent : trierCleHasmapStringFloatDescendant
+	 *  	
+
 	 * @param meteo
 	 * @param periodeJournee
 	 * @param ranking
 	 *            cle de la hasmap listeItemByPlayer
 	 * @param listeItemByPlayer
 	 */
-	public void faireBoireLaPopulation(Meteo meteo, Meteo periodeJournee, ArrayList<String> ranking,
-			HashMap<String, ArrayList<MapItem>> listeItemByPlayer) {
+	public void faireBoireLaPopulation(Meteo meteo, TheGame laPartie) {
+
 		for (Agent client : this.population) {
-			while(client.getIsaBueAujourdhui()==false && client.getMotivation()>outils.Global.minMotivationAvantDeNePlusVouloirBoire && client.getListeDesStand().size()>0){
-				for (String playerName : ranking) {
-					for (MapItem mapItem : listeItemByPlayer.get(playerName))
-						client.calculerGainVolonteFinaleParUnePub(playerName, mapItem);
+			while(client.getIsaBueAujourdhui()==false && client.getMotivation()>outils.Global.minMotivationAvantDeNePlusVouloirBoire && client.getListeDesStandNonVisite().size()>0){
+			
+			
+				//on genere la volontéFinale
+				client.generationDeLaVolonteFinale(laPartie.getListeMapItemJoueur());
+					
+				//on cherche sur qu'elle bar on va.
+				int i_stand = 0;
+				while (i_stand < client.getListeDesStandTrie().size() && client.peutSeDeplacerVersCeBar(laPartie, client.getListeDesStandTrie().get(i_stand))){
+					i_stand++;
 				}
-				//on recupere le meilleur stand
+				
+				//le client passe sa commande
+				client.commanderUneBoisson(laPartie, client.getListeDesStandTrie().get(i_stand));
+				
 			}
 			//Le client  a bue, il n'a plus soif, on peut le retirer du jeu
-			//
 			if (client.getIsaBueAujourdhui() == true){
 				this.population.remove(client);
 			}

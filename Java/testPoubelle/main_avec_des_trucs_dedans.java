@@ -27,7 +27,7 @@ public class main_avec_des_trucs_dedans {
 		//PlayerInfo test = new PlayerInfo();
 		
 		
-		TheGame laPartie = new TheGame(50, -50, 50, -50);
+		TheGame laPartie = new TheGame();
 		
 		ArrayList<String> ranking = new ArrayList<>();
 		ranking.add("Viktor");
@@ -38,7 +38,7 @@ public class main_avec_des_trucs_dedans {
 		Meteo meteo = Meteo.heatwave;
 		Meteo periodeJournee = Meteo.matin;
 		
-		laPartie.getMapDeLaPopulation().genererPopulation(50, -50, 50, -50, ranking.size(), meteo, periodeJournee);
+//		laPartie.getMapDeLaPopulation().genererPopulation(50, -50, 50, -50, ranking.size(), meteo, periodeJournee);
 		laPartie.setRanking(ranking);
 
 		System.out.println(laPartie.getMapDeLaPopulation().toString());

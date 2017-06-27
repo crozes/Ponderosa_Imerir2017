@@ -149,9 +149,9 @@ public class ManipulationJson {
 		/*------------------------------------------------------------------------------------------------------
 		 * Le ranking
 		 */
+		laPartie.getRanking().clear();
 		size_jsonArray = jsonArRanking.size();
 		for (int i = 0; i < size_jsonArray; i++) {
-			laPartie.getRanking().clear();
 			laPartie.getRanking().add(jsonArRanking.get(i).getAsString());
 		}
 
@@ -167,7 +167,7 @@ public class ManipulationJson {
 		JsonObject jsonObDrinkInfo;
 
 		PlayerInfo playerInfo;
-		int cash;
+		float cash;
 		int sales;
 		float profit;
 
@@ -210,7 +210,7 @@ public class ManipulationJson {
 		for (String playerName : laPartie.getRanking()) {
 
 			jsonObInfoPlayer = jsonObPlayerInfo.get(playerName).getAsJsonObject();
-			cash = jsonObInfoPlayer.get("cash").getAsInt();
+			cash = jsonObInfoPlayer.get("cash").getAsFloat();
 			sales = jsonObInfoPlayer.get("sales").getAsInt();
 			profit = jsonObInfoPlayer.get("profit").getAsFloat();
 
@@ -219,6 +219,8 @@ public class ManipulationJson {
 			size_jsonArray = jsonArDrinkOffered.size();
 			playerInfo = new PlayerInfo(sales, cash, profit, new ArrayList<DrinkInfo>());
 
+			//int i =0;
+			//while(jsonArDrinkOffered.get(i).getAsJsonObject().isJsonNull()==false){
 			for (int i = 0; i < size_jsonArray; i++) {
 				jsonObDrinkInfo = jsonArDrinkOffered.get(i).getAsJsonObject();
 				name = jsonObDrinkInfo.get("name").getAsString();
@@ -227,7 +229,7 @@ public class ManipulationJson {
 				isCold = jsonObDrinkInfo.get("isCold").getAsBoolean();
 
 				playerInfo.getDrinksOffered().add(new DrinkInfo(name, price, hasAlcohol, isCold));
-
+//				i++;
 			}
 
 			laPartie.getListePlayerInfo().put(playerName, playerInfo);
@@ -238,6 +240,8 @@ public class ManipulationJson {
 
 			size_jsonArray = jsonArDrinkInfo.size();
 			ArrayList<DrinkInfo> drinkInfo = new ArrayList<>();
+//			i =0;
+//			while(!jsonArDrinkInfo.get(i).getAsJsonObject().isJsonNull()){
 			for (int i = 0; i < size_jsonArray; i++) {
 				jsonObDrinkInfo = jsonArDrinkInfo.get(i).getAsJsonObject();
 				name = jsonObDrinkInfo.get("name").getAsString();
@@ -245,7 +249,7 @@ public class ManipulationJson {
 				hasAlcohol = jsonObDrinkInfo.get("hasAlcohol").getAsBoolean();
 				isCold = jsonObDrinkInfo.get("isCold").getAsBoolean();
 				drinkInfo.add(new DrinkInfo(name, price, hasAlcohol, isCold));
-				
+//				i++;
 			}
 			laPartie.getListeDesDrinkInfo().put(playerName, drinkInfo);
 
@@ -255,6 +259,8 @@ public class ManipulationJson {
 
 			size_jsonArray = jsonArMapItem.size();
 			ArrayList<MapItem> mapItem = new ArrayList<>();
+//			i =0;
+//			while(!jsonArMapItem.get(i).getAsJsonObject().isJsonNull()){
 			for (int i = 0; i < size_jsonArray; i++) {
 				jsonObMapItem = jsonArMapItem.get(i).getAsJsonObject();
 
@@ -274,11 +280,9 @@ public class ManipulationJson {
 					mapItem.add(new Publicite(kind, owner, influence, new Coordonnees(latitude, longitude)));
 				}else{ //c'est un stand
 					mapItem.add(new Stand(kind, owner, influence, new Coordonnees(latitude, longitude)));
-					laPartie.getListeDesStand().put(playerName, ( new Stand(kind, owner, influence, new Coordonnees(latitude, longitude)) ) );
-					
+					laPartie.getListeDesStand().put(playerName, ( new Stand(kind, owner, influence, new Coordonnees(latitude, longitude)) ) );	
 				}
-				
-				
+//				i++;
 			}
 				laPartie.getListeMapItemJoueur().put(playerName, mapItem);
 			

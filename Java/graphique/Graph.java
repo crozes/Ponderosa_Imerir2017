@@ -1,13 +1,16 @@
 package graphique;
 
-
 import java.util.ArrayList;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import gestion_population.TheGame;
+
 import communication.Communication;
+import gestion_population.TheGame;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Group;
@@ -16,6 +19,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -38,36 +43,14 @@ public class Graph extends Application  {
 	Canvas canvas=new Canvas(carte_x,carte_y);
 	int tempo=2;//variable temporaire
 	
-	/**recuperation d'info depuis le serveur*/
-	////////////////////////////////////////recupMJB//////////////////////////////////////
-	/**recuperation de la meteo du jour et du budjet*/
-	private String recupMJB(){
-		String texte = Communication.getRecevoir(Global.URL_TEST_JSON_GET);
-		JsonElement jelement = new JsonParser().parse(texte);
-		JsonObject json = jelement.getAsJsonObject();
-		String weather = json.get("weather").getAsString();
-		int day = json.get("day").getAsInt();
-		float budget = json.get("budget").getAsFloat();
-		return "meteo : " + weather + "\n jour : " + day + "\n budjet : " + budget;
-	}
-	/////////////////////////////////////////recupNbJoueur//////////////////////////////
-	private int recupNbJoueur(){
-		String texte = Communication.getRecevoir("https://ponderosaproject.herokuapp.com/nbrPlayer");
-		JsonElement jelement = new JsonParser().parse(texte);
-		JsonObject json = jelement.getAsJsonObject();
-		int nbJoueur = json.get("nbrPlayer").getAsInt();
-		return nbJoueur;
-	
-	}
-	////////////////////////////////////////recupHour//////////////////////////////////
 	/**recuperation de l'heure*/
-	private String recupHour(){
-		String texte = Communication.getRecevoir("https://ponderosaproject.herokuapp.com/getHour");
+	private int recupHour(){
+		String texte = Communication.getRecevoir("https://ponderosaproject.herokuapp.com/metrology");
 		JsonElement jelement = new JsonParser().parse(texte);
 		JsonObject json = jelement.getAsJsonObject();
-		int time = json.get("time").getAsInt();
-		String date=hourJour(time);
-		return date;
+		int time = json.get("timestamp").getAsInt();
+		System.out.println("time"+time);
+		return time;
 	}
 	////////////////////////////////////////hourJour/////////////////////////////////////
 	/**trensformation time en jour et heure*/
@@ -76,7 +59,7 @@ public class Graph extends Application  {
 		int heure=time-(24*jour);
 		String.valueOf(jour);
 		String.valueOf(heure);
-		return jour+"jour \n\n"+heure+"h00";
+		return jour+"jour \n"+heure+"h00";
 	}
 	/////////////////////////////////////////gridpanel/////////////////////////////////
 	/**crée les case du gridpane*/
@@ -95,21 +78,24 @@ public class Graph extends Application  {
 	private GraphicsContext migration(int nbPop){
 		
 		GraphicsContext gc=canvas.getGraphicsContext2D();
+		
 		for(int i=0;i<nbPop;i++){
 			gc.setFill(Color.rgb(0, 0, 0, 1));
         	gc.fillOval(Math.random()*(carte_x-0), Math.random()*(carte_y-0), 10, 10);
         }
-        gc.setFill(Color.rgb(100, 100, 100, /*0.5*/1));
-        gc.fillOval(150, 200, 50, 50);
+        gc.setFill(Color.rgb(255, 100, 100, 0.7));
+        gc.fillOval(150, 200, 100, 100);
         return gc;
 	}
 	/////////////////////////////////////////start///////////////////////////////////
 				/**affichage*/
-    public void start(Stage primaryStage) {  
+	
+    public void start(Stage primaryStage) { 
+
     	/*variable de test*/
     	int recupNbJoueur=10;
     	/*creation de la fenetre*/
-    	primaryStage.setTitle("limonade");
+    	primaryStage.setTitle("limonade.io");
         Group root=new Group();//arriere de la fenetre
         Scene scene= new Scene(root,1000,600,Color.LIGHTBLUE);//scene
         /*creation de panel*/
@@ -132,36 +118,44 @@ public class Graph extends Application  {
         page.getChildren().add(genPanel);
         /*contenu de la page*/
         /////////////////case1////////////////
-        String MJB=recupMJB();
+        String MJB="info patie";//recupMJB();
         Label topLabel= new Label(); 
         topLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); 
         topLabel.setStyle("-fx-background-color: white; -fx-border-color: black;-fx-alignment:CENTER; -fx-font-size: 15pt;");
         topLabel.setText(MJB);
         upPanel.add(topLabel, 0, 0);
         /////////////////case2///////////////
-        String heure="heure";//recupHour();
+        
         
         label2.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); 
         label2.setStyle("-fx-background-color: white; -fx-border-color: black;-fx-alignment:CENTER; -fx-font-size: 20pt ;");
-        label2.setText(heure);
+        label2.setText(ranking.get(1).toString());/*************ICI*******************/
         upPanel.add(label2, 1, 0);
-        /////////////////case4//////////////
-        ComboBox listJoueur=new ComboBox();
         
-         ArrayList joueur=new ArrayList();
-         for(int i=0;i<=recupNbJoueur/*()*/;i++){/////////////////////////////	////////////////////////////////////////
-     		joueur.add("joueur"+i);
-     	}
-		listJoueur.getItems().addAll(
-        	joueur
-       );
-		listJoueur.setValue("joueur");
-        upPanel.add(listJoueur, 2, 0);
         /////////////////////////////////case carte/////////////////////////////
         Group carte=new Group();
         genPanel.add(carte, 0, 0);
-        
-        
+        ////////////////////////////////case infoJoueur/////////////////////////////////////////
+        TreeItem<String> listJoueur = new TreeItem<String>("id joueur");
+       
+        TreeItem<String> infoJoueur = new TreeItem<String>("infoJoueur(id)");
+        TreeItem<String> drinkInfo = new TreeItem<String>("Drink Info");
+       	listJoueur.setExpanded(true);
+        infoJoueur.getChildren().addAll(
+            new TreeItem<String>("infoJoueur(fric)"),
+            new TreeItem<String>("infoJoueur(vente)"),
+            new TreeItem<String>("infoJoueur(profit)")
+        );
+        drinkInfo.getChildren().addAll(
+                new TreeItem<String>("nom"),
+                new TreeItem<String>("prix"),
+                new TreeItem<String>("alchool"),
+                new TreeItem<String>("froid")
+            );
+        infoJoueur.getChildren().addAll(drinkInfo);
+        listJoueur.getChildren().addAll(infoJoueur);
+        TreeView<String> treeView = new TreeView<String>(listJoueur);
+        genPanel.add(treeView, 1, 0);
         //creation de la population
         migration(150);
     	carte.getChildren().add(canvas);
@@ -191,14 +185,17 @@ public class Graph extends Application  {
     				catch (InterruptedException exception) {
     				  exception.printStackTrace();
     				}
-    			tempo++;
-    			String heure=String.valueOf(tempo);
-    			Platform.runLater(()->label2.setText(heure));//*/
-    			if(tempo==60){
-    				tempo=0;
+    			Platform.runLater(()->label2.setText(hourJour(recupHour())));
+    			boolean refresh=true;
+    			if((recupHour()%12)==0){
+    				
     				migration(150).clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-    			}else if(tempo==1){
-    				migration(150);
+    				if(refresh==true){
+    					migration(150);
+    				}
+    
+    			}else{
+    				refresh=false;
     			}
     			
     		}

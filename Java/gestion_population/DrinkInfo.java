@@ -103,10 +103,13 @@ public class DrinkInfo {
 		JsonObject jsonObSale = new JsonObject();
 		jsonObSale.addProperty("player", playerName);
 		jsonObSale.addProperty("item", this.name);
-		jsonObSale.addProperty("quantity:int", this.vendue);
+		jsonObSale.addProperty("quantity", this.vendue);
 		return jsonObSale;
 	}
 
+	public void uneVente(){
+		this.vendue++;
+	}
 	public JsonObject getJsonObject() {
 		JsonObject jsonOb = new JsonObject();
 

@@ -31,7 +31,7 @@ public class TheGame {
 	private ArrayList<MapItem> laMapDesObjets;
 	private Population mapDeLaPopulation;
 
-	public TheGame(int latitudeMax, int LatitudeMin, int longitudeMax, int LongitudeMin) {
+	public TheGame() {
 		this.region = new Region();
 		this.ranking = new ArrayList<String>();
 
@@ -43,13 +43,11 @@ public class TheGame {
 		
 		this.laMapDesObjets = new ArrayList<MapItem>();
 
-		this.mapDeLaPopulation = new Population(latitudeMax, LatitudeMin, longitudeMax, LongitudeMin);
+		this.mapDeLaPopulation = new Population();
 
 	}
 
-	public TheGame(String jsonMap) {
-		ManipulationJson.jsonFromStringMap(jsonMap, this);
-	}
+	
 
 	public TheGame(ArrayList<MapItem> laMapDesObjets, Population mapDeLaPopulation,
 			HashMap<String, ArrayList<MapItem>> listeItemByPlayer, HashMap<String, PlayerInfo> listePlayerInfo,
@@ -253,6 +251,35 @@ public class TheGame {
 			}
 		}
 		return jsonArSales;
+	}
+	
+	
+	public String toString(){
+		String resultToReturn ="";
+		
+//		private Region region;
+		resultToReturn+= "Region :"+this.region.toString()+"\n";
+//		private ArrayList<String> ranking;
+		resultToReturn+= "Ranking :"+this.ranking.toString()+"\n";
+//		private HashMap<String, ArrayList<MapItem>> listeMapItemJoueur;
+		resultToReturn+= "listeMapItemJoueur :"+this.listeMapItemJoueur.toString()+"\n";
+//		for(MapItem mapItem : this.listeMapItemJoueur){
+//			mapItem.toString();
+//		}
+//		private HashMap<String, PlayerInfo> listePlayerInfo;
+		resultToReturn+= "listePlayerInfo :"+this.listePlayerInfo.toString()+"\n";
+//		private HashMap<String, ArrayList<DrinkInfo>> listeDesDrinkInfo; // joueur	
+		resultToReturn+= "listeDesDrinkInfo :"+this.listeDesDrinkInfo.toString()+"\n";// drinkinfo
+//		private HashMap<String, Stand> listeDesStand;
+		resultToReturn+= "listeDesStand :"+this.listeDesStand.toString()+"\n";
+//		private ArrayList<MapItem> laMapDesObjets;
+		resultToReturn+= "laMapDesObjets :"+this.laMapDesObjets.toString()+"\n";
+//		private Population mapDeLaPopulation;
+		resultToReturn+= "mapDeLaPopulation :"+this.mapDeLaPopulation.toString()+"\n";
+			
+		
+		return resultToReturn;
+				
 	}
 
 }
