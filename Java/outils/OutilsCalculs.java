@@ -1,5 +1,9 @@
 package outils;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.concurrent.ThreadLocalRandom;
 
 import gestion_population.Agent;
@@ -155,4 +159,26 @@ public class OutilsCalculs {
 		}
 	}
 
+	public static String fichierTxtVersString(String urlDuFichier){
+		String result ="";
+		String ligne = "";
+		try{
+			InputStream flux=new FileInputStream(urlDuFichier); 
+			InputStreamReader lecture=new InputStreamReader(flux);
+			BufferedReader buff=new BufferedReader(lecture);
+
+			while ((ligne=buff.readLine())!=null){
+				result+=ligne;
+			}
+			buff.close(); 
+			}		
+			catch (Exception e){
+			System.out.println(e.toString());
+			}
+		
+		return result;
+	}
+	
+	
+	
 }

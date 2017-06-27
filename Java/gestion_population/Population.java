@@ -19,6 +19,10 @@ public class Population {
 
 	public float test_motivationMax = 0;
 	public float test_motivationMin = 1000000;
+	
+	public Population(){
+		this.population = new ArrayList<Agent>();
+	}
 
 	public Population(float latitudeMax, float LatitudeMin, float longitudeMax, float LongitudeMin) {
 		this.latitudeMax = latitudeMax;

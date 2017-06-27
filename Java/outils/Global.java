@@ -11,10 +11,10 @@ public final class Global {
 	// url de tes pour poster et recuperer ce qu'on a envoyé.
 	public static String URL_TEST_JSON_POST = "https://ponderosaproject.herokuapp.com/posttest";
 
-	public static String URL_POST_SALES = " ";
-	public static String URL_POST_REQUEST_FOR_SELLING = " ";
-	public static String URL_GET_MAP = " ";
-	public static String URL_GET_FORECAST = " ";
+	public static String URL_POST_SALES = "https://ponderosaproject.herokuapp.com/sales";
+	public static String URL_POST_REQUEST_FOR_SELLING = "https://ponderosaproject.herokuapp.com/sale";
+	public static String URL_GET_MAP = "https://ponderosaproject.herokuapp.com/map";
+	public static String URL_GET_FORECAST = "https://ponderosaproject.herokuapp.com/metrology";
 	/**
 	 * min max motivation et mouvement
 	 */

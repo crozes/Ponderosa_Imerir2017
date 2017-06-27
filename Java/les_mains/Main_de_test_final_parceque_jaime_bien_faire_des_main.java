@@ -1,6 +1,7 @@
 package les_mains;
 
 import communication.Communication;
+import communication.ManipulationJson;
 import communication.ThreadGetForecast;
 import gestion_population.TheGame;
 import outils.Meteo;
@@ -13,10 +14,9 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 		//recuperation du string json
 		String StringDeLaMapEnJson;
 		
-		//creation de la partie avec recuperation du jsonMap pour innitialiser la partie
-		TheGame laPartie; 
-		StringDeLaMapEnJson = Communication.getRecevoir(outils.Global.URL_GET_MAP);
-		laPartie= new TheGame(StringDeLaMapEnJson);
+		//creation de la partie 
+		TheGame laPartie;
+		laPartie= new TheGame();
 		
 		
 		//lancement du thread de requete du Forecast
@@ -26,17 +26,26 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 		
 
 		while (true){
-
-			//generation de la population
-			laPartie.getMapDeLaPopulation().genererPopulation(laPartie.getRegion().getLatitudeMax(),
-					laPartie.getRegion().getLatitudeMin(), laPartie.getRegion().getLongitudeMax(),
-					laPartie.getRegion().getLongitudeMin(), laPartie.getRanking().size(), laPartie.getMeteoDuJour(),
-					Meteo.matin);
 			
-			//on fait boire la population le matin
-			laPartie.getMapDeLaPopulation().faireBoireLaPopulation(laPartie.getMeteoDuJour(),
-					Meteo.matin, laPartie.getRanking(),
-					laPartie.getListeMapItemJoueur());
+			//recuperation du jsonMap pour innitialiser la partie
+			StringDeLaMapEnJson = Communication.getRecevoir(outils.Global.URL_GET_MAP);
+			ManipulationJson.jsonFromStringMap(StringDeLaMapEnJson, laPartie);
+			
+			//si la partie n'est pas vide
+			if(laPartie.getRanking().size()>0){
+				//generation de la population
+				laPartie.getMapDeLaPopulation().genererPopulation(laPartie.getRegion().getLatitudeMax(),
+						laPartie.getRegion().getLatitudeMin(), laPartie.getRegion().getLongitudeMax(),
+						laPartie.getRegion().getLongitudeMin(), laPartie.getRanking().size(), laPartie.getMeteoDuJour(),
+						Meteo.matin);
+				
+				//on fait boire la population le matin
+				laPartie.getMapDeLaPopulation().faireBoireLaPopulation(laPartie.getMeteoDuJour(),
+						Meteo.matin, laPartie.getRanking(),
+						laPartie.getListeMapItemJoueur());
+			}
+			
+
 			
 			//on attend l'apres midi
 			while(outils.OutilsCalculs.quelEstLaPeriodeDeLaJournee(laPartie.getHeureDepuisDebutJeu() ) != Meteo.soir){
@@ -48,17 +57,22 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 				}
 			}
 			
-			//on fait deplacer la population
-			laPartie.getMapDeLaPopulation().mouvementDuMidi(laPartie.getMeteoDuJour(), Meteo.soir);
 			
-			//on fait boire la population le soir
-			laPartie.getMapDeLaPopulation().faireBoireLaPopulation(laPartie.getMeteoDuJour(),
-					Meteo.soir, laPartie.getRanking(),
-					laPartie.getListeMapItemJoueur());
 			
-			//on envoie le resultat au serveur
-			
-			Communication.postEnvoyer(laPartie.getJsonSales().toString(), outils.Global.URL_POST_SALES);
+			//si la partie n'est pas vide
+			if(laPartie.getRanking().size()>0){
+				//on fait deplacer la population
+				laPartie.getMapDeLaPopulation().mouvementDuMidi(laPartie.getMeteoDuJour(), Meteo.soir);
+				
+				//on fait boire la population le soir
+				laPartie.getMapDeLaPopulation().faireBoireLaPopulation(laPartie.getMeteoDuJour(),
+						Meteo.soir, laPartie.getRanking(),
+						laPartie.getListeMapItemJoueur());
+				
+				//on envoie le resultat au serveur
+				Communication.postEnvoyer(laPartie.getJsonSales().toString(), outils.Global.URL_POST_SALES);
+			}
+
 			
 			//on attend le lendemain et on recommence
 			
@@ -70,13 +84,6 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 					e.printStackTrace();
 				}
 			}
-			
-			//on recupere le temps est quand on est à une nouvelle journee, on recommence.
-			StringDeLaMapEnJson = Communication.getRecevoir(outils.Global.URL_GET_MAP);
-			laPartie= new TheGame(StringDeLaMapEnJson);
-			
 		}
-
-
 	}
 }

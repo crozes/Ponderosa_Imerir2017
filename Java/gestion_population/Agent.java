@@ -154,18 +154,20 @@ public class Agent {
 	 * @return
 	 */
 	public String trierStandSelonVolonteFinale(){
+		
+		
 		String standMeilleur = null;
-		for(String cle : this.listeDeLaVolontePourStand.keySet()){
-			if (standMeilleur ==null){
-				standMeilleur = cle;
-			}
-			
-			if(this.listeDeLaVolontePourStand.get(standMeilleur)<this.listeDeLaVolontePourStand.get(cle)){
-				if(this.listeDesStand.get(cle) >
-				standMeilleur = cle;
-			}
-			
-		}
+//		for(String cle : this.listeDeLaVolontePourStand.keySet()){
+//			if (standMeilleur ==null){
+//				standMeilleur = cle;
+//			}
+//			
+//			if(this.listeDeLaVolontePourStand.get(standMeilleur)<this.listeDeLaVolontePourStand.get(cle)){
+//				if(this.listeDesStand.get(cle) >
+//				standMeilleur = cle;
+//			}
+//			
+//		}
 		return standMeilleur;
 	}
 	

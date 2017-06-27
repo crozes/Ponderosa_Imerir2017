@@ -27,7 +27,7 @@ public class main_avec_des_trucs_dedans {
 		//PlayerInfo test = new PlayerInfo();
 		
 		
-		TheGame laPartie = new TheGame(50, -50, 50, -50);
+		TheGame laPartie = new TheGame();
 		
 		ArrayList<String> ranking = new ArrayList<>();
 		ranking.add("Viktor");
