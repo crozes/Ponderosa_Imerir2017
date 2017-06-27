@@ -42,40 +42,8 @@ public  class Graph extends Application {
 	int carte_x=800;
 	int carte_y=500;
 	Canvas canvas=new Canvas(carte_x,carte_y);
-	TheGame game = Main_pour_blaguer.laPartie;
-	int tempo=2;//variable temporaire
+	TheGame game=Main_pour_blaguer.laPartie;
 	
-	/**recuperation de l'heure*/
-	private int recupHour(){
-		String texte = Communication.getRecevoir("https://ponderosaproject.herokuapp.com/metrology");
-		JsonElement jelement = new JsonParser().parse(texte);
-		JsonObject json = jelement.getAsJsonObject();
-		int time = json.get("timestamp").getAsInt();
-		System.out.println("time"+time);
-		return time;
-	}
-	////////////////////////////////////////hourJour/////////////////////////////////////
-	/**trensformation time en jour et heure*/
-	private String hourJour(int time){
-		int jour=time/24;
-		int heure=time-(24*jour);
-		String.valueOf(jour);
-		String.valueOf(heure);
-		return jour+"jour \n"+heure+"h00";
-	}
-	/////////////////////////////////////////gridpanel/////////////////////////////////
-	/**crée les case du gridpane*/
-	private void gridPanel(int nbcol,int nblign,GridPane panel){
-		for (int i = 0; i < nbcol; i++) {
-            ColumnConstraints colConst = new ColumnConstraints(carte_x/nbcol);
-            panel.getColumnConstraints().add(colConst);
-        }
-        for (int i = 0; i < nblign; i++) {
-            RowConstraints rowConst = new RowConstraints(100);
-            panel.getRowConstraints().add(rowConst);         
-        }
-        panel.setGridLinesVisible(true);
-	}
 	/////////////////////////////instalation des citoyen
 	private GraphicsContext migration(int nbPop){
 		
@@ -89,19 +57,18 @@ public  class Graph extends Application {
         gc.fillOval(150, 200, 100, 100);
         return gc;
 	}
+
 	/////////////////////////////////////////start///////////////////////////////////
 				/**affichage*/
 	
     public void start(Stage primaryStage ) { 
-    	
-    	/*variable de test*/
-    	int recupNbJoueur=10;
  
     	/*creation de la fenetre*/
     	primaryStage.setTitle("limonade.io");
         Group root=new Group();//arriere de la fenetre
         Scene scene= new Scene(root,1000,600,Color.LIGHTBLUE);//scene
         
+        System.out.println(game.getLaMapDesObjets().toString());
         /*creation du premier panel*/
         VBox page=new VBox();
         GridPane upPanel = new GridPane();
@@ -201,8 +168,7 @@ public  class Graph extends Application {
     				}
     			Platform.runLater(()->label2.setText(String.valueOf("jour\nheure:"+game.getHeureDepuisDebutJeu())));
     			boolean refresh=true;
-    			if((tempo%12)==0){
-    				tempo++;
+    			if((game.getHeureDepuisDebutJeu()%12)==0){
     				migration(150).clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     				if(refresh==true){
     					migration(150);
@@ -210,7 +176,6 @@ public  class Graph extends Application {
     
     			}else{
     				refresh=false;
-    				tempo++;
     			}
     			
     		}

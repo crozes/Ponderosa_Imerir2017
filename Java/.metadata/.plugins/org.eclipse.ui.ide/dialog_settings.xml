@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+		<item value="D:\projet\Ponderosa_Imerir2017\Java"/>
 		<item value="D:\projetIntegration\Ponderosa_Imerir2017\Java"/>
 		<item value="D:\eclipse\projet\ProjetIntegration"/>
 		<item value="C:\Users\bryce\Desktop\projet d integration\ponderosa\Ponderosa_Imerir2017\Java"/>
 	</list>
+	<section name="ExternalProjectImportWizard">
+	</section>
 </section>
