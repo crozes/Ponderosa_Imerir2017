@@ -98,167 +98,157 @@ void weather_update(){
 		FORECAST_ST next_forecast_state[NB_PREVISIONS];
 		for(int i=0;i<NB_PREVISIONS;i++){
 		next_forecast_state[i] = forecast_state[i];
-			switch(forecast_state[i]){
-				case SUNNY_F:
-				case CLOUD_F:
-				case RAIN_F:
-				case STORM_F:
-				case HEAT_WAVE_F:
-					if(i==NB_PREVISIONS-1){			//si on est au bout des prévisions, on fait un random
-						next_weather= random(100);
-						if(next_weather<14){
-							next_forecast_state[i]=RAIN_F;
+		
+			if(i==NB_PREVISIONS-1){			//si on est au bout des prévisions, on fait un random
+				next_weather= random(100);
+				if(next_weather<14){
+					next_forecast_state[i]=RAIN_F;
+				}else{
+					if(next_weather<34){
+						next_forecast_state[i]=CLOUD_F;
+					}
+					else{
+						if(next_weather<74){
+							next_forecast_state[i]=SUNNY_F;
 						}else{
-							if(next_weather<34){
+							if(next_weather<94){
+								next_forecast_state[i]=HEAT_WAVE_F;
+							}else{
+								next_forecast_state[i]=STORM_F;
+							}
+						}
+					}
+				}
+			}else{					//sinon, on regarde à la demi-journée suivante et on confirme
+				switch(forecast_state[i+1]){
+					case SUNNY_F:
+						next_weather= random(100);
+						if(next_weather<87){
+							next_forecast_state[i]=SUNNY_F;
+						}else{
+							if(next_weather<92){
 								next_forecast_state[i]=CLOUD_F;
 							}
 							else{
-								if(next_weather<74){
-									next_forecast_state[i]=SUNNY_F;
-								}else{
-									if(next_weather<94){
-										next_forecast_state[i]=HEAT_WAVE_F;
-									}else{
+								if(next_weather<97){
+									next_forecast_state[i]=HEAT_WAVE_F;
+								}
+								else{
+									if(next_weather<98){
 										next_forecast_state[i]=STORM_F;
+									}
+									else{
+										if(next_weather<99){
+											next_forecast_state[i]=RAIN_F;
+										}
 									}
 								}
 							}
 						}
-					}else{					//sinon, on regarde à la demi-journée suivante et on confirme
-						switch(forecast_state[i+1]){
-							case SUNNY_F:
-								next_weather= random(100);
-								if(next_weather<87){
-									next_forecast_state[i]=SUNNY_F;
-								}else{
-									if(next_weather<92){
+					break;
+					case HEAT_WAVE_F:
+						next_weather= random(100);
+						if(next_weather<87){
+							next_forecast_state[i]=HEAT_WAVE_F;
+						}else{
+							if(next_weather<92){
+								next_forecast_state[i]=SUNNY_F;
+							}
+							else{
+								if(next_weather<97){
+									next_forecast_state[i]=STORM_F;
+								}
+								else{
+									if(next_weather<98){
 										next_forecast_state[i]=CLOUD_F;
 									}
 									else{
-										if(next_weather<97){
-											next_forecast_state[i]=HEAT_WAVE_F;
-										}
-										else{
-											if(next_weather<98){
-												next_forecast_state[i]=STORM_F;
-											}
-											else{
-												if(next_weather<99){
-													next_forecast_state[i]=RAIN_F;
-												}
-											}
+										if(next_weather<99){
+											next_forecast_state[i]=RAIN_F;
 										}
 									}
 								}
-							break;
-							case HEAT_WAVE_F:
-								next_weather= random(100);
-								if(next_weather<87){
-									next_forecast_state[i]=HEAT_WAVE_F;
-								}else{
-									if(next_weather<92){
-										next_forecast_state[i]=SUNNY_F;
+							}
+						}
+					break;
+					case STORM_F:
+						next_weather= random(100);
+						if(next_weather<87){
+							next_forecast_state[i]=STORM_F;
+						}else{
+							if(next_weather<92){
+								next_forecast_state[i]=HEAT_WAVE_F;
+							}
+							else{
+								if(next_weather<97){
+									next_forecast_state[i]=RAIN_F;
+								}
+								else{
+									if(next_weather<98){
+										next_forecast_state[i]=CLOUD_F;
 									}
 									else{
-										if(next_weather<97){
-											next_forecast_state[i]=STORM_F;
-										}
-										else{
-											if(next_weather<98){
-												next_forecast_state[i]=CLOUD_F;
-											}
-											else{
-												if(next_weather<99){
-													next_forecast_state[i]=RAIN_F;
-												}
-											}
+										if(next_weather<99){
+											next_forecast_state[i]=SUNNY_F;
 										}
 									}
 								}
-							break;
-							case STORM_F:
-								next_weather= random(100);
-								if(next_weather<87){
-									next_forecast_state[i]=STORM_F;
-								}else{
-									if(next_weather<92){
+							}
+						}
+					break;
+					case RAIN_F:
+						next_weather= random(100);
+						if(next_weather<87){
+							next_forecast_state[i]=RAIN_F;
+						}else{
+							if(next_weather<92){
+								next_forecast_state[i]=STORM_F;
+							}
+							else{
+								if(next_weather<97){
+									next_forecast_state[i]=CLOUD_F;
+								}
+								else{
+									if(next_weather<98){
 										next_forecast_state[i]=HEAT_WAVE_F;
 									}
 									else{
-										if(next_weather<97){
-											next_forecast_state[i]=RAIN_F;
-										}
-										else{
-											if(next_weather<98){
-												next_forecast_state[i]=CLOUD_F;
-											}
-											else{
-												if(next_weather<99){
-													next_forecast_state[i]=SUNNY_F;
-												}
-											}
-										}
-									}
-								}
-							break;
-							case RAIN_F:
-								next_weather= random(100);
-								if(next_weather<87){
-									next_forecast_state[i]=RAIN_F;
-								}else{
-									if(next_weather<92){
-										next_forecast_state[i]=STORM_F;
-									}
-									else{
-										if(next_weather<97){
-											next_forecast_state[i]=CLOUD_F;
-										}
-										else{
-											if(next_weather<98){
-												next_forecast_state[i]=HEAT_WAVE_F;
-											}
-											else{
-												if(next_weather<99){
-													next_forecast_state[i]=SUNNY_F;
-												}
-											}
-										}
-									}
-								}
-							break;
-							case CLOUD_F:
-								next_weather= random(100);
-								if(next_weather<87){
-									next_forecast_state[i]=CLOUD_F;
-								}else{
-									if(next_weather<92){
-										next_forecast_state[i]=RAIN_F;
-									}
-									else{
-										if(next_weather<97){
+										if(next_weather<99){
 											next_forecast_state[i]=SUNNY_F;
 										}
-										else{
-											if(next_weather<98){
-												next_forecast_state[i]=HEAT_WAVE_F;
-											}
-											else{
-												if(next_weather<99){
-													next_forecast_state[i]=STORM_F;
-												}
-											}
+									}
+								}
+							}
+						}
+					break;
+					case CLOUD_F:
+						next_weather= random(100);
+						if(next_weather<87){
+							next_forecast_state[i]=CLOUD_F;
+						}else{
+							if(next_weather<92){
+								next_forecast_state[i]=RAIN_F;
+							}
+							else{
+								if(next_weather<97){
+									next_forecast_state[i]=SUNNY_F;
+								}
+								else{
+									if(next_weather<98){
+										next_forecast_state[i]=HEAT_WAVE_F;
+									}
+									else{
+										if(next_weather<99){
+											next_forecast_state[i]=STORM_F;
 										}
 									}
 								}
-							break;
-							default:
-							break;
+							}
 						}
-					}
-				break;
-				default:
-				//ne reien faire
-				break;
+					break;
+					default:
+					break;
+				}
 			}
 			forecast_state[i] = next_forecast_state[i];
 		}
