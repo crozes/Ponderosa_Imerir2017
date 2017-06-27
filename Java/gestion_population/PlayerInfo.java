@@ -32,7 +32,8 @@ public class PlayerInfo {
 	private HashMap<String, Integer> deTest = new HashMap<>();
 	
 	public PlayerInfo(){
-
+		
+		
 	}
 	
 	public PlayerInfo(int sales, float cash, float profit, ArrayList<DrinkInfo> drinksOffered) {
@@ -41,9 +42,30 @@ public class PlayerInfo {
 		this.cash = cash;
 		this.profit = profit;
 		this.drinksOffered = drinksOffered;
+		
+		this.trierDrinksOffered();
+		
 	}
 	
 	
+	
+	private void trierDrinksOffered(){
+		 ArrayList<DrinkInfo> drinksOfferedTrie = new ArrayList<DrinkInfo>();
+		 float price =0f;
+		 DrinkInfo boissonLaPlusChere = null;
+		 while(this.drinksOffered.size()>0){
+			 price =0f;
+			 for(DrinkInfo drinkInfo : this.drinksOffered){
+				 if(drinkInfo.getPrice() > price){
+					 price = drinkInfo.getPrice();
+					 boissonLaPlusChere = drinkInfo;
+				 }
+			 }
+			 drinksOfferedTrie.add(boissonLaPlusChere);
+			 this.drinksOffered.remove(boissonLaPlusChere);
+		 }
+		 this.drinksOffered = drinksOfferedTrie;
+	}
 	
 	public HashMap<String, Integer> getDeTest(){
 		return this.deTest;

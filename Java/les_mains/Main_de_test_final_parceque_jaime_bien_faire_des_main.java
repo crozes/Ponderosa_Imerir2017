@@ -17,19 +17,23 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 		//creation de la partie 
 		TheGame laPartie;
 		laPartie= new TheGame();
-		
+		//recuperation du jsonMap pour innitialiser la partie
+		StringDeLaMapEnJson = Communication.getRecevoir(outils.Global.URL_GET_MAP);
+		ManipulationJson.jsonFromStringMap(StringDeLaMapEnJson, laPartie);
 		
 		//lancement du thread de requete du Forecast
 		ThreadGetForecast threadForecast = new ThreadGetForecast(laPartie);
 		threadForecast.start();
 		
-		
+		//lancement du threadImage
+		/*
+		 * ThreadGraphism threadGraphism = new ThreadGraphism(laPartie);
+		threadGraphism.start();
+		 */
 
 		while (true){
 			
-			//recuperation du jsonMap pour innitialiser la partie
-			StringDeLaMapEnJson = Communication.getRecevoir(outils.Global.URL_GET_MAP);
-			ManipulationJson.jsonFromStringMap(StringDeLaMapEnJson, laPartie);
+
 			
 			//si la partie n'est pas vide
 			if(laPartie.getRanking().size()>0){
@@ -37,12 +41,10 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 				laPartie.getMapDeLaPopulation().genererPopulation(laPartie.getRegion().getLatitudeMax(),
 						laPartie.getRegion().getLatitudeMin(), laPartie.getRegion().getLongitudeMax(),
 						laPartie.getRegion().getLongitudeMin(), laPartie.getRanking().size(), laPartie.getMeteoDuJour(),
-						Meteo.matin);
+						Meteo.matin, laPartie.getListeDesStand());
 				
 				//on fait boire la population le matin
-				laPartie.getMapDeLaPopulation().faireBoireLaPopulation(laPartie.getMeteoDuJour(),
-						Meteo.matin, laPartie.getRanking(),
-						laPartie.getListeMapItemJoueur());
+				laPartie.getMapDeLaPopulation().faireBoireLaPopulation(Meteo.thunderstorm, laPartie);
 			}
 			
 
@@ -65,9 +67,7 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 				laPartie.getMapDeLaPopulation().mouvementDuMidi(laPartie.getMeteoDuJour(), Meteo.soir);
 				
 				//on fait boire la population le soir
-				laPartie.getMapDeLaPopulation().faireBoireLaPopulation(laPartie.getMeteoDuJour(),
-						Meteo.soir, laPartie.getRanking(),
-						laPartie.getListeMapItemJoueur());
+				laPartie.getMapDeLaPopulation().faireBoireLaPopulation(Meteo.soir, laPartie);
 				
 				//on envoie le resultat au serveur
 				Communication.postEnvoyer(laPartie.getJsonSales().toString(), outils.Global.URL_POST_SALES);
@@ -84,6 +84,9 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 					e.printStackTrace();
 				}
 			}
+			//recuperation du nouveau jsonPournouveau jour
+			StringDeLaMapEnJson = Communication.getRecevoir(outils.Global.URL_GET_MAP);
+			ManipulationJson.jsonFromStringMap(StringDeLaMapEnJson, laPartie);
 		}
 	}
 }

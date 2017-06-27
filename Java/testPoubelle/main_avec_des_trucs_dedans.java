@@ -38,7 +38,7 @@ public class main_avec_des_trucs_dedans {
 		Meteo meteo = Meteo.heatwave;
 		Meteo periodeJournee = Meteo.matin;
 		
-		laPartie.getMapDeLaPopulation().genererPopulation(50, -50, 50, -50, ranking.size(), meteo, periodeJournee);
+//		laPartie.getMapDeLaPopulation().genererPopulation(50, -50, 50, -50, ranking.size(), meteo, periodeJournee);
 		laPartie.setRanking(ranking);
 
 		System.out.println(laPartie.getMapDeLaPopulation().toString());
