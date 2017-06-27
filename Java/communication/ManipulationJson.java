@@ -13,6 +13,7 @@ import gestion_population.MapItem;
 import gestion_population.TheGame;
 import gestion_population.PlayerInfo;
 import gestion_population.Publicite;
+import gestion_population.Region;
 import gestion_population.Stand;
 import outils.Meteo;
 
@@ -55,7 +56,19 @@ public class ManipulationJson {
 
 	}
 	
-
+	/**
+	 * renvoie 
+	 * @param jsonSale
+	 * @return
+	 */
+	public static int jsonFromStringSale(String jsonSale){
+		
+		JsonElement jsonEl = new JsonParser().parse(jsonSale);
+		JsonObject jsonOb = jsonEl.getAsJsonObject();
+		
+		
+		return jsonOb.get("quantity").getAsInt();
+	}
 	
 	
 
@@ -131,11 +144,13 @@ public class ManipulationJson {
 	 *            le lien avec toutes les informations.
 	 *            
 	 * @author atila
+	 * @throws Exception 
 	 */
-	public static void jsonFromStringMap(String jsonMap, TheGame laPartie) {
+	public static void jsonFromStringMap(String jsonMap, TheGame laPartie) throws Exception {
 		JsonElement jsonEl = new JsonParser().parse(jsonMap);
 		JsonObject jsonObMape = jsonEl.getAsJsonObject();
 		JsonObject jsonObMap = jsonObMape.get("map").getAsJsonObject();
+		JsonObject jsonObRegion = jsonObMap.get("region").getAsJsonObject();
 		JsonArray jsonArRanking = jsonObMap.get("ranking").getAsJsonArray();
 
 		JsonObject jsonObPlayerInfo = jsonObMap.get("playerInfo").getAsJsonObject();
@@ -146,6 +161,15 @@ public class ManipulationJson {
 		 */
 		int size_jsonArray = 0;
 
+		
+		/*------------------------------------------------------------------------------------------------------
+		 * La region 
+		 */
+		float center_latitude = jsonObRegion.get("center").getAsJsonObject().get("latitude").getAsFloat();
+		float center_longitude = jsonObRegion.get("center").getAsJsonObject().get("longitude").getAsFloat();
+		float span_latitude = jsonObRegion.get("span").getAsJsonObject().get("latitudeSpan").getAsFloat();
+		float span_longitude = jsonObRegion.get("span").getAsJsonObject().get("longitudeSpan").getAsFloat();
+		laPartie.setRegion(new Region(center_latitude, center_longitude, span_latitude, span_longitude));
 		/*------------------------------------------------------------------------------------------------------
 		 * Le ranking
 		 */
@@ -166,7 +190,7 @@ public class ManipulationJson {
 		JsonArray jsonArDrinkOffered;
 		JsonObject jsonObDrinkInfo;
 
-		PlayerInfo playerInfo;
+		PlayerInfo playerInfo = null;
 		float cash;
 		int sales;
 		float profit;
@@ -214,23 +238,29 @@ public class ManipulationJson {
 			sales = jsonObInfoPlayer.get("sales").getAsInt();
 			profit = jsonObInfoPlayer.get("profit").getAsFloat();
 
-			jsonArDrinkOffered = jsonObInfoPlayer.get("drinksOffered").getAsJsonArray();
+			try {
+				jsonArDrinkOffered = jsonObInfoPlayer.get("drinksOffered").getAsJsonArray();
 
-			size_jsonArray = jsonArDrinkOffered.size();
-			playerInfo = new PlayerInfo(sales, cash, profit, new ArrayList<DrinkInfo>());
+				size_jsonArray = jsonArDrinkOffered.size();
+				playerInfo = new PlayerInfo(sales, cash, profit, new ArrayList<DrinkInfo>());
 
-			//int i =0;
-			//while(jsonArDrinkOffered.get(i).getAsJsonObject().isJsonNull()==false){
-			for (int i = 0; i < size_jsonArray; i++) {
-				jsonObDrinkInfo = jsonArDrinkOffered.get(i).getAsJsonObject();
-				name = jsonObDrinkInfo.get("name").getAsString();
-				price = jsonObDrinkInfo.get("price").getAsFloat();
-				hasAlcohol = jsonObDrinkInfo.get("hasAlcohol").getAsBoolean();
-				isCold = jsonObDrinkInfo.get("isCold").getAsBoolean();
+				//int i =0;
+				//while(jsonArDrinkOffered.get(i).getAsJsonObject().isJsonNull()==false){
+				for (int i = 0; i < size_jsonArray; i++) {
+					jsonObDrinkInfo = jsonArDrinkOffered.get(i).getAsJsonObject();
+					name = jsonObDrinkInfo.get("name").getAsString();
+					price = jsonObDrinkInfo.get("price").getAsFloat();
+					hasAlcohol = jsonObDrinkInfo.get("hasAlcohol").getAsBoolean();
+					isCold = jsonObDrinkInfo.get("isCold").getAsBoolean();
 
-				playerInfo.getDrinksOffered().add(new DrinkInfo(name, price, hasAlcohol, isCold));
-//				i++;
+					playerInfo.getDrinksOffered().add(new DrinkInfo(name, price, hasAlcohol, isCold));
+//					i++;
+				}
+			} catch (Exception e) {
+				System.out.println("Probleme de lecture dans drinkOffered");
+				// TODO: handle exception
 			}
+
 
 			laPartie.getListePlayerInfo().put(playerName, playerInfo);
 
@@ -255,35 +285,46 @@ public class ManipulationJson {
 
 			// itemsByPlayers
 			laPartie.getListeMapItemJoueur().clear();
-			jsonArMapItem = jsonObItemsByPlayers.get(playerName).getAsJsonArray();
-
-			size_jsonArray = jsonArMapItem.size();
+			
 			ArrayList<MapItem> mapItem = new ArrayList<>();
-//			i =0;
-//			while(!jsonArMapItem.get(i).getAsJsonObject().isJsonNull()){
-			for (int i = 0; i < size_jsonArray; i++) {
-				jsonObMapItem = jsonArMapItem.get(i).getAsJsonObject();
-
-				kind = jsonObMapItem.get("kind").getAsString();
-				owner = jsonObMapItem.get("owner").getAsString();
-				influence = jsonObMapItem.get("influence").getAsFloat();
-				jsonObLocation = jsonObMapItem.get("location").getAsJsonObject();
-
-				latitude = jsonObLocation.get("latitude").getAsFloat();
-				longitude = jsonObLocation.get("longitude").getAsFloat();
-
-				// public MapItem(String kind, String owner, float influence,
-				// Coordonnees coordonnees) {
-
+			try {
+				jsonArMapItem = jsonObItemsByPlayers.get(playerName).getAsJsonArray();
 				
-				if(kind == "ad"){
-					mapItem.add(new Publicite(kind, owner, influence, new Coordonnees(latitude, longitude)));
-				}else{ //c'est un stand
-					mapItem.add(new Stand(kind, owner, influence, new Coordonnees(latitude, longitude)));
-					laPartie.getListeDesStand().put(playerName, ( new Stand(kind, owner, influence, new Coordonnees(latitude, longitude)) ) );	
+
+				size_jsonArray = jsonArMapItem.size();
+
+//				i =0;
+//				while(!jsonArMapItem.get(i).getAsJsonObject().isJsonNull()){
+				for (int i = 0; i < size_jsonArray; i++) {
+					jsonObMapItem = jsonArMapItem.get(i).getAsJsonObject();
+
+					kind = jsonObMapItem.get("kind").getAsString();
+					owner = jsonObMapItem.get("owner").getAsString();
+					influence = jsonObMapItem.get("influence").getAsFloat();
+					jsonObLocation = jsonObMapItem.get("location").getAsJsonObject();
+
+					latitude = jsonObLocation.get("latitude").getAsFloat();
+					longitude = jsonObLocation.get("longitude").getAsFloat();
+
+					// public MapItem(String kind, String owner, float influence,
+					// Coordonnees coordonnees) {
+
+					
+					if(kind == "ad"){
+						mapItem.add(new Publicite(kind, owner, influence, new Coordonnees(latitude, longitude)));
+					}else{ //c'est un stand
+						mapItem.add(new Stand(kind, owner, influence, new Coordonnees(latitude, longitude)));
+						laPartie.getListeDesStand().put(playerName, ( new Stand(kind, owner, influence, new Coordonnees(latitude, longitude)) ) );	
+					}
+//					i++;
 				}
-//				i++;
+			} catch (Exception e) {
+				System.out.println("Mauvaise lecture de ItemByPlayer");
+				// TODO: handle exception
 			}
+				
+
+
 				laPartie.getListeMapItemJoueur().put(playerName, mapItem);
 			
 		}

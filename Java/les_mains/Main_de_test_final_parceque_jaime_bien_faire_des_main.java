@@ -2,13 +2,12 @@ package les_mains;
 
 import communication.Communication;
 import communication.ManipulationJson;
-import communication.ThreadGetForecast;
 import gestion_population.TheGame;
 import outils.Meteo;
 
 public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		
 		
 		//recuperation du string json
@@ -20,15 +19,16 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 		//recuperation du jsonMap pour innitialiser la partie
 		StringDeLaMapEnJson = Communication.getRecevoir(outils.Global.URL_GET_MAP);
 		ManipulationJson.jsonFromStringMap(StringDeLaMapEnJson, laPartie);
+		laPartie.setMeteoDuJour(Meteo.sunny);
 		
 		//lancement du thread de requete du Forecast
-		ThreadGetForecast threadForecast = new ThreadGetForecast(laPartie);
-		threadForecast.start();
-		
+//		ThreadGetForecast threadForecast = new ThreadGetForecast(laPartie);
+//		threadForecast.start();
+//		
 		//lancement du threadImage
 		/*
 		 * ThreadGraphism threadGraphism = new ThreadGraphism(laPartie);
-		threadGraphism.start();
+		threadGraphism.start(laPartie);
 		 */
 
 		while (true){
@@ -43,6 +43,10 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 						laPartie.getRegion().getLongitudeMin(), laPartie.getRanking().size(), laPartie.getMeteoDuJour(),
 						Meteo.matin, laPartie.getListeDesStand());
 				
+				
+				System.out.println("Voici la population :");
+				System.out.println(laPartie.getMapDeLaPopulation().toString());
+				
 				//on fait boire la population le matin
 				laPartie.getMapDeLaPopulation().faireBoireLaPopulation(Meteo.thunderstorm, laPartie);
 			}
@@ -54,7 +58,7 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 				try {
 					Thread.sleep(outils.Global.dureerDuSleep);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}
@@ -80,7 +84,7 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 				try {
 					Thread.sleep(outils.Global.dureerDuSleep);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}

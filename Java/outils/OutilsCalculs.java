@@ -83,8 +83,6 @@ public class OutilsCalculs {
 	 * @return int entre min(inclu) et max(inclu)
 	 */
 	public static int randomInt(int min, int max) {
-		// Random random = new Random();
-
 		return ThreadLocalRandom.current().nextInt(min, max + 1);
 	}
 
@@ -96,10 +94,6 @@ public class OutilsCalculs {
 	 * @return float entre min(inclu) et max(inclu)
 	 */
 	public static float randomFloat(float min, float max) {
-		// Random random = new Random();
-		// return( min + random.nextFloat() * (max - min) );
-
-		System.out.println(min + "   " + max + "    " + (ThreadLocalRandom.current().nextFloat() * (max - min) + min));
 		return ThreadLocalRandom.current().nextFloat() * (max - min) + min;
 	}
 

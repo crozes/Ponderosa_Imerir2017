@@ -35,7 +35,7 @@ public class Main_pour_blaguer {
 		//creation de la partie avec recuperation du jsonMap pour innitialiser la partie
 		TheGame laPartie = new TheGame(); 
 	//	StringDeLaMapEnJson = Communication.getRecevoir(outils.Global.URL_GET_MAP);
-		ManipulationJson.jsonFromStringMap(plop, laPartie);
+//		ManipulationJson.jsonFromStringMap(plop, laPartie);
 		
 		System.out.println(laPartie.toString());
 

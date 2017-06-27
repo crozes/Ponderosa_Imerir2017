@@ -3,6 +3,7 @@ package gestion_population;
 import com.google.gson.JsonObject;
 
 import communication.Communication;
+import communication.ManipulationJson;
 
 public class DrinkInfo {
 
@@ -36,16 +37,18 @@ public class DrinkInfo {
 		this.coutEnVolonteFinalePourBoire = price * outils.Global.drinkInfoPoidVolonteFinalePourBoire;
 	}
 
-	public boolean demandeDeBoire(String playerName) {
+	public boolean demandeDeBoire(String playerName, int quantity) {
 		if (this.isPlusEnStock == true) {
 			return false;
 		} else {
-			String result = Communication.postEnvoyer(this.getJsonObjectSale(playerName).toString(),
+			String result = Communication.postEnvoyer(this.getJsonObjectSale(playerName, 1).toString(),
 					outils.Global.URL_POST_REQUEST_FOR_SELLING);
-			if (Integer.parseInt(result) == 0) {
+			int reponse = ManipulationJson.jsonFromStringSale(result);
+			if (reponse < quantity) {
 				this.isPlusEnStock = true;
 				return false;
 			} else {
+				this.uneVente();
 				return true;
 			}
 		}
@@ -99,6 +102,14 @@ public class DrinkInfo {
 		this.isCold = isCold;
 	}
 
+	public JsonObject getJsonObjectSale(String playerName, int quantity) {
+		JsonObject jsonObSale = new JsonObject();
+		jsonObSale.addProperty("player", playerName);
+		jsonObSale.addProperty("item", this.name);
+		jsonObSale.addProperty("quantity", quantity);
+		return jsonObSale;
+	}
+	
 	public JsonObject getJsonObjectSale(String playerName) {
 		JsonObject jsonObSale = new JsonObject();
 		jsonObSale.addProperty("player", playerName);

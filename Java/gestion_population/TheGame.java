@@ -7,7 +7,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
-import communication.ManipulationJson;
 import outils.Meteo;
 
 public class TheGame {
@@ -251,6 +250,7 @@ public class TheGame {
 			}
 		}
 		return jsonArSales;
+
 	}
 	
 	
@@ -280,6 +280,13 @@ public class TheGame {
 		
 		return resultToReturn;
 				
+	}
+	
+	public void apercuDesVentes(){
+		for(String playerInfo : this.listePlayerInfo.keySet()){
+			System.out.println(playerInfo + " a vendue : "+ this.listePlayerInfo.get(playerInfo));
+		}
+		
 	}
 
 }

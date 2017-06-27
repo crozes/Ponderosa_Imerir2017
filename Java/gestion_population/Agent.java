@@ -3,7 +3,6 @@ package gestion_population;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import communication.Communication;
 import outils.Global;
 import outils.Meteo;
 
@@ -210,18 +209,20 @@ public class Agent {
 	public boolean commanderUneBoisson(TheGame leMonde, String debitDeBoisson){
 		float coutBoissonVF;
 		int i_drinks = 0;
-		String enStock = "";
-		
+
+
+		boolean aBue = false;
 		ArrayList<DrinkInfo> boissonPropose = new ArrayList<>(leMonde.getListePlayerInfo().get(debitDeBoisson).getDrinksOffered());
 		while(this.aBueAujourdhui==false && i_drinks<boissonPropose.size()){
 			coutBoissonVF = boissonPropose.get(i_drinks).getCoutEnVolonteFinalePourBoire();
 			if(this.listeDeLaVolontePourStand.get(debitDeBoisson)>coutBoissonVF){
 				if(this.veutBoissonFroide == boissonPropose.get(i_drinks).getIsCold() 
 						&&	this.veutBoissonSansAlcool == boissonPropose.get(i_drinks).getIsHasAlcohol()){
-					enStock = Communication.postEnvoyer(boissonPropose.get(i_drinks).getJsonObjectSale(debitDeBoisson).toString(), outils.Global.URL_POST_REQUEST_FOR_SELLING);
-					if(enStock=="1"){
+					
+					
+					aBue = boissonPropose.get(i_drinks).demandeDeBoire(debitDeBoisson,1);
+					if(aBue==true){
 						this.aBueAujourdhui=true;
-						boissonPropose.get(i_drinks).uneVente();
 						return true;
 					}	
 				}

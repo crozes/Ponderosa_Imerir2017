@@ -2,8 +2,6 @@ package gestion_population;
 
 import com.google.gson.JsonObject;
 
-import outils.ValeurPositive;
-
 
 public class CoordonneesSpan {
 
@@ -23,14 +21,15 @@ public class CoordonneesSpan {
 	 *                latitude_span ou longitude_span sont négatives
 	 * 
 	 * @author atila
+	 * @throws Exception 
 	 * @throws PositionException 
 	 */
-	public CoordonneesSpan(float latitude_span, float longitude_span) throws ValeurPositive {
+	public CoordonneesSpan(float latitude_span, float longitude_span) throws Exception {
 		super();
 
 		if (latitude_span < 0 || longitude_span < 0) {
 			
-			throw new ValeurPositive();
+			throw new Exception("latitude ou longitude region negative");
 			
 		}
 		else{

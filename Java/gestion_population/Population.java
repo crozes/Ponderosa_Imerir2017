@@ -212,6 +212,8 @@ public class Population {
 			client.setCoordonnees(this.calculerPositionClient(meteo, periodeJournee));
 		}
 	}
+	
+	
 
 	public String toString() {
 		String toReturn = "";

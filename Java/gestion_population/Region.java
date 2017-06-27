@@ -2,8 +2,6 @@ package gestion_population;
 
 import com.google.gson.JsonObject;
 
-import outils.ValeurPositive;
-
 public class Region {
 
 	private Coordonnees center;
@@ -18,7 +16,7 @@ public class Region {
 	}
 
 	public Region(float latitude_center, float longitude_center, float latitude_span, float longitude_span)
-			throws ValeurPositive {
+			throws Exception {
 
 		super();
 		this.center = new Coordonnees(latitude_center, longitude_center);
