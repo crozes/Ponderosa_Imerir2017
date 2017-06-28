@@ -270,4 +270,71 @@ public class Population {
 		return toReturn;
 	}
 
+	public ArrayList<Agent> getPopulation() {
+		return population;
+	}
+
+	public void setPopulation(ArrayList<Agent> population) {
+		this.population = population;
+	}
+
+	public float getLatitudeMax() {
+		return latitudeMax;
+	}
+
+	public void setLatitudeMax(float latitudeMax) {
+		this.latitudeMax = latitudeMax;
+	}
+
+	public float getLatitudeMin() {
+		return LatitudeMin;
+	}
+
+	public void setLatitudeMin(float latitudeMin) {
+		LatitudeMin = latitudeMin;
+	}
+
+	public float getLongitudeMax() {
+		return longitudeMax;
+	}
+
+	public void setLongitudeMax(float longitudeMax) {
+		this.longitudeMax = longitudeMax;
+	}
+
+	public float getLongitudeMin() {
+		return LongitudeMin;
+	}
+
+	public void setLongitudeMin(float longitudeMin) {
+		LongitudeMin = longitudeMin;
+	}
+
+	public float getNombreDeClient() {
+		return nombreDeClient;
+	}
+
+	public void setNombreDeClient(float nombreDeClient) {
+		this.nombreDeClient = nombreDeClient;
+	}
+
+	public float getTest_motivationMax() {
+		return test_motivationMax;
+	}
+
+	public void setTest_motivationMax(float test_motivationMax) {
+		this.test_motivationMax = test_motivationMax;
+	}
+
+	public float getTest_motivationMin() {
+		return test_motivationMin;
+	}
+
+	public void setTest_motivationMin(float test_motivationMin) {
+		this.test_motivationMin = test_motivationMin;
+	}
+	
+	
+	
+
 }
