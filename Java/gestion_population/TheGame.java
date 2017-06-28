@@ -7,6 +7,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
+import javafx.stage.Stage;
 import outils.Meteo;
 
 public class TheGame {
@@ -29,6 +30,8 @@ public class TheGame {
 	
 	private ArrayList<MapItem> laMapDesObjets;
 	private Population mapDeLaPopulation;
+	
+	private Stage primaryStage;
 
 	public TheGame() {
 		this.region = new Region();
@@ -171,6 +174,14 @@ public class TheGame {
 	public void setHeureDepuisDebutJeu(int heureDepuisDebutJeu) {
 		this.heureDepuisDebutJeu = heureDepuisDebutJeu;
 	}
+	
+	public Stage getStage() {
+		return primaryStage;
+	}
+
+	public void setStage(Stage primaryStage) {
+		this.primaryStage = primaryStage;
+	}
 
 	/**
 	 * Permet de creer l'objet JsonMap afin de l'envoyer au serveur
@@ -242,7 +253,7 @@ public class TheGame {
 	 * 
 	 * @return
 	 */
-	public JsonArray getJsonArFromSales() {
+	public JsonArray getJsonSales() {
 		JsonArray jsonArSales = new JsonArray();
 		for (String playerName : this.ranking) {
 			for (DrinkInfo drinkInfo : this.listeDesDrinkInfo.get(playerName)) {
