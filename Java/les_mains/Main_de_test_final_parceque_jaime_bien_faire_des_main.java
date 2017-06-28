@@ -1,9 +1,13 @@
 package les_mains;
 
+import java.util.ArrayList;
+
 import communication.Communication;
 import communication.ManipulationJson;
 import communication.ThreadGetForecast;
 import gestion_population.TheGame;
+import graphique.Graph;
+import javafx.stage.Stage;
 import outils.Meteo;
 
 public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
@@ -34,14 +38,17 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 			
 			e.printStackTrace();
 		}
-		
-		
+		Stage scene =new Stage();
+		ArrayList<Object> arg= new ArrayList<Object>();
+		arg.add(laPartie);
+		arg.add(scene);
+		Graph.launch(args);
 		//lancement du threadImage
 		/*
 		 * ThreadGraphism threadGraphism = new ThreadGraphism(laPartie);
-		threadGraphism.start(laPartie);
+		threadGraphism.start(arg);
 		 */
-
+		
 		
 //		//correction du bug json
 //		Stand stand;

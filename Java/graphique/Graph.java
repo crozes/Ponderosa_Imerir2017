@@ -1,15 +1,12 @@
 package graphique;
 
+
+
 import java.util.ArrayList;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.sun.org.apache.xpath.internal.Arg;
 
-import gestion_population.TheGame;
-
-import communication.Communication;
+import gestion_population.Agent;
 import gestion_population.TheGame;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -17,12 +14,10 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
@@ -32,42 +27,47 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-import outils.Global;
-import outils.Meteo;
-import testPoubelle.Main_pour_blaguer;
 
 
 
 
-public  class Graph extends Application {
+
+public class Graph extends Application {
+	TheGame game;
+	Stage primaryStage;
 	Label label2= new Label();
-	int carte_x=800;
-	int carte_y=500;
+	float carte_x=800;//game.getRegion().getLongitudeMax();
+	float carte_y=500;//game.getRegion().getLatitudeMax();
 	Canvas canvas=new Canvas(carte_x,carte_y);
-	TheGame game=Main_pour_blaguer.laPartie;
+	
+	public Graph(TheGame game){
+		this.game = game;
+	}
+	
+	
 	
 	/////////////////////////////instalation des citoyen
-	private GraphicsContext migration(int nbPop){
+	public GraphicsContext migration(int nbPop){
 		
 		//game.getMapDeLaPopulation().genererPopulation(carte_x, 0, carte_y, 0, nbPop, game.getMeteoDuJour(), Meteo.soir, game.getListeDesStand());
 		GraphicsContext gc=canvas.getGraphicsContext2D();
 		//population
-		for(int i=0;i<nbPop;i++){
+		for(int i=0;i<game.getMapDeLaPopulation().getPopulation().size();i++){
 			gc.setFill(Color.rgb(0, 0, 0, 1));
-        	gc.fillOval(Math.random()*(carte_x-0), Math.random()*(carte_y-0), 10, 10);
+        	gc.fillOval(game.getMapDeLaPopulation().getPopulation().get(i).getLatitude(), game.getMapDeLaPopulation().getPopulation().get(i).getLongitude(), 10, 10);
+   
         }
 		//joueur
 		for(int j=0;j<game.getRanking().size();j++){
 			gc.setFill(Color.rgb(100, 255, 100, 0.7));
-	        gc.fillOval(Math.random()*(carte_x-0),/* game.getLaMapDesObjets().getCoordonnees().getLatitude()*/Math.random()*(carte_y-0), 100, 100);
+	        gc.fillOval(game.getListeDesStand().get(game.getRanking().get(j)).getCoordonnees().getLatitude(), game.getListeDesStand().get(game.getRanking().get(j)).getCoordonnees().getLongitude(), 100, 100);
 	        
 		}
 		//pub
-		for(int j=0;j<game.getRanking().size();j++){
+		for(int k=0;k<game.getRanking().size();k++){
 			gc.setFill(Color.rgb(255, 100, 100, 0.7));
-			gc.fillOval(/*game.getLaMapDesObjets().getCoordonnees().getLatitude()*/Math.random()*(carte_x-0),/* game.getLaMapDesObjets().getCoordonnees().getLatitude()*/Math.random()*(carte_y-0), 50, 50);
+			gc.fillOval(Math.random()*(carte_x-0),Math.random()*(carte_y-0), 50, 50);
 	        
 		}
 		return gc;
@@ -114,7 +114,7 @@ public  class Graph extends Application {
         Label topLabel= new Label(); 
         topLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); 
         topLabel.setStyle("-fx-background-color: white; -fx-border-color: black;-fx-alignment:CENTER; -fx-font-size: 15pt;");
-        topLabel.setText("meteo : "+game.getMeteoDuJour()+"\nnb de player : "+game.getRanking().size()+"\npopulation : ");//+game.getMapDeLaPopulation());//affichage
+        topLabel.setText("meteo : "+game.getMeteoDuJour()+"\nnb de player : "+game.getRanking().size()+"\npopulation : ");//population .size
         upPanel.add(topLabel, 0, 0);
         
         ////////////////////////////////////case2///////////////////////////////
@@ -136,7 +136,7 @@ public  class Graph extends Application {
         BackgroundImage myBI= new BackgroundImage(new Image("http://cartography.oregonstate.edu/index_files/stacks_image_3198.jpg",carte_x,carte_y,false,true),
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                   BackgroundSize.DEFAULT);
-        genPanel.setBackground(new Background(myBI));
+        //genPanel.setBackground(new Background(myBI));
         
         
         ////////////////////////////////case infoJoueur/////////////////////////////////////////
@@ -146,38 +146,39 @@ public  class Graph extends Application {
             listJoueur.setExpanded(true);
             TreeItem<String> posJoueur = new TreeItem<String>("position");//affichage
             	posJoueur.getChildren().addAll(
-                        new TreeItem<String>("pos X : "+game.getListeMapItemJoueur().get("location")),//affichage
-                        new TreeItem<String>("pos Y")//affichage
+                        new TreeItem<String>("pos X : "+game.getListeDesStand().get(game.getRanking().get(i)).getCoordonnees().getLatitude()),
+                        new TreeItem<String>("pos Y : "+game.getListeDesStand().get(game.getRanking().get(i)).getCoordonnees().getLongitude())
                     );
             
             TreeItem<String> posPub =new TreeItem<String>("pub");
             	int nbrPub=game.getListeMapItemJoueur().size();
             	for(int k=0;k<nbrPub;k++){
             		
-            			TreeItem<String> pub = new TreeItem<String>("pub"+k);//affichage
+            			TreeItem<String> pub = new TreeItem<String>("pub"+k);
             	        pub.getChildren().addAll(
-            	        		new TreeItem<String>("pos X"),//affichage
-                                new TreeItem<String>("pos Y")//affichage
+            	        		new TreeItem<String>("pos X : "),//affichage 
+                                new TreeItem<String>("pos Y : ")//affichage
             	                );
                         posPub.getChildren().addAll(pub);
             	}
             
             infoJoueur.getChildren().addAll(
             	new TreeItem<String>("rank :"+(i+1)),
-                new TreeItem<String>("budjet : "+game.getListePlayerInfo().get(game.getRanking().get(i)).getCash()),//affichage
-                new TreeItem<String>("vente : "+ game.getListePlayerInfo().get(game.getRanking().get(i)).getSales()),//affichage
-                new TreeItem<String>("profit : "+game.getListePlayerInfo().get(game.getRanking().get(i)).getProfit())//affichage
+                new TreeItem<String>("budjet : "+game.getListePlayerInfo().get(game.getRanking().get(i)).getCash()+"€"),
+                new TreeItem<String>("vente : "+ game.getListePlayerInfo().get(game.getRanking().get(i)).getSales()+"€"),
+                new TreeItem<String>("profit : "+game.getListePlayerInfo().get(game.getRanking().get(i)).getProfit()+"€")
             );
-            TreeItem<String> drinkInfo = new TreeItem<String>("Drink Info");//affichage
-            drinkInfo.getChildren().addAll(
-                    new TreeItem<String>("nom : "),//affichage
-                    new TreeItem<String>("prix : "),//affichage
-                    new TreeItem<String>("alchool : "),//affichage
-                    new TreeItem<String>("froid : ")//affichage
-                );
+            for(int k=0;k<game.getListeDesDrinkInfo().get(game.getRanking().get(i)).size();k++){
+            	TreeItem<String> drinkInfo = new TreeItem<String>(game.getListeDesDrinkInfo().get(game.getRanking().get(i)).get(k).getName());
+                drinkInfo.getChildren().addAll(
+                        new TreeItem<String>("prix : "+game.getListeDesDrinkInfo().get(game.getRanking().get(i)).get(k).getPrice()+"€"),//affichage
+                        new TreeItem<String>("alchool : "+String.valueOf(game.getListeDesDrinkInfo().get(game.getRanking().get(i)).get(k).getIsHasAlcohol())),//affichage
+                        new TreeItem<String>("froid : "+String.valueOf(game.getListeDesDrinkInfo().get(game.getRanking().get(i)).get(k).getIsCold()))//affichage
+                    );
+                infoJoueur.getChildren().addAll(drinkInfo);
+            }
             infoJoueur.getChildren().addAll(posJoueur);
             infoJoueur.getChildren().addAll(posPub);
-            infoJoueur.getChildren().addAll(drinkInfo);
             listJoueur.getChildren().addAll(infoJoueur);
         }
 
@@ -186,19 +187,17 @@ public  class Graph extends Application {
         //creation de la population
         migration(150);
     	carte.getChildren().add(canvas);
-        MAJ miseAJour = new MAJ();
+        threadGraph miseAJour = new threadGraph();
         miseAJour.start();
-        /////////////////affichage carte et information gaphique////////////////////
         
+        /////////////////affichage carte et information gaphique////////////////////
         
         /*affichage*/
         root.getChildren().add(page);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-    /////////////////////////////////threadRun///////////////////////////////////////////
-    /**met a jour l'heure et la date*/
-    private class MAJ extends Thread{
+    private class threadGraph extends Thread{
     	public void run(){
     		while(true)
     		{
@@ -217,11 +216,12 @@ public  class Graph extends Application {
     				if(refresh==true){
     					migration(150);
     				}
-    
+
     			}else{
     				refresh=false;
     			}	
     		}
     	}
     }
+
 }
