@@ -67,7 +67,7 @@ public class Graph extends Application {
 		//pub
 		for(int k=0;k<game.getRanking().size();k++){
 			gc.setFill(Color.rgb(255, 100, 100, 0.7));
-			gc.fillOval(Math.random()*(carte_x-0),Math.random()*(carte_y-0), 50, 50);
+			gc.fillOval(Math.random()*(carte_x-0),Math.random()*(carte_y-0), 50, 50);//pos pub ??
 	        
 		}
 		return gc;
@@ -140,11 +140,11 @@ public class Graph extends Application {
         
         
         ////////////////////////////////case infoJoueur/////////////////////////////////////////
-        TreeItem<String> listJoueur = new TreeItem<String>("id joueur");//affichage
+        TreeItem<String> listJoueur = new TreeItem<String>("id joueur");
         for(int i=0;i<game.getRanking().size();i++){
-        	 TreeItem<String> infoJoueur = new TreeItem<String>(game.getRanking().get(i));//affichage
+        	 TreeItem<String> infoJoueur = new TreeItem<String>(game.getRanking().get(i));
             listJoueur.setExpanded(true);
-            TreeItem<String> posJoueur = new TreeItem<String>("position");//affichage
+            TreeItem<String> posJoueur = new TreeItem<String>("position");
             	posJoueur.getChildren().addAll(
                         new TreeItem<String>("pos X : "+game.getListeDesStand().get(game.getRanking().get(i)).getCoordonnees().getLatitude()),
                         new TreeItem<String>("pos Y : "+game.getListeDesStand().get(game.getRanking().get(i)).getCoordonnees().getLongitude())
@@ -156,8 +156,8 @@ public class Graph extends Application {
             		
             			TreeItem<String> pub = new TreeItem<String>("pub"+k);
             	        pub.getChildren().addAll(
-            	        		new TreeItem<String>("pos X : "),//affichage 
-                                new TreeItem<String>("pos Y : ")//affichage
+            	        		new TreeItem<String>("pos X : "),//pos pub ??
+                                new TreeItem<String>("pos Y : ")//pos pub ??
             	                );
                         posPub.getChildren().addAll(pub);
             	}
@@ -172,8 +172,8 @@ public class Graph extends Application {
             	TreeItem<String> drinkInfo = new TreeItem<String>(game.getListeDesDrinkInfo().get(game.getRanking().get(i)).get(k).getName());
                 drinkInfo.getChildren().addAll(
                         new TreeItem<String>("prix : "+game.getListeDesDrinkInfo().get(game.getRanking().get(i)).get(k).getPrice()+"€"),//affichage
-                        new TreeItem<String>("alchool : "+String.valueOf(game.getListeDesDrinkInfo().get(game.getRanking().get(i)).get(k).getIsHasAlcohol())),//affichage
-                        new TreeItem<String>("froid : "+String.valueOf(game.getListeDesDrinkInfo().get(game.getRanking().get(i)).get(k).getIsCold()))//affichage
+                        new TreeItem<String>("alchool : "+String.valueOf(game.getListeDesDrinkInfo().get(game.getRanking().get(i)).get(k).getIsHasAlcohol())),
+                        new TreeItem<String>("froid : "+String.valueOf(game.getListeDesDrinkInfo().get(game.getRanking().get(i)).get(k).getIsCold()))
                     );
                 infoJoueur.getChildren().addAll(drinkInfo);
             }
@@ -197,6 +197,7 @@ public class Graph extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+    //c est trop le bordel pour le mettre dans une classe a part
     private class threadGraph extends Thread{
     	public void run(){
     		while(true)

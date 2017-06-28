@@ -39,10 +39,8 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 			e.printStackTrace();
 		}
 		Stage scene =new Stage();
-		ArrayList<Object> arg= new ArrayList<Object>();
-		arg.add(laPartie);
-		arg.add(scene);
-		Graph.launch(args);
+		
+		Graph start=new Graph(laPartie);
 		//lancement du threadImage
 		/*
 		 * ThreadGraphism threadGraphism = new ThreadGraphism(laPartie);

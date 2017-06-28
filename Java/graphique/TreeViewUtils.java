@@ -1,4 +1,4 @@
-/*
+
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
@@ -9,11 +9,12 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 
 import gestion_population.PlayerInfo;
+import gestion_population.Publicite;
 import gestion_population.TheGame;
 
 /**
  * Created by brice on 27/06/17.
- *//*
+ */
 public class TreeViewUtils {
     public static TreeItem<String> getPlayerBranch(TreeItem<String> root, String playerID,TheGame game) throws PlayerNotFound {
         ObservableList<TreeItem<String>> playersBranch = root.getChildren();
@@ -72,14 +73,11 @@ public class TreeViewUtils {
 
 
                 }
-            } catch (NoStandException e) {
-                standsBranch.getChildren().clear();
-            }
 
             TreeItem<String> adsBranch = getBranch(playerBranch, "Ads",game);
 //            System.out.println("Ok ads");
             try {
-                ArrayList<Item> ads = playerInfo.getAds();
+                ArrayList<Publicite> ads = playerInfo.getAds();//pub
                 if(ads.size()!=adsBranch.getChildren().size()){
                     adsBranch.getChildren().clear();
                     for(Item unAd : ads){
@@ -92,22 +90,16 @@ public class TreeViewUtils {
                     for(TreeItem<String> unAds : adsBranch.getChildren()){
 
                         getBranch(unAds,"Positon",game).setValue("Position: " + ads.get(i).getLocation().toString());
-                        getBranch(standsBranch,"Influence>",game).setValue("Influence: " + ads.get(i).getInfluence());
+                        getBranch(standsBranch,"Influence>",game).setValue("Influence: " + ads.get(i).getInfluence());//pub tjr
 
                         i++;
                     }
                 }
 
-            } catch (NoAdFound noAdFound) {
+            } catch (NoAdFound noAdFound) {//exeption pas de pub je creer ou pas 
                 adsBranch.getChildren().clear();
             }
             TreeItem<String> drinksBranch = getBranch(playerBranch, "Drinks",game);
-            try {
-                checkDrinks(playerInfo,drinksBranch);
-
-            } catch (NoDrinkFound noDrinkFound) {
-                noDrinkFound.printStackTrace();
-            }
 
 
         } catch (PlayerNotFound playerNotFound) {
@@ -235,4 +227,3 @@ public class TreeViewUtils {
 
 
 }
-*/
