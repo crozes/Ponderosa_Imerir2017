@@ -36,8 +36,9 @@ public class Main_pour_blaguer {
 		//System.out.println(plop);
 		//creation de la partie avec recuperation du jsonMap pour innitialiser la partie
 		
-	//	StringDeLaMapEnJson = Communication.getRecevoir(outils.Global.URL_GET_MAP);
-		ManipulationJson.jsonFromStringMap(plop, laPartie);
+		StringDeLaMapEnJson = Communication.getRecevoir(outils.Global.URL_GET_MAP);
+		ManipulationJson.jsonFromStringMap(StringDeLaMapEnJson, laPartie);
+		Graph.launch(Graph.class,args);
 		//System.out.println(laPartie.toString());
 //		HashMap<String, Integer> plop = new HashMap<>();
 //		plop.put("William", 10);

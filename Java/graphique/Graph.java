@@ -35,6 +35,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import outils.Global;
+import outils.Meteo;
 import testPoubelle.Main_pour_blaguer;
 
 
@@ -50,6 +51,7 @@ public  class Graph extends Application {
 	/////////////////////////////instalation des citoyen
 	private GraphicsContext migration(int nbPop){
 		
+		//game.getMapDeLaPopulation().genererPopulation(carte_x, 0, carte_y, 0, nbPop, game.getMeteoDuJour(), Meteo.soir, game.getListeDesStand());
 		GraphicsContext gc=canvas.getGraphicsContext2D();
 		//population
 		for(int i=0;i<nbPop;i++){
@@ -57,13 +59,13 @@ public  class Graph extends Application {
         	gc.fillOval(Math.random()*(carte_x-0), Math.random()*(carte_y-0), 10, 10);
         }
 		//joueur
-		for(int j=0;j</*game.getRanking().size()*/10;j++){
+		for(int j=0;j<game.getRanking().size();j++){
 			gc.setFill(Color.rgb(100, 255, 100, 0.7));
-	        gc.fillOval(/*game.getLaMapDesObjets().getCoordonnees().getLatitude()*/Math.random()*(carte_x-0),/* game.getLaMapDesObjets().getCoordonnees().getLatitude()*/Math.random()*(carte_y-0), 100, 100);
+	        gc.fillOval(Math.random()*(carte_x-0),/* game.getLaMapDesObjets().getCoordonnees().getLatitude()*/Math.random()*(carte_y-0), 100, 100);
 	        
 		}
 		//pub
-		for(int j=0;j</*game.getRanking().size()*/50;j++){
+		for(int j=0;j<game.getRanking().size();j++){
 			gc.setFill(Color.rgb(255, 100, 100, 0.7));
 			gc.fillOval(/*game.getLaMapDesObjets().getCoordonnees().getLatitude()*/Math.random()*(carte_x-0),/* game.getLaMapDesObjets().getCoordonnees().getLatitude()*/Math.random()*(carte_y-0), 50, 50);
 	        
@@ -112,7 +114,7 @@ public  class Graph extends Application {
         Label topLabel= new Label(); 
         topLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); 
         topLabel.setStyle("-fx-background-color: white; -fx-border-color: black;-fx-alignment:CENTER; -fx-font-size: 15pt;");
-        topLabel.setText("meteo : "+game.getMeteoDuJour()+"\nnb de player : "+game.getRanking().size()+"\npopulation : ??");//affichage
+        topLabel.setText("meteo : "+game.getMeteoDuJour()+"\nnb de player : "+game.getRanking().size()+"\npopulation : ");//+game.getMapDeLaPopulation());//affichage
         upPanel.add(topLabel, 0, 0);
         
         ////////////////////////////////////case2///////////////////////////////
@@ -139,17 +141,17 @@ public  class Graph extends Application {
         
         ////////////////////////////////case infoJoueur/////////////////////////////////////////
         TreeItem<String> listJoueur = new TreeItem<String>("id joueur");//affichage
-        for(int i=0;i<game.getRanking().size()+2;i++){
-        	 TreeItem<String> infoJoueur = new TreeItem<String>(/*game.getRanking().get(i)*/"pseudo");//affichage
+        for(int i=0;i<game.getRanking().size();i++){
+        	 TreeItem<String> infoJoueur = new TreeItem<String>(game.getRanking().get(i));//affichage
             listJoueur.setExpanded(true);
             TreeItem<String> posJoueur = new TreeItem<String>("position");//affichage
             	posJoueur.getChildren().addAll(
-                        new TreeItem<String>("pos X"),//affichage
+                        new TreeItem<String>("pos X : "+game.getListeMapItemJoueur().get("location")),//affichage
                         new TreeItem<String>("pos Y")//affichage
                     );
             
             TreeItem<String> posPub =new TreeItem<String>("pub");
-            	int nbrPub=5;
+            	int nbrPub=game.getListeMapItemJoueur().size();
             	for(int k=0;k<nbrPub;k++){
             		
             			TreeItem<String> pub = new TreeItem<String>("pub"+k);//affichage
@@ -161,16 +163,17 @@ public  class Graph extends Application {
             	}
             
             infoJoueur.getChildren().addAll(
-                new TreeItem<String>("infoJoueur(cash)"),//affichage
-                new TreeItem<String>("infoJoueur(vente)"),//affichage
-                new TreeItem<String>("infoJoueur(profit)")//affichage
+            	new TreeItem<String>("rank :"+(i+1)),
+                new TreeItem<String>("budjet : "+game.getListePlayerInfo().get(game.getRanking().get(i)).getCash()),//affichage
+                new TreeItem<String>("vente : "+ game.getListePlayerInfo().get(game.getRanking().get(i)).getSales()),//affichage
+                new TreeItem<String>("profit : "+game.getListePlayerInfo().get(game.getRanking().get(i)).getProfit())//affichage
             );
             TreeItem<String> drinkInfo = new TreeItem<String>("Drink Info");//affichage
             drinkInfo.getChildren().addAll(
-                    new TreeItem<String>("nom"),//affichage
-                    new TreeItem<String>("prix"),//affichage
-                    new TreeItem<String>("alchool"),//affichage
-                    new TreeItem<String>("froid")//affichage
+                    new TreeItem<String>("nom : "),//affichage
+                    new TreeItem<String>("prix : "),//affichage
+                    new TreeItem<String>("alchool : "),//affichage
+                    new TreeItem<String>("froid : ")//affichage
                 );
             infoJoueur.getChildren().addAll(posJoueur);
             infoJoueur.getChildren().addAll(posPub);
@@ -205,7 +208,9 @@ public  class Graph extends Application {
     				catch (InterruptedException exception) {
     				  exception.printStackTrace();
     				}
-    			Platform.runLater(()->label2.setText(String.valueOf("jour\nheure:"+game.getHeureDepuisDebutJeu())));
+    	        int jour=game.getHeureDepuisDebutJeu()%24;
+    	        int heure=game.getHeureDepuisDebutJeu()-(24*jour);
+    			Platform.runLater(()->label2.setText(String.valueOf("jour : "+jour+ "\nheure : "+heure)));
     			boolean refresh=true;
     			if((game.getHeureDepuisDebutJeu()%12+1)==0){
     				migration(150).clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -215,15 +220,8 @@ public  class Graph extends Application {
     
     			}else{
     				refresh=false;
-    			}
-    			
+    			}	
     		}
     	}
     }
-    
-    //////////////////////////////////main///////////////////////////////////////////////
-	public static void main(String[] args) {
-		launch(Graph.class,args);
-   }
-	
 }
