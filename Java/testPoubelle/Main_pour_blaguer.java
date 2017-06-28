@@ -1,40 +1,52 @@
 package testPoubelle;
 
-import java.util.HashMap;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import communication.Communication;
-import communication.ManipulationJson;
-import gestion_population.Coordonnees;
-import gestion_population.TheGame;
+import outils.Meteo;
 
 public class Main_pour_blaguer {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-//		Coordonnees plop = new Coordonnees(0f, 0f);
-//		ThreadProut threadProut = new ThreadProut(plop);
-//		threadProut.start();
+		// 
+//		//lancement du thread de requete du Forecast
+//		ThreadGetForecast threadForecast = new ThreadGetForecast(new TheGame());
+//		threadForecast.start();
 //		
-//		System.out.println("prout");
-//		while(true){
-//			try {
-//				Thread.sleep(500);
-//				System.out.println(plop.getLatitude());
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				System.out.println("proble");
-//				e.printStackTrace();
-//			}
-//
-//		}	
-		outils.ToString.toString("plop");
+////		
+		String jsonTemps = Communication.getRecevoir(outils.Global.URL_GET_FORECAST);
+		System.out.println(jsonTemps);
+		
+		String laMeteo = " ";
+		JsonElement jsonEl = new JsonParser().parse(jsonTemps);
+		JsonObject jsonObTemps = jsonEl.getAsJsonObject();
+		JsonArray jsonArWheather;
+		JsonObject jsonObForecast;
+		
 
-//		HashMap<String, Integer> plop = new HashMap<>();
-//		plop.put("William", 10);
-//		plop.put("Victor", 9);
-//		
-//		System.out.println(plop.toString());
+		System.out.println((jsonObTemps.get("timestamp").getAsInt()));
+
+		jsonArWheather = jsonObTemps.get("weather").getAsJsonArray();
+
+		for (int i = 0; i < 2; i++) {
+			jsonObForecast = jsonArWheather.get(i).getAsJsonObject();
+			laMeteo = jsonObForecast.get("weather").getAsString();
+			outils.ToString.toStringMeteo(laMeteo +" = format meteo envoye par le serveur");
+			if (jsonObForecast.get("dfn").getAsInt() == i) {
+				//outils.ToString.toStringMeteo("La meteo en string : " +laMeteo);
+				System.out.println((Meteo.valueOf(laMeteo)));
+			} else {
+				//outils.ToString.toStringMeteo("La meteo en string : " +laMeteo);
+				System.out.println((Meteo.valueOf(laMeteo)));
+			}
+		}
+		
+		
+
+		
 	}
 
 }

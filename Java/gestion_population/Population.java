@@ -99,7 +99,7 @@ public class Population {
 		this.longitudeMax = longitudeMax;
 		this.LongitudeMin = LongitudeMin;
 		
-		outils.ToString.toString("On genere les pigeons");
+		outils.ToString.toStringVousEtesIci("On genere les pigeons ... les clients pardons");
 		
 		for (int i = 0; i < nombreDeClient; i++) {
 			this.population.add(this.creerUnAgent(meteo, periodeJournee, listeDesStand));
@@ -173,34 +173,41 @@ public class Population {
 		for(int i_client = 0; i_client<this.population.size(); i_client++){
 			client = this.population.get(i_client);
 			numeroClient++;
-			outils.ToString.toString("On s'occupe du client : " + numeroClient + " sur : " + population.size());
-			outils.ToString.toString("aBue = " + client.getIsaBueAujourdhui() + " motivation : "+ client.getMotivation() + 
+			outils.ToString.toStringDiver("On s'occupe du client : " + numeroClient + " sur : " + population.size());
+			outils.ToString.toStringDiver("aBue = " + client.getIsaBueAujourdhui() + " motivation : "+ client.getMotivation() + 
 					" motivation min autorise : " + outils.Global.minMotivationAvantDeNePlusVouloirBoire +
 				" nombre de stand qu'il reste a visiter : " + client.getListeDesStandNonVisite().size()	);
 			do{
 			
 			
 				//on genere la volontéFinale
+				outils.ToString.toStringDebug(laPartie.getListeMapItemJoueur());
 				client.generationDeLaVolonteFinale(laPartie.getListeMapItemJoueur());
 					
 				//on cherche sur qu'elle bar on va.
 				int i_stand = -1;
 				boolean peutSeDeplacer = false;
-				do{
+				while (i_stand < client.getListeDesStandTrie().size()-1 && peutSeDeplacer == false ){
 					i_stand++;
-					outils.ToString.toString("i : " + i_stand + " size : " + client.getListeDesStandTrie().size() +"probleme d'index Population faireBoire...");
+					outils.ToString.toStringDebug("i : " + i_stand + " size : " + client.getListeDesStandTrie().size() +"probleme d'index Population faireBoire...");
 					peutSeDeplacer = client.peutSeDeplacerVersCeBar(laPartie, client.getListeDesStandTrie().get(i_stand));
 					
-				}while (i_stand < client.getListeDesStandTrie().size()-1 && peutSeDeplacer == false );
+				}
+					
+
+					
 				
-				//le client passe sa commande
-				outils.ToString.toString("Le client :" + numeroClient + " passe commande chez : " + client.getListeDesStandTrie().get(i_stand));
-				client.commanderUneBoisson(laPartie, client.getListeDesStandTrie().get(i_stand));
+				if(i_stand!=-1){
+					//le client passe sa commande
+					outils.ToString.toStringDiver("Le client :" + numeroClient + " passe commande chez : " + client.getListeDesStandTrie().get(i_stand));
+					client.commanderUneBoisson(laPartie, client.getListeDesStandTrie().get(i_stand));
+				}
+
 				
 			}while(client.getIsaBueAujourdhui()==false && client.getMotivation()>outils.Global.minMotivationAvantDeNePlusVouloirBoire && client.getListeDesStandNonVisite().size()>0);
 			//Le client  a bue, il n'a plus soif, on peut le retirer du jeu
 			if (client.getIsaBueAujourdhui() == true){
-				outils.ToString.toString("On a retirer un client. Il reste : "+ population.size()+" clients");
+				outils.ToString.toStringDiver("----------------------> On a retirer un client. Il reste : "+ population.size()+" clients");
 				this.population.remove(client);
 			}
 

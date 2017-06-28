@@ -35,8 +35,8 @@ public class main_avec_des_trucs_dedans {
 		ranking.add("Tupolef");
 		ranking.add("Tchekov");
 		
-		Meteo meteo = Meteo.heatwave;
-		Meteo periodeJournee = Meteo.matin;
+//		Meteo meteo = Meteo.heatwave;
+//		Meteo periodeJournee = Meteo.matin;
 		
 //		laPartie.getMapDeLaPopulation().genererPopulation(50, -50, 50, -50, ranking.size(), meteo, periodeJournee);
 		laPartie.setRanking(ranking);

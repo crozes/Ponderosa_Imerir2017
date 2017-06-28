@@ -3,7 +3,7 @@ package gestion_population;
 import com.google.gson.JsonObject;
 
 /**
- * Simple classe qui à comme paramettres x et y.
+ * Simple classe qui à comme paramettres latitude et longitude.
  * Elle permet de localiser toute chose physique sur la carte
  * @author atila
  *

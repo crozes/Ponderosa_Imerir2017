@@ -22,13 +22,13 @@ public class ManipulationJson {
 
 
 
-
-
 	/**
 	 * Voici la fonction qui lit le forecast produit par l'Arduino.
 	 * Ce json contient la meteo d'aujourd'hui et de demain, ainsi que la duree en heure depuis le debut de la partie.
 	 * 
-	 * Recoie : Temps "timestamp":int Forecast "dfn" :int /days from now - 0
+	 * Recoie : 
+	 * Forecast "dfn" :int, "wheather" : wheather /days from now - 0
+	 * Temps "timestamp":int, "wheather":[forecast] 
 	 * means today, 1 means "tomorrow" "weather": String -> Enum
 	 * 
 	 * @param jsonTemps
@@ -37,39 +37,37 @@ public class ManipulationJson {
 	public static void jsonFromStringTemps(String jsonTemps, TheGame laPartie) {
 		String laMeteo = " ";
 		JsonElement jsonEl = new JsonParser().parse(jsonTemps);
-		JsonObject jsonOb = jsonEl.getAsJsonObject();
+		JsonObject jsonObTemps = jsonEl.getAsJsonObject();
+		JsonArray jsonArWheather;
+		JsonObject jsonObForecast;
+		int timeStamp = 0;
+		int dfn;
+		Meteo meteo;
 
-		laPartie.setHeureDepuisDebutJeu(jsonOb.get("timestamp").getAsInt());
+		
+		
+		timeStamp = jsonObTemps.get("timestamp").getAsInt();
+		laPartie.setHeureDepuisDebutJeu(timeStamp);
 
-		JsonArray jsonAr = jsonOb.get("weather").getAsJsonArray();
+		jsonArWheather = jsonObTemps.get("weather").getAsJsonArray();
 
-		jsonOb = jsonAr.get(0).getAsJsonObject();
-
-		for (int i = 0; i < 2; i++) {
-			laMeteo = jsonOb.get("weather").getAsString();
-			if (jsonOb.get("dfn").getAsInt() == i) {
-				laPartie.setMeteoDuJour(Meteo.valueOf(laMeteo));
-			} else {
-				laPartie.setMeteoDeDemain(Meteo.valueOf(laMeteo));
+		for (int i = 0; i < jsonArWheather.size(); i++) {
+			jsonObForecast = jsonArWheather.get(i).getAsJsonObject();
+			laMeteo = jsonObForecast.get("weather").getAsString();
+			outils.ToString.toStringMeteo(laMeteo +" = format meteo envoye par le serveur");
+			meteo = Meteo.valueOf(laMeteo);
+			dfn = jsonObForecast.get("dfn").getAsInt();
+			if ( dfn == 0) {
+				outils.ToString.toStringMeteo("La meteo en string : " +laMeteo);
+				laPartie.setMeteoDuJour(meteo);
+			} else if(dfn == 1) {
+				outils.ToString.toStringMeteo("La meteo en string : " +laMeteo);
+				laPartie.setMeteoDeDemain(meteo);
 			}
 		}
+	}
+	
 
-	}
-	
-	/**
-	 * renvoie 
-	 * @param jsonSale
-	 * @return
-	 */
-	public static int jsonFromStringSale(String jsonSale){
-		
-		JsonElement jsonEl = new JsonParser().parse(jsonSale);
-		JsonObject jsonOb = jsonEl.getAsJsonObject();
-		
-		
-		return jsonOb.get("quantity").getAsInt();
-	}
-	
 	
 
 	/**
@@ -218,7 +216,7 @@ public class ManipulationJson {
 		JsonArray jsonArMapItem;
 
 		// MapItem
-		
+		laPartie.getListeMapItemJoueur().clear();
 		JsonObject jsonObLocation;
 		JsonObject jsonObMapItem;
 		String kind;
@@ -284,9 +282,9 @@ public class ManipulationJson {
 			laPartie.getListeDesDrinkInfo().put(playerName, drinkInfo);
 
 			// itemsByPlayers
-			laPartie.getListeMapItemJoueur().clear();
 			
-			ArrayList<MapItem> mapItem = new ArrayList<>();
+			
+			ArrayList<MapItem> mapItemPourUnJoueur = new ArrayList<>();
 			try {
 				jsonArMapItem = jsonObItemsByPlayers.get(playerName).getAsJsonArray();
 				
@@ -309,13 +307,14 @@ public class ManipulationJson {
 					// public MapItem(String kind, String owner, float influence,
 					// Coordonnees coordonnees) {
 
-					
-					if(kind == "ad"){
-						mapItem.add(new Publicite(kind, owner, influence, new Coordonnees(latitude, longitude)));
+					//mapItem contient tous les mapItem, pub et stand. Mais listeStand que des stand
+					if(kind.equals("ad")){
+						outils.ToString.toStringJSON("Verification du kind pour ad : " + kind );
+						mapItemPourUnJoueur.add(new Publicite(kind, owner, influence, new Coordonnees(latitude, longitude)));
 					}else{ //c'est un stand
-						mapItem.add(new Stand(kind, owner, influence, new Coordonnees(latitude, longitude)));
+						outils.ToString.toStringJSON("Verification du kind pour stand : " + kind );
+						mapItemPourUnJoueur.add(new Stand(kind, owner, influence, new Coordonnees(latitude, longitude)));
 						laPartie.getListeDesStand().put(playerName, ( new Stand(kind, owner, influence, new Coordonnees(latitude, longitude)) ) );	
-						System.out.println("bbbbbbbbbbb");
 					}
 //					i++;
 				}
@@ -325,78 +324,16 @@ public class ManipulationJson {
 			}
 				
 
-
-				laPartie.getListeMapItemJoueur().put(playerName, mapItem);
+			outils.ToString.toStringJSON("insertion de la mapItem dans la partie : "
+					+ mapItemPourUnJoueur + " pour : " + playerName + " on est dans la lecture du json sur le serveur" );
 			
+			
+			laPartie.getListeMapItemJoueur().put(playerName, mapItemPourUnJoueur);
+			outils.ToString.toStringJSON("Voila la map item finale : " + laPartie.getListeMapItemJoueur());
 		}
 	}
 	
 	
-	
-//	
-//	
-//	public static String jsonToStringMap(Partie laPartie){
-//		
-//		JsonObject jsonObResult = new JsonObject();
-//		
-//		JsonObject jsonObRegion = new JsonObject();
-//		JsonObject jsonObSpan = new JsonObject();
-//		JsonObject jsonObCenter = new JsonObject();
-//
-//		JsonArray jsonArRanking = new JsonArray();
-//		JsonObject jsonObRanking = new JsonObject();
-//		
-//		JsonObject jsonObPlayerInfo = new JsonObject();
-//		JsonObject jsonObInfoPlayer = new JsonObject(); // le playerinfo dans le playerinfo In foplayer ....
-//		JsonArray jsonArDrinksOffered = new JsonArray();
-//		JsonObject jsonObDrinkInfo = new JsonObject();
-//
-//		
-//		JsonObject jsonObItemsByPlayers = new JsonObject();
-//		JsonArray jsonArMapItem = new JsonArray();
-//		JsonObject jsonObMapItem = new JsonObject();
-//		JsonObject jsonObLocation = new JsonObject();
-//		
-//		
-//		JsonObject jsonObDrinksByPlayers= new JsonObject();
-//		JsonArray jsonArDrinkInfo = new JsonArray();
-////		JsonObject jsonObDrinkInfo = new JsonObject();
-////		JsonObject jsonObName = new JsonObject();
-////		JsonObject jsonObPrice = new JsonObject();
-////		JsonObject jsonObHasAlcohol = new JsonObject();
-////		JsonObject jsonObIsCold = new JsonObject();
-//		
-//		
-//		
-//		jsonObCenter.addProperty("latitude", laPartie.getRegion().getCenter().getLatitude());
-//		jsonObCenter.addProperty("longitude", laPartie.getRegion().getCenter().getLatitude());
-//		jsonObRegion.add("center", jsonObCenter);
-//		
-//		jsonObCenter.addProperty("latitude", laPartie.getRegion().getSpan().getLatitude_span());
-//		jsonObCenter.addProperty("latitude", laPartie.getRegion().getSpan().getLongitude_span());
-//		jsonObRegion.add("span", jsonObSpan);
-//		
-//		jsonObResult.add("region", jsonObRegion);
-//		
-//
-//		
-//		for (String playerName : laPartie.getRanking()) {
-//
-//			// ranking
-//			jsonObRanking.addProperty(playerName, playerName);
-//			jsonArRanking.add(jsonObRanking);
-//
-//
-//			
-//			jsonObItemsByPlayers.add(playerName, jsonArMapItem);
-//			jsonObResult.add("itemsByPlayers", jsonObItemsByPlayers);
-//
-//			// drinksByPlayer
-//			jsonObResult.add("drinksByPlayer", jsonObDrinksByPlayers);
-//		}
-//
-//		return jsonObResult.toString();
-//	}
 
 
 	/**

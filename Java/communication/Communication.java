@@ -30,7 +30,7 @@ public class Communication {
 			url = new URL(URL_Serveur);
 			connection = (HttpURLConnection) url.openConnection();
 
-			System.out.println("< Recuperation du get");
+			outils.ToString.toStringHTTP("< Recuperation du get");
 
 			connection.setRequestMethod("GET");
 			connection.setDoInput(true);
@@ -47,7 +47,7 @@ public class Communication {
 			in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
 			String resultat = org.apache.commons.io.IOUtils.toString(in);
-			System.out.println("get recuperer = " + resultat + " >");
+			outils.ToString.toStringHTTP("get recuperer = " + resultat + " >");
 
 			return resultat;
 
@@ -94,9 +94,9 @@ public class Communication {
 			wr.flush();
 			wr.close();
 
-			System.out.println("Envoie: " + toPost);
+			outils.ToString.toStringHTTP("Envoie: " + toPost);
 			int reponse = connection.getResponseCode();
-			System.out.println("Code reponse " + reponse + " Reponse " + connection.getResponseMessage());
+			outils.ToString.toStringHTTP("Code reponse " + reponse + " Reponse " + connection.getResponseMessage());
 
 			InputStream in = null;
 
@@ -107,7 +107,7 @@ public class Communication {
 				System.out.println("\nMauvaise data : ");
 			}
 			String result = org.apache.commons.io.IOUtils.toString(in, "UTF-8");
-			System.out.println("result " + result);
+			outils.ToString.toStringHTTP("result " + result);
 			return result;
 
 		} catch (Exception e) {

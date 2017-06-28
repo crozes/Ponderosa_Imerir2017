@@ -56,10 +56,9 @@ public class CoordonneesSpan {
 		this.longitude_span = longitude_span;
 	}
 	
-	public JsonObject getJsonObject(){
+	public JsonObject getJsonObject() {
 		JsonObject jsonOb = new JsonObject();
-		
-		
+
 		jsonOb.addProperty("latitude", this.latitude_span);
 		jsonOb.addProperty("longitude", this.longitude_span);
 		return jsonOb;

@@ -242,7 +242,7 @@ public class TheGame {
 	 * 
 	 * @return
 	 */
-	public JsonArray getJsonSales() {
+	public JsonArray getJsonArFromSales() {
 		JsonArray jsonArSales = new JsonArray();
 		for (String playerName : this.ranking) {
 			for (DrinkInfo drinkInfo : this.listeDesDrinkInfo.get(playerName)) {

@@ -6,14 +6,24 @@ import java.util.HashMap;
 import outils.Global;
 import outils.Meteo;
 
+
+
+/**
+ * Voila la classe qui simule les clients
+ * @author atila
+ *
+ */
 public class Agent {
 
 	private Coordonnees coordonnees;
 
 	private float motivation;
-	private HashMap<String, Stand> listeDesStandNonVisite ; // definie la volonte de boire une boisson
+    // definie la volonte de boire une boisson
+	private HashMap<String, Stand> listeDesStandNonVisite;
 	private HashMap<String, Float> listeDeLaVolontePourStand; //
 	private ArrayList<String> listeDesStandTrie;
+	
+	
 
 	private boolean veutBoissonFroide;
 	private boolean veutBoissonSansAlcool;
@@ -35,9 +45,8 @@ public class Agent {
 		this.calculerEnvieBoissonSansAlcool(meteo, periodeJournee);
 
 		this.aBueAujourdhui = false;
-		this.listeDeLaVolontePourStand =  new HashMap<String, Float>();
+		this.listeDeLaVolontePourStand = new HashMap<String, Float>();
 		this.listeDesStandNonVisite = new HashMap<String, Stand>(listeDesStand);
-	
 
 		this.listeDesStandTrie = new ArrayList<>();
 		this.coordonnees = new Coordonnees(0f, 0f);
@@ -69,7 +78,7 @@ public class Agent {
 			float motivation = outils.OutilsCalculs.randomFloat(Global.clientMinMotivation, Global.clientMaxMotivation);
 
 			motivation *= outils.OutilsCalculs.poidMeteoMotivationBoissonFroide(meteo);
-
+			
 			return motivation;
 		}
 	}
@@ -120,7 +129,6 @@ public class Agent {
 			}
 		}
 	}
-	
 
 	/**
 	 * Calcul du bonus de volonte finale d'une pub sur un client
@@ -129,8 +137,8 @@ public class Agent {
 	 * @param mapItem
 	 */
 	public void calculerGainVolonteFinaleParUnePub(String playerName, MapItem mapItem) {
-		
-		//petite verification que la valeur existe
+
+		// petite verification que la valeur existe
 		if (this.listeDeLaVolontePourStand.get(playerName) == null) {
 			this.listeDeLaVolontePourStand.put(playerName, 1f);
 		}
@@ -150,45 +158,24 @@ public class Agent {
 	 * @return
 	 */
 	private float calculerInfluancePub(MapItem mapItem) {
+		outils.ToString.toStringVousEtesIci(" class.Agent method clacluler InfluancePub");
 		float distance = outils.OutilsCalculs.calculerDistance(this, mapItem);
 		float influancePub = (float) ((Math.pow(mapItem.getInfluence(), 2) * outils.Global.poidInfluencePub)
 				/ (Math.pow(distance, 2)));
-		
-		outils.ToString.toString("Valeur infuancePub : "+influancePub+" class.Agent method clacluler InfluancePub");
-		
-		return influancePub*outils.Global.poidCalculInfluence ;
+
+		outils.ToString.toStringMath("Valeur infuancePub : " + influancePub);
+
+		return influancePub * outils.Global.poidCalculInfluence;
 	}
-	
-	
-	/**
-	 * Trouve le meilleur Stand
-	 * @return
-	 */
-	public String trierStandSelonVolonteFinale(){
-		
-		
-		String standMeilleur = null;
-//		for(String cle : this.listeDeLaVolontePourStand.keySet()){
-//			if (standMeilleur ==null){
-//				standMeilleur = cle;
-//			}
-//			
-//			if(this.listeDeLaVolontePourStand.get(standMeilleur)<this.listeDeLaVolontePourStand.get(cle)){
-//				if(this.listeDesStand.get(cle) >
-//				standMeilleur = cle;
-//			}
-//			
-//		}
-		return standMeilleur;
-	}
-	
-	private float coutDuDeplacementVers(Coordonnees coordonneesStand){
+
+
+	private float coutDuDeplacementVers(Coordonnees coordonneesStand) {
 		float distanceMaximun = outils.OutilsCalculs.calculerDistance(this.coordonnees, coordonneesStand);
-		distanceMaximun *=outils.Global.poidDistancePerteVolonteFinale;
-		
+		distanceMaximun *= outils.Global.poidDistancePerteVolonteFinale;
+
 		return distanceMaximun;
 	}
-	
+
 	/**
 	 * Calcule s'il restera sufisament de volonte finale pour boire un verre
 	 * dans le stand choisie
@@ -196,39 +183,43 @@ public class Agent {
 	 * @param stand
 	 * @return vrai s'il serait peut etre possible de boire dans le stand
 	 *         choisie, faux sinon
+	 * @author atila
 	 */
-	public boolean peutSeDeplacerVersCeBar(TheGame quaranteDeux,String debitDeBoisson){
+	public boolean peutSeDeplacerVersCeBar(TheGame quaranteDeux, String debitDeBoisson) {
+		outils.ToString.toStringVousEtesIci("On est dans peutSeDeplacerVersCeBar dans class.Agent");
 		Stand stand = this.listeDesStandNonVisite.get(debitDeBoisson);
 		float coutDistance = coutDuDeplacementVers(stand.getCoordonnees());
-		
-		outils.ToString.toString("On est dans peutSeDeplacerVersCeBar dans class.Agent");
-		outils.ToString.toString("liste des stand non visite" + this.listeDesStandNonVisite);
-		outils.ToString.toString("cout en distance "+ coutDistance + " volonte : " + this.listeDeLaVolontePourStand.get(stand.getOwner()) + " pour le bar de " + stand.getOwner());
-		
-		if((this.listeDeLaVolontePourStand.get(stand.getOwner())-coutDistance)>outils.Global.volonteMinPourAllerVersUnStand){
-			outils.ToString.toString("Le bar :" + debitDeBoisson + " est choisie car Volonte : "
+
+		outils.ToString.toStringListe("liste des stand non visite" + this.listeDesStandNonVisite);
+		outils.ToString.toStringMath("cout en distance " + coutDistance + " volonte : "
+				+ this.listeDeLaVolontePourStand.get(stand.getOwner()) + " pour le bar de " + stand.getOwner());
+
+		if ((this.listeDeLaVolontePourStand.get(stand.getOwner())
+				- coutDistance) > outils.Global.volonteMinPourAllerVersUnStand) {
+			outils.ToString.toStringDiver("Le bar :" + debitDeBoisson + " est choisie car Volonte : "
 					+ this.listeDeLaVolontePourStand.get(stand.getOwner()) + " cout de la distance : " + coutDistance);
 			return true;
-		}
-		else{
-			outils.ToString.toString("Le bar :" + debitDeBoisson + " est trop loin car Volonte : "
+		} else {
+			outils.ToString.toStringDiver("Le bar :" + debitDeBoisson + " est trop loin car Volonte : "
 					+ this.listeDeLaVolontePourStand.get(stand.getOwner()) + " cout de la distance : " + coutDistance);
 			return false;
 		}
 	}
-	
+
 	/**
 	 * tente de boire une boisson dans le stand d'un joueur
+	 * 
 	 * @param player
 	 * @return
 	 */
 	public boolean commanderUneBoisson(TheGame leMonde, String debitDeBoisson) {
+		outils.ToString.toStringVousEtesIci("On est dans commanderUneBoisson dans class.Agent");
 		float coutBoissonVF;
 		int i_drinks = 0;
 		boolean aBue = false;
 		ArrayList<DrinkInfo> boissonPropose = new ArrayList<>(
 				leMonde.getListePlayerInfo().get(debitDeBoisson).getDrinksOffered());
-		
+
 		while (this.aBueAujourdhui == false && i_drinks < boissonPropose.size()) {
 			coutBoissonVF = boissonPropose.get(i_drinks).getCoutEnVolonteFinalePourBoire();
 
@@ -237,9 +228,14 @@ public class Agent {
 						&& this.veutBoissonSansAlcool == boissonPropose.get(i_drinks).getIsHasAlcohol()) {
 
 					aBue = boissonPropose.get(i_drinks).demandeDeBoire(debitDeBoisson, 1);
+					
+					outils.ToString.toStringMath("Un client essaie de boire cout boisson : "+ coutBoissonVF + 
+							" volonte qu'a le client : "+this.listeDeLaVolontePourStand.get(debitDeBoisson) +
+							" boisson en stock : " + aBue);
 					if (aBue == true) {
 						this.aBueAujourdhui = true;
-						outils.ToString.toString("!!!Client a bue "+  boissonPropose.get(i_drinks).toString() + " chez " + debitDeBoisson);
+						outils.ToString.toStringDiver("!!!  Client a bue " + boissonPropose.get(i_drinks).toString()
+								+ " chez " + debitDeBoisson);
 						return true;
 					}
 				}
@@ -251,54 +247,62 @@ public class Agent {
 		return false;
 
 	}
-	
 
-	
 	/**
-	 * 
+	 * On genere la volonte finale
+	 * On recherche les stand non visite, puis pour chacun d'entre eux
+	 * on genere la volonteLie
 	 * @param listeItemByPlayer
 	 */
-	public void generationDeLaVolonteFinale(HashMap<String, ArrayList<MapItem>> listeItemByPlayer){
+	public void generationDeLaVolonteFinale(HashMap<String, ArrayList<MapItem>> listeItemByPlayer) {
+		outils.ToString.toStringVousEtesIci("On est dans generationDeLaVolonteFinale dans class.Agent");
+
 		this.listeDeLaVolontePourStand = new HashMap<String, Float>();
-		float volonte =0f;
+		float volonte = 0f;
 		float influancePub = 0f;
-		for(String playerName : this.listeDesStandNonVisite.keySet()){
+		outils.ToString.toStringListe("Voila la liste des standNonVisite : " +this.listeDesStandNonVisite);
+		for (String playerName : this.listeDesStandNonVisite.keySet()) {
 			this.listeDeLaVolontePourStand.put(playerName, 0f);
-			volonte =0f;
-			for(MapItem mapItem : listeItemByPlayer.get(playerName)){
-				 influancePub =this.calculerInfluancePub(mapItem);
-				 
-				 volonte += influancePub;
-				 
-				 outils.ToString.toString("influance pub : " + influancePub + " volonte resultante : " + volonte);
+			volonte = 0f;
+			outils.ToString.toStringListe("Voila la liste des mapItem de : " + playerName +" : " +listeItemByPlayer);
+			for (MapItem mapItem : listeItemByPlayer.get(playerName)) {
+				influancePub = this.calculerInfluancePub(mapItem);
+
+				volonte += influancePub;
+
+				outils.ToString.toStringMath("influance pub : " + influancePub + " volonte resultante : " + volonte);
 				this.listeDeLaVolontePourStand.put(playerName, volonte);
 			}
 		}
-		
-		//on recupere la liste des stand trie
-		
-		outils.ToString.toString("Voila la volonteFinale :" + this.listeDeLaVolontePourStand);
-		//je suis un idiot j'ai perdue 2 h pour ca, mais quel cretin
-		//this.listeDesStandTrie = trierCleHasmapStringFloatDescendant(this.listeDeLaVolontePourStand);
-		
+
+		// on recupere la liste des stand trie
+
+		outils.ToString.toStringListe("Voila la volonteFinale :" + this.listeDeLaVolontePourStand);
+		// je suis un idiot j'ai perdue 2 h pour ca, mais quel cretin
+		// this.listeDesStandTrie =
+		// trierCleHasmapStringFloatDescendant(this.listeDeLaVolontePourStand);
+
 		HashMap<String, Float> pourTrie = new HashMap<String, Float>(this.listeDeLaVolontePourStand);
 		this.listeDesStandTrie = trierCleHasmapStringFloatDescendant(pourTrie);
-		
+
 	}
-	
+
 	/**
-	 * Renvoie une arraylist avec les cle de la HasMap, de la meilleure valeur, à la plus mauvaise.
+	 * Renvoie une arraylist avec les cle de la HasMap, de la meilleure valeur,
+	 * à la plus mauvaise.
+	 * 
 	 * @param aTrier
 	 * @return
 	 */
-	public ArrayList<String> trierCleHasmapStringFloatDescendant(HashMap<String, Float> aTrier){
+	public ArrayList<String> trierCleHasmapStringFloatDescendant(HashMap<String, Float> aTrier) {
+		outils.ToString.toStringVousEtesIci("On est dans trierCleHasmapStringFloatDescendant dans class.Agent");
 		ArrayList<String> listeTrie = new ArrayList<String>();
 		String cleMeilleureValeur = "";
 		float meilleureValeur;
-		while(!aTrier.isEmpty()){
-			meilleureValeur=0f;
-			for(String cle : aTrier.keySet()){
-				if(aTrier.get(cle)>meilleureValeur){
+		while (!aTrier.isEmpty()) {
+			meilleureValeur = 0f;
+			for (String cle : aTrier.keySet()) {
+				if (aTrier.get(cle) > meilleureValeur) {
 					meilleureValeur = aTrier.get(cle);
 					cleMeilleureValeur = cle;
 				}
@@ -306,16 +310,11 @@ public class Agent {
 			listeTrie.add(cleMeilleureValeur);
 			aTrier.remove(cleMeilleureValeur);
 		}
-		
-		outils.ToString.toString("et voila la version trie : " + listeTrie);
+
+		outils.ToString.toStringListe("et voila la version trie : " + listeTrie);
 		return listeTrie;
 	}
 
-	
-	
-
-	
-	
 	public HashMap<String, Stand> getListeDesStandNonVisite() {
 		return listeDesStandNonVisite;
 	}
@@ -399,7 +398,5 @@ public class Agent {
 	public void setListeDesStandTrie(ArrayList<String> listeDesStandTrie) {
 		this.listeDesStandTrie = listeDesStandTrie;
 	}
-	
-	
 
 }
