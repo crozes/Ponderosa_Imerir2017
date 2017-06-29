@@ -1,6 +1,7 @@
 
 package les_mains;
 
+
 import communication.Communication;
 import communication.ManipulationJson;
 import communication.ThreadGetForecast;
@@ -52,7 +53,7 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 
 		Stage scene =new Stage();
 
-		
+
 		
 		//lancement du threadImage
 		/*

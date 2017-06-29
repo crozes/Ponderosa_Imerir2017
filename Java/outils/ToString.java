@@ -3,7 +3,7 @@ package outils;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URL;
+
 
 public class ToString {
 
