@@ -77,15 +77,14 @@ public class Population {
 		float manipGaussien = (float) ThreadLocalRandom.current().nextGaussian();
 		float latitude = this.LatitudeMin + random.nextFloat() * (this.latitudeMax - this.LatitudeMin);
 		float longitude = this.LongitudeMin + random.nextFloat() * (this.longitudeMax - this.LongitudeMin);
-		System.out.println(latitude  + "     " + longitude);
-		
 		
 		
 		manipGaussien = manipGaussien/1.05f;
-		System.out.println("Gauss : " + manipGaussien);
-
-
-		return (new Coordonnees(latitude*manipGaussien, longitude*manipGaussien));
+		//System.out.println("Gauss : " + manipGaussien);
+		latitude = (latitude*manipGaussien);
+		longitude = (longitude*manipGaussien);
+		System.out.println(latitude  + "     " + longitude);
+		return (new Coordonnees(latitude+400, longitude+250));
 	}
 
 	/**

@@ -17,19 +17,25 @@ import gestion_population.Region;
 import gestion_population.Stand;
 import outils.Meteo;
 
+
+/**
+ * Permet de lire du json et de mettre à jours les objets lies
+ * @author atila
+ *
+ */
 public class ManipulationJson {
 
 
 
 
 	/**
-	 * Voici la fonction qui lit le forecast produit par l'Arduino.
-	 * Ce json contient la meteo d'aujourd'hui et de demain, ainsi que la duree en heure depuis le debut de la partie.
+	 * Voici la fonction qui lit le forecast produit par l'Arduino. Ce json
+	 * contient la meteo d'aujourd'hui et de demain, ainsi que la duree en heure
+	 * depuis le debut de la partie.
 	 * 
-	 * Recoie : 
-	 * Forecast "dfn" :int, "wheather" : wheather /days from now - 0
-	 * Temps "timestamp":int, "wheather":[forecast] 
-	 * means today, 1 means "tomorrow" "weather": String -> Enum
+	 * Recoie : Forecast "dfn" :int, "wheather" : wheather /days from now - 0
+	 * Temps "timestamp":int, "wheather":[forecast] means today, 1 means
+	 * "tomorrow" "weather": String -> Enum
 	 * 
 	 * @param jsonTemps
 	 * @author atila
@@ -44,8 +50,6 @@ public class ManipulationJson {
 		int dfn;
 		Meteo meteo;
 
-		
-		
 		timeStamp = jsonObTemps.get("timestamp").getAsInt();
 		laPartie.setHeureDepuisDebutJeu(timeStamp);
 
@@ -54,19 +58,18 @@ public class ManipulationJson {
 		for (int i = 0; i < jsonArWheather.size(); i++) {
 			jsonObForecast = jsonArWheather.get(i).getAsJsonObject();
 			laMeteo = jsonObForecast.get("weather").getAsString();
-			outils.ToString.toStringMeteo(laMeteo +" = format meteo envoye par le serveur");
+			outils.ToString.toStringMeteo(laMeteo + " = format meteo envoye par le serveur");
 			meteo = Meteo.valueOf(laMeteo);
 			dfn = jsonObForecast.get("dfn").getAsInt();
-			if ( dfn == 0) {
-				outils.ToString.toStringMeteo("La meteo en string : " +laMeteo);
+			if (dfn == 0) {
+				outils.ToString.toStringMeteo("La meteo en string : " + laMeteo);
 				laPartie.setMeteoDuJour(meteo);
-			} else if(dfn == 1) {
-				outils.ToString.toStringMeteo("La meteo en string : " +laMeteo);
+			} else if (dfn == 1) {
+				outils.ToString.toStringMeteo("La meteo en string : " + laMeteo);
 				laPartie.setMeteoDeDemain(meteo);
 			}
 		}
 	}
-	
 
 	
 
@@ -153,13 +156,11 @@ public class ManipulationJson {
 
 		JsonObject jsonObPlayerInfo = jsonObMap.get("playerInfo").getAsJsonObject();
 
-
 		/*------------------------------------------------------------------------------------------------------
 		 * Declaration des variables
 		 */
 		int size_jsonArray = 0;
 
-		
 		/*------------------------------------------------------------------------------------------------------
 		 * La region 
 		 */
@@ -210,8 +211,6 @@ public class ManipulationJson {
 		 * string:[mapItem] },
 		 */
 
-		
-
 		JsonObject jsonObItemsByPlayers = jsonObMap.get("itemsByPlayers").getAsJsonObject();
 		JsonArray jsonArMapItem;
 
@@ -242,8 +241,7 @@ public class ManipulationJson {
 				size_jsonArray = jsonArDrinkOffered.size();
 				playerInfo = new PlayerInfo(sales, cash, profit, new ArrayList<DrinkInfo>());
 
-				//int i =0;
-				//while(jsonArDrinkOffered.get(i).getAsJsonObject().isJsonNull()==false){
+
 				for (int i = 0; i < size_jsonArray; i++) {
 					jsonObDrinkInfo = jsonArDrinkOffered.get(i).getAsJsonObject();
 					name = jsonObDrinkInfo.get("name").getAsString();
@@ -252,13 +250,12 @@ public class ManipulationJson {
 					isCold = jsonObDrinkInfo.get("isCold").getAsBoolean();
 
 					playerInfo.getDrinksOffered().add(new DrinkInfo(name, price, hasAlcohol, isCold));
-//					i++;
+
 				}
 			} catch (Exception e) {
 				System.out.println("Probleme de lecture dans drinkOffered");
-				// TODO: handle exception
-			}
 
+			}
 
 			laPartie.getListePlayerInfo().put(playerName, playerInfo);
 
@@ -268,8 +265,7 @@ public class ManipulationJson {
 
 			size_jsonArray = jsonArDrinkInfo.size();
 			ArrayList<DrinkInfo> drinkInfo = new ArrayList<>();
-//			i =0;
-//			while(!jsonArDrinkInfo.get(i).getAsJsonObject().isJsonNull()){
+
 			for (int i = 0; i < size_jsonArray; i++) {
 				jsonObDrinkInfo = jsonArDrinkInfo.get(i).getAsJsonObject();
 				name = jsonObDrinkInfo.get("name").getAsString();
@@ -277,7 +273,7 @@ public class ManipulationJson {
 				hasAlcohol = jsonObDrinkInfo.get("hasAlcohol").getAsBoolean();
 				isCold = jsonObDrinkInfo.get("isCold").getAsBoolean();
 				drinkInfo.add(new DrinkInfo(name, price, hasAlcohol, isCold));
-//				i++;
+
 			}
 			laPartie.getListeDesDrinkInfo().put(playerName, drinkInfo);
 
@@ -291,8 +287,7 @@ public class ManipulationJson {
 
 				size_jsonArray = jsonArMapItem.size();
 
-//				i =0;
-//				while(!jsonArMapItem.get(i).getAsJsonObject().isJsonNull()){
+
 				for (int i = 0; i < size_jsonArray; i++) {
 					jsonObMapItem = jsonArMapItem.get(i).getAsJsonObject();
 
@@ -316,11 +311,10 @@ public class ManipulationJson {
 						mapItemPourUnJoueur.add(new Stand(kind, owner, influence, new Coordonnees(latitude, longitude)));
 						laPartie.getListeDesStand().put(playerName, ( new Stand(kind, owner, influence, new Coordonnees(latitude, longitude)) ) );	
 					}
-//					i++;
+
 				}
 			} catch (Exception e) {
 				System.out.println("Mauvaise lecture de ItemByPlayer");
-				// TODO: handle exception
 			}
 				
 
@@ -337,16 +331,17 @@ public class ManipulationJson {
 
 
 	/**
-	 * Creer un object json cle + valeur en string
-	 * Permet de tester une requete post avec URL
-	 * URL_TEST_JSON_POST ="https://ponderosaproject.herokuapp.com/posttest";
+	 * Creer un object json cle + valeur en string Permet de tester une requete
+	 * post avec URL URL_TEST_JSON_POST
+	 * ="https://ponderosaproject.herokuapp.com/posttest";
 	 * 
-	 * @param key la clé du json
-	 * @param value la valeur du json
+	 * @param key
+	 *            la clé du json
+	 * @param value
+	 *            la valeur du json
 	 * 
 	 * @author atila
 	 */
-
 	public static String creerUnString(String key, String value) {
 		String result = " ";
 		JsonObject jsonObject = new JsonObject();

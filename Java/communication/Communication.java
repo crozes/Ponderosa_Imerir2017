@@ -11,15 +11,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * 
+ * Permet de faire un post ou un get d'un string sur le serveur
  * @author atila
  *
  */
 public class Communication {
 
 	/**
-	 * 
-	 * @return
+	 * Fait une demande de get sur le serveur
+	 * @param URL_Serveur l'url http de la requete
+	 * @return l'information demande par le get
 	 */
 	public static String getRecevoir(String URL_Serveur) {
 
@@ -65,8 +66,10 @@ public class Communication {
 	}
 
 	/**
-	 * 
-	 * @param toPost
+	 * Fait un post via http
+	 * @param toPost la donner que l'on souhaite envoyer
+	 * @param URL_Serveur l'url http de la requete
+	 * @return la reponse du serveur
 	 */
 	public static String postEnvoyer(String toPost, String URL_Serveur) {
 		URL url;
