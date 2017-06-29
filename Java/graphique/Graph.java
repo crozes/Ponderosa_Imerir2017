@@ -70,12 +70,15 @@ public class Graph extends Application {
 	        
 		}
 		//pub
-		for(int k=0;k<game.getRanking().size()-1;k++){
-			for(int l=0;l<game.getListeMapItemJoueur().size();l++){
-				gc.setFill(Color.rgb(255, 100, 100, 0.5));
+		for(int k=0;k<game.getRanking().size();k++){
+			for(int l=0;l<game.getListeMapItemJoueur().get(game.getRanking().get(k)).size();l++){
+				gc.setFill(Color.rgb(255, 100, 100, 0.7));
 				//gc.fillOval(400,/***/250, 50,50);//game.getListeDesStand().get(l).getInfluence(), game.getListeDesStand().get(l).getInfluence())
-				gc.fillOval(Double.parseDouble(String.valueOf(game.getListeMapItemJoueur().get(game.getRanking().get(k)).get(l).getLatitude()+400)),/***/Double.parseDouble(String.valueOf(game.getListeMapItemJoueur().get(game.getRanking().get(k)).get(l).getLongitude()+250)), 100,100);//game.getListeDesStand().get(l).getInfluence(), game.getListeDesStand().get(l).getInfluence())
-			}
+				double latitude=Double.parseDouble(String.valueOf(game.getListeMapItemJoueur().get(game.getRanking().get(k)).get(l).getLatitude()+400));
+				double longitude=Double.parseDouble(String.valueOf(game.getListeMapItemJoueur().get(game.getRanking().get(k)).get(l).getLongitude()+250));
+				double influence=Double.parseDouble(String.valueOf(game.getListeMapItemJoueur().get(game.getRanking().get(k)).get(l).getInfluence()));
+				gc.fillOval(latitude,longitude,influence*10,influence*10);
+				}
 		}
 		return gc;
 	}
@@ -83,7 +86,7 @@ public class Graph extends Application {
 	/////////////////////////////////////////info player/////////////////////////////
 	private TreeItem<String> infoPlayer(){
 		TreeItem<String> listJoueur = new TreeItem<String>("id joueur");
-        for(int i=0;i<game.getRanking().size()-1;i++){
+        for(int i=0;i<game.getRanking().size();i++){
         	 TreeItem<String> infoJoueur = new TreeItem<String>(game.getRanking().get(i));
             listJoueur.setExpanded(true);
             TreeItem<String> posJoueur = new TreeItem<String>("position");
@@ -93,13 +96,12 @@ public class Graph extends Application {
                     );
             
             TreeItem<String> posPub =new TreeItem<String>("pub");
-            	int nbrPub=game.getListeMapItemJoueur().size();
-            	for(int k=0;k<nbrPub;k++){
+            	for(int k=0;k<game.getListeMapItemJoueur().get(game.getRanking().get(i)).size();k++){
             		
             			TreeItem<String> pub = new TreeItem<String>("pub"+k);
             	        pub.getChildren().addAll(
-            	        		new TreeItem<String>("pos X : "+game.getListeMapItemJoueur().get(game.getRanking().get(k)).get(i).getLatitude()),
-                                new TreeItem<String>("pos Y : "+game.getListeMapItemJoueur().get(game.getRanking().get(k)).get(i).getLatitude())
+            	        		new TreeItem<String>("pos X : "+game.getListeMapItemJoueur().get(game.getRanking().get(i)).get(k).getLatitude()),
+                                new TreeItem<String>("pos Y : "+game.getListeMapItemJoueur().get(game.getRanking().get(i)).get(k).getLatitude())
             	                );
             	        
                         posPub.getChildren().addAll(pub);
