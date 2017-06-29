@@ -16,24 +16,37 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 		
 		//creation de la partie 
 		TheGame laPartie;
-		laPartie= new TheGame();
-		//recuperation du jsonMap pour innitialiser la partie
-		stringDeLaMapEnJson = Communication.getRecevoir(outils.Global.URL_GET_MAP);
-		outils.ToString.toStringJSON(stringDeLaMapEnJson);
-		ManipulationJson.jsonFromStringMap(stringDeLaMapEnJson, laPartie);
+		laPartie= TheGame.getInstance();
+
 		
-		
-		//lancement du thread de requete du Forecast
-		ThreadGetForecast threadForecast = new ThreadGetForecast(laPartie);
-		threadForecast.start();
-		
-		//petit slep pour etre sur de bien avoir recuperer la meteo et l'heure
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
+		boolean localOuServeur = outils.Global.requeteServeurVraiOuFauxPourSimulationEnLocal;
+		if(localOuServeur==true){
+			//recuperation du jsonMap pour innitialiser la partie
+			stringDeLaMapEnJson = Communication.getRecevoir(outils.Global.URL_GET_MAP);
+			outils.ToString.toStringJSON(stringDeLaMapEnJson);
+			ManipulationJson.jsonFromStringMap(stringDeLaMapEnJson, laPartie);
 			
-			e.printStackTrace();
+			
+			//lancement du thread de requete du Forecast
+			ThreadGetForecast threadForecast = new ThreadGetForecast(laPartie);
+			threadForecast.start();
+			
+			//petit slep pour etre sur de bien avoir recuperer la meteo et l'heure
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				
+				e.printStackTrace();
+			}
 		}
+		else{ //on simule
+			
+			stringDeLaMapEnJson = outils.OutilsCalculs.fichierTxtVersString("Files/json.txt");
+			ManipulationJson.jsonFromStringMap(stringDeLaMapEnJson, laPartie);
+			laPartie.setHeureDepuisDebutJeu(10);
+			laPartie.setMeteoDuJour(Meteo.valueOf("sunny"));
+		}
+
 		
 		
 		//lancement du threadImage
@@ -96,7 +109,9 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 				outils.ToString.toStringListe(laPartie.getMapDeLaPopulation());
 				
 				//on fait boire la population le matin
-				laPartie.getMapDeLaPopulation().faireBoireLaPopulation(Meteo.thunderstorm, laPartie);
+				laPartie.getMapDeLaPopulation().faireBoireLaPopulation2(laPartie);
+				
+				
 			}
 			
 
@@ -119,7 +134,7 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 				laPartie.getMapDeLaPopulation().mouvementDuMidi(laPartie.getMeteoDuJour(), Meteo.soir);
 				
 				//on fait boire la population le soir
-				laPartie.getMapDeLaPopulation().faireBoireLaPopulation(Meteo.soir, laPartie);
+				laPartie.getMapDeLaPopulation().faireBoireLaPopulation2(laPartie);
 				
 				/*
 				 * On envoie PAS les ventes de la journnee au seveurle resultat au serveur, car
