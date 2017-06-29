@@ -41,9 +41,9 @@ public class DrinkInfo {
 		this.calculCoutVolonteFinalePourBoire();
 	}
 
-	private void calculCoutVolonteFinalePourBoire() {
-		this.coutEnVolonteFinalePourBoire = price * outils.Global.drinkInfoPoidVolonteFinalePourBoire;
-	}
+    private void calculCoutVolonteFinalePourBoire() {
+        this.coutEnVolonteFinalePourBoire = (float) Math.pow(this.price, 2) * outils.Global.drinkInfoPoidVolonteFinalePourBoire;
+    }
 
 	/**
 	 * Permet de savoir si une boisson est encore en stock. Si le serveur nous

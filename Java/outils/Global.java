@@ -45,14 +45,14 @@ public final class Global {
 	
 	public static final float volonteMinPourAllerVersUnStand = 200;
 	
-	public static final int dureerDuSleep = 5000;
+	public static final int dureerDuSleep = 500;
 	
 	public static final float minMotivationAvantDeNePlusVouloirBoire = 10;
 	
 	
 	
 	
-	public static final boolean requeteServeurVraiOuFauxPourSimulationEnLocal = false;
+	public static final boolean requeteServeurVraiOuFauxPourSimulationEnLocal = true;
 	
 	public static boolean uneFoisAfficherLaCarte=false;
 	

@@ -94,6 +94,7 @@ public class OutilsCalculs {
 	 * @return float entre min(inclu) et max(inclu)
 	 */
 	public static float randomFloat(float min, float max) {
+		
 		return ThreadLocalRandom.current().nextFloat() * (max - min) + min;
 	}
 

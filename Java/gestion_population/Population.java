@@ -75,17 +75,15 @@ public class Population {
 	private Coordonnees calculerPositionClient(Meteo meteo, Meteo periodeJournee) {
 		Random random = new Random();
 		float manipGaussien = (float) ThreadLocalRandom.current().nextGaussian();
-		float latitude = this.LatitudeMin + random.nextFloat() * (this.latitudeMax - this.LatitudeMin);
-		float longitude = this.LongitudeMin + random.nextFloat() * (this.longitudeMax - this.LongitudeMin);
-		System.out.println(latitude  + "     " + longitude);
+//		float latitude = this.LatitudeMin + random.nextFloat() * (this.latitudeMax - this.LatitudeMin);
+//		float longitude = this.LongitudeMin + random.nextFloat() * (this.longitudeMax - this.LongitudeMin);
+		float latitude = (-400) + random.nextFloat() * ((400) - (-400));
+		float longitude = (-250) + random.nextFloat() * ((250) - (-250));
 		
 		
-		
-		manipGaussien = manipGaussien/1.05f;
-		System.out.println("Gauss : " + manipGaussien);
 
 
-		return (new Coordonnees(latitude*manipGaussien, longitude*manipGaussien));
+		return (new Coordonnees((latitude * manipGaussien)+400, (longitude * manipGaussien)+250));
 	}
 
 	/**
@@ -115,7 +113,7 @@ public class Population {
 		this.LongitudeMin = LongitudeMin;
 
 		outils.ToString.toStringVousEtesIci("On genere les pigeons ... les clients pardons");
-
+		this.population.clear();
 		for (int i = 0; i < nombreDeClient; i++) {
 			this.population.add(this.creerUnAgent(meteo, periodeJournee, listeDesStand));
 		}
@@ -265,8 +263,12 @@ public class Population {
 					i_stand++;
 					outils.ToString.toStringDebug("i : " + i_stand + " size : " + client.getListeDesStandTrie().size()
 							+ "probleme d'index Population faireBoire...");
-					peutSeDeplacer = client.choisirLeBarOuAller2(laPartie,
-							laPartie.getListeDesStand().get(client.getListeDesStandTrie().get(i_stand)));
+					
+					if(client.getListeDesStandTrie().size()>0){
+						peutSeDeplacer = client.choisirLeBarOuAller2(laPartie,
+								laPartie.getListeDesStand().get(client.getListeDesStandTrie().get(i_stand)));
+					}
+
 
 				}
 
@@ -274,9 +276,7 @@ public class Population {
 				// si on peut se deplacer alors on va tenter d'y boire une
 				// bierre
 
-				if (i_stand != -1) {
-					aPuBoire = client.commanderUneBoisson2(laPartie, client.getListeDesStandTrie().get(i_stand));
-
+				if (i_stand != -1 && client.getListeDesStandTrie().size()>0) {
 					if (aPuBoire == true) {
 						client.setaBueAujourdhui(true);
 

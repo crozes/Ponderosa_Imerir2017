@@ -16,7 +16,7 @@ public class ToString {
 	private static boolean activerToStringDivers = false;
 	private static boolean activerToStringMeteo = false;
 	
-	private static boolean activerTraceFichier = false;
+	private static boolean activerTraceFichier = true;
 	
 	public static void toStringDebug (Object o){
 		if (activerToStringDebug == true){
