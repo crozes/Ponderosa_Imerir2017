@@ -18,6 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
@@ -28,24 +29,28 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import les_mains.Main_de_test_final_parceque_jaime_bien_faire_des_main;
 
 
 
 
 
 public class Graph extends Application {
-	TheGame game;
-	Stage primaryStage;
-	Label label2= new Label();
+	TheGame game=Main_de_test_final_parceque_jaime_bien_faire_des_main.laPartie ;
+	
 	float carte_x=800;//game.getRegion().getLongitudeMax();
 	float carte_y=500;//game.getRegion().getLatitudeMax();
 	Canvas canvas=new Canvas(carte_x,carte_y);
 	
-	public Graph(TheGame game){
-		this.game = game;
+	/*public Graph(TheGame partie){
+		this.game=partie;
 	}
 	
-	
+	public void init(String[] args) {
+		//game=partie;
+		launch(Graph.class,args);
+		
+   }*/
 	
 	/////////////////////////////instalation des citoyen
 	public GraphicsContext migration(int nbPop){
@@ -66,9 +71,10 @@ public class Graph extends Application {
 		}
 		//pub
 		for(int k=0;k<game.getRanking().size();k++){
-			gc.setFill(Color.rgb(255, 100, 100, 0.7));
-			gc.fillOval(Math.random()*(carte_x-0),Math.random()*(carte_y-0), 50, 50);//pos pub ??
-	        
+			for(int l=0;l<game.getListeMapItemJoueur().size();l++){
+				gc.setFill(Color.rgb(255, 100, 100, 0.7));
+				gc.fillOval(game.getListeMapItemJoueur().get(game.getRanking().get(k)).get(l).getLatitude(),game.getListeMapItemJoueur().get(game.getRanking().get(k)).get(l).getLongitude(), 50, 50);//pos pub ??
+			}
 		}
 		return gc;
 	}
@@ -77,7 +83,7 @@ public class Graph extends Application {
 				/**affichage*/
 	
     public void start(Stage primaryStage ) { 
- 
+    
     	/*creation de la fenetre*/
     	primaryStage.setTitle("limonade.io");
         Group root=new Group();//arriere de la fenetre
@@ -114,10 +120,11 @@ public class Graph extends Application {
         Label topLabel= new Label(); 
         topLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); 
         topLabel.setStyle("-fx-background-color: white; -fx-border-color: black;-fx-alignment:CENTER; -fx-font-size: 15pt;");
-        topLabel.setText("meteo : "+game.getMeteoDuJour()+"\nnb de player : "+game.getRanking().size()+"\npopulation : ");//population .size
+        topLabel.setText("meteo : "+game.getMeteoDuJour()+"\nnb de player :" +game.getRanking().size()+"\npopulation : ");//population .size
         upPanel.add(topLabel, 0, 0);
         
         ////////////////////////////////////case2///////////////////////////////
+        Label label2= new Label();
         label2.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); 
         label2.setStyle("-fx-background-color: white; -fx-border-color: black;-fx-alignment:CENTER; -fx-font-size: 20pt ;");
         int jour=game.getHeureDepuisDebutJeu()%24;
@@ -133,10 +140,10 @@ public class Graph extends Application {
          * http://cartography.oregonstate.edu/index_files/stacks_image_3198.jpg
          * http://jeuxserieux.ac-creteil.fr/wp-content/uploads/2011/12/Zelda-Map.png
          */
-        BackgroundImage myBI= new BackgroundImage(new Image("http://cartography.oregonstate.edu/index_files/stacks_image_3198.jpg",carte_x,carte_y,false,true),
+        BackgroundImage myBI= new BackgroundImage(new Image("File:/Java/image/map.png",carte_x,carte_y,false,true),
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                   BackgroundSize.DEFAULT);
-        //genPanel.setBackground(new Background(myBI));
+        genPanel.setBackground(new Background(myBI));
         
         
         ////////////////////////////////case infoJoueur/////////////////////////////////////////
@@ -156,9 +163,10 @@ public class Graph extends Application {
             		
             			TreeItem<String> pub = new TreeItem<String>("pub"+k);
             	        pub.getChildren().addAll(
-            	        		new TreeItem<String>("pos X : "),//pos pub ??
-                                new TreeItem<String>("pos Y : ")//pos pub ??
+            	        		new TreeItem<String>("pos X : "+game.getListeMapItemJoueur().get(game.getRanking().get(i)).get(k).getLatitude()),//pos pub ??
+                                new TreeItem<String>("pos Y : "+game.getListeMapItemJoueur().get(game.getRanking().get(i)).get(k).getLongitude())//pos pub ??
             	                );
+            	        
                         posPub.getChildren().addAll(pub);
             	}
             
@@ -187,7 +195,7 @@ public class Graph extends Application {
         //creation de la population
         migration(150);
     	carte.getChildren().add(canvas);
-        threadGraph miseAJour = new threadGraph();
+        threadGraph miseAJour = new threadGraph(label2);
         miseAJour.start();
         
         /////////////////affichage carte et information gaphique////////////////////
@@ -197,8 +205,12 @@ public class Graph extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-    //c est trop le bordel pour le mettre dans une classe a part
+   
     private class threadGraph extends Thread{
+    	Label label2;
+    	threadGraph(Label label){
+    		this.label2=label;
+    	}
     	public void run(){
     		while(true)
     		{
@@ -224,5 +236,8 @@ public class Graph extends Application {
     		}
     	}
     }
+    public static void main(String[] args) {
+		launch(Graph.class,args);
+   }
 
 }

@@ -1,4 +1,4 @@
-
+/*
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
@@ -8,13 +8,14 @@ import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 
+import gestion_population.MapItem;
 import gestion_population.PlayerInfo;
 import gestion_population.Publicite;
 import gestion_population.TheGame;
 
 /**
  * Created by brice on 27/06/17.
- */
+ *//*
 public class TreeViewUtils {
     public static TreeItem<String> getPlayerBranch(TreeItem<String> root, String playerID,TheGame game) throws PlayerNotFound {
         ObservableList<TreeItem<String>> playersBranch = root.getChildren();
@@ -59,7 +60,7 @@ public class TreeViewUtils {
             TreeItem<String> standsBranch = getBranch(playerBranch, "Stand",game);
 //            System.out.println("Ok Stands");
             try {
-                Item stands = /*stand*/;
+                MapItem stands = game.getListeMapItemJoueur().get(name).get(l)/*stand*/;/*
                 if(standsBranch.getChildren().size() == 0){
                     TreeItem<String> poss = new TreeItem<>("Position: " + stands.getLocation().toString());
                     TreeItem<String> inf = new TreeItem<>("Influence: " + stands.getInfluence());
@@ -227,3 +228,4 @@ public class TreeViewUtils {
 
 
 }
+*/
