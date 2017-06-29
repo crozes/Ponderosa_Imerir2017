@@ -3,6 +3,7 @@ package gestion_population;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import outils.Global;
 import outils.Meteo;
@@ -73,10 +74,18 @@ public class Population {
 	 */
 	private Coordonnees calculerPositionClient(Meteo meteo, Meteo periodeJournee) {
 		Random random = new Random();
+		float manipGaussien = (float) ThreadLocalRandom.current().nextGaussian();
 		float latitude = this.LatitudeMin + random.nextFloat() * (this.latitudeMax - this.LatitudeMin);
 		float longitude = this.LongitudeMin + random.nextFloat() * (this.longitudeMax - this.LongitudeMin);
+		System.out.println(latitude  + "     " + longitude);
+		
+		
+		
+		manipGaussien = manipGaussien/1.05f;
+		System.out.println("Gauss : " + manipGaussien);
 
-		return (new Coordonnees(latitude, longitude));
+
+		return (new Coordonnees(latitude*manipGaussien, longitude*manipGaussien));
 	}
 
 	/**
