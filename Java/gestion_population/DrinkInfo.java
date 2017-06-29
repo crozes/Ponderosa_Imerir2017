@@ -56,7 +56,9 @@ public class DrinkInfo {
 			return false;
 		} else {
 			
-			if (false == outils.Global.requeteServeurVraiOuFauxPourSimulationEnLocal){
+			
+			boolean localOuSimulateur = outils.Global.requeteServeurVraiOuFauxPourSimulationEnLocal;
+			if (false == localOuSimulateur){
 				quantityEnStock = 1;
 			}
 			else{

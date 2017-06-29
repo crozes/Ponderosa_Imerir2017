@@ -267,14 +267,22 @@ public class Agent {
 		outils.ToString.toStringDebug("listeDesStandNonVisite : " + listeDesStandNonVisite + " stand en cour : " + stand
 				+ " avec proprio : " + stand.getOwner());
 		coutDistance = coutDuDeplacementVers2(stand.getCoordonnees());
-		outils.ToString.ecrireUneTrace("Stand : " + stand.toString() + " cout en deplacement : " + coutDistance
+		
+		
+		
+		outils.ToString.ecrireUneTrace("Stand : " + stand.getOwner() + " cout en deplacement : " + coutDistance
 				+ " volonteMin a l'arrive autorise : " + outils.Global.volonteMinPourAllerVersUnStand);
 		volonteFinaleDuBar = this.listeDeLaVolontePourStand.get(stand.getOwner()).floatValue();
 		volonteFinaleDuBar -= -coutDistance;
+		
+		
+		
 		this.listeDeLaVolontePourStand.put(stand.getOwner(), volonteFinaleDuBar);
 		if (this.listeDeLaVolontePourStand.get(stand.getOwner()).floatValue() > outils.Global.volonteMinPourAllerVersUnStand) {
+			
 			outils.ToString.toStringDiver("Le bar :" + stand.getOwner() + " est choisie car Volonte : "
 					+ this.listeDeLaVolontePourStand.get(stand.getOwner()) + " cout de la distance : " + coutDistance);
+			
 			return true;
 		} else {
 			outils.ToString.toStringDiver("Le bar :" + stand.getOwner() + " est trop loin car Volonte : "
