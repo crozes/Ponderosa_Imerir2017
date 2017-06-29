@@ -2,7 +2,6 @@ package gestion_population;
 
 import com.google.gson.JsonObject;
 
-
 public class CoordonneesSpan {
 
 	private float latitude_span;
@@ -21,22 +20,20 @@ public class CoordonneesSpan {
 	 *                latitude_span ou longitude_span sont négatives
 	 * 
 	 * @author atila
-	 * @throws Exception 
-	 * @throws PositionException 
+	 * @throws Exception
+	 * @throws PositionException
 	 */
 	public CoordonneesSpan(float latitude_span, float longitude_span) throws Exception {
 		super();
 
 		if (latitude_span < 0 || longitude_span < 0) {
-			
+
 			throw new Exception("latitude ou longitude region negative");
-			
-		}
-		else{
+
+		} else {
 			this.latitude_span = latitude_span;
 			this.longitude_span = longitude_span;
 		}
-
 
 	}
 
@@ -55,7 +52,7 @@ public class CoordonneesSpan {
 	public void setLongitude_span(float longitude_span) {
 		this.longitude_span = longitude_span;
 	}
-	
+
 	public JsonObject getJsonObject() {
 		JsonObject jsonOb = new JsonObject();
 
@@ -64,8 +61,8 @@ public class CoordonneesSpan {
 		return jsonOb;
 	}
 
-	public String toString(){
+	public String toString() {
 		return ("Latitude:" + this.latitude_span + " Longitude:" + this.longitude_span + " .");
 	}
-	
+
 }
