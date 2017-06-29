@@ -6,6 +6,7 @@ import communication.Communication;
 import communication.ManipulationJson;
 import communication.ThreadGetForecast;
 import gestion_population.TheGame;
+import gestion_population.ThreadBoucleGestionPopulation;
 import graphique.Graph;
 import javafx.application.Application;
 import outils.Meteo;
@@ -53,10 +54,14 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 		}
 
 		
-		laPartie.getMapDeLaPopulation().genererPopulation(-400,
-				400, -250,
-				250, laPartie.getRanking().size(), Meteo.valueOf("sunny"),
+		laPartie.getMapDeLaPopulation().genererPopulation(0,
+				800, 0,
+				500, laPartie.getRanking().size(), Meteo.valueOf("sunny"),
 				Meteo.matin, laPartie.getListeDesStand());
+		
+		ThreadBoucleGestionPopulation threadPopulation = new ThreadBoucleGestionPopulation(laPartie);
+		threadPopulation.start();
+		
 		Application.launch(Graph.class,args);
 	
 
@@ -104,7 +109,7 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 //		
 //		
 //		laPartie.setListeDesStand(correction);
-		Meteo meteoDuJour;
+//		Meteo meteoDuJour;
 //		while (true){
 //			
 //			

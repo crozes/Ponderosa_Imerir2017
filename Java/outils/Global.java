@@ -45,7 +45,7 @@ public final class Global {
 	
 	public static final float volonteMinPourAllerVersUnStand = 200;
 	
-	public static final int dureerDuSleep = 1500;
+	public static final int dureerDuSleep = 500;
 	
 	public static final float minMotivationAvantDeNePlusVouloirBoire = 10;
 	

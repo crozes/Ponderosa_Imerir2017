@@ -81,10 +81,7 @@ public class Population {
 		float longitude = (-250) + random.nextFloat() * ((250) - (-250));
 		
 		
-		System.out.println(latitude + "     " + longitude);
 
-		manipGaussien = manipGaussien ;
-		System.out.println("Gauss : " + manipGaussien);
 
 		return (new Coordonnees((latitude * manipGaussien)+400, (longitude * manipGaussien)+250));
 	}
@@ -266,8 +263,12 @@ public class Population {
 					i_stand++;
 					outils.ToString.toStringDebug("i : " + i_stand + " size : " + client.getListeDesStandTrie().size()
 							+ "probleme d'index Population faireBoire...");
-					peutSeDeplacer = client.choisirLeBarOuAller2(laPartie,
-							laPartie.getListeDesStand().get(client.getListeDesStandTrie().get(i_stand)));
+					
+					if(client.getListeDesStandTrie().size()>0){
+						peutSeDeplacer = client.choisirLeBarOuAller2(laPartie,
+								laPartie.getListeDesStand().get(client.getListeDesStandTrie().get(i_stand)));
+					}
+
 
 				}
 

@@ -94,12 +94,8 @@ public class OutilsCalculs {
 	 * @return float entre min(inclu) et max(inclu)
 	 */
 	public static float randomFloat(float min, float max) {
-		float manipGaussien = (float) ThreadLocalRandom.current().nextGaussian();
-		manipGaussien = manipGaussien/10;
-		System.out.println("Gauss : " + manipGaussien);
-		float leRandom = ThreadLocalRandom.current().nextFloat() * (max - min) + min;
 		
-		return (leRandom * manipGaussien);
+		return ThreadLocalRandom.current().nextFloat() * (max - min) + min;
 	}
 
 	/**
