@@ -1,3 +1,4 @@
+/*
 package graphique;
 
 
@@ -9,13 +10,14 @@ import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 
+import gestion_population.MapItem;
 import gestion_population.PlayerInfo;
 import gestion_population.Publicite;
 import gestion_population.TheGame;
 
 /**
  * Created by brice on 27/06/17.
- */
+ *//*
 public class TreeViewUtils {
     public static TreeItem<String> getPlayerBranch(TreeItem<String> root, String playerID,TheGame game) throws PlayerNotFound {
         ObservableList<TreeItem<String>> playersBranch = root.getChildren();
@@ -60,17 +62,17 @@ public class TreeViewUtils {
             TreeItem<String> standsBranch = getBranch(playerBranch, "Stand",game);
 //            System.out.println("Ok Stands");
             try {
-                Item stands = /*stand*/;
+                MapItem stands =game.getListeDesStand().get(name) ;
                 if(standsBranch.getChildren().size() == 0){
-                    TreeItem<String> poss = new TreeItem<>("Position: " + stands.getLocation().toString());
-                    TreeItem<String> inf = new TreeItem<>("Influence: " + stands.getInfluence());
+                    TreeItem<String> poss = new TreeItem<>("Position: " + game.getListeDesStand().get(name).getCoordonnees());
+                    TreeItem<String> inf = new TreeItem<>("Influence: " + game.getListeDesStand().get(name).getInfluence());
                     standsBranch.getChildren().addAll(poss,inf);
                 }
                 else
                 {
 
-                    getBranch(standsBranch,"Positon",game).setValue("Position: " + stands.getLocation().toString());
-                    getBranch(standsBranch,"Positon",game).setValue("Influence: " + stands.getInfluence());
+                    getBranch(standsBranch,"Positon",game).setValue("Position: " + game.getListeDesStand().get(name).getCoordonnees().toString());
+                    getBranch(standsBranch,"Positon",game).setValue("Influence: " + game.getListeDesStand().get(name).getInfluence());
 
 
                 }
@@ -78,11 +80,11 @@ public class TreeViewUtils {
             TreeItem<String> adsBranch = getBranch(playerBranch, "Ads",game);
 //            System.out.println("Ok ads");
             try {
-                ArrayList<Publicite> ads = playerInfo.getAds();//pub
+                ArrayList<MapItem> ads = game.getListeMapItemJoueur().get(name);//pub
                 if(ads.size()!=adsBranch.getChildren().size()){
                     adsBranch.getChildren().clear();
-                    for(Item unAd : ads){
-                        addAd(adsBranch,unAd);
+                    for(MapItem unAd : ads){
+                        addAd(adsBranch,unAd,game);
                     }
                 }
                 else
@@ -90,7 +92,7 @@ public class TreeViewUtils {
                     int i = 0;
                     for(TreeItem<String> unAds : adsBranch.getChildren()){
 
-                        getBranch(unAds,"Positon",game).setValue("Position: " + ads.get(i).getLocation().toString());
+                        getBranch(unAds,"Positon",game).setValue("Position: " + game.getListeMapItemJoueur().get(name).get(i).getCoordonnees());
                         getBranch(standsBranch,"Influence>",game).setValue("Influence: " + ads.get(i).getInfluence());//pub tjr
 
                         i++;
@@ -165,9 +167,9 @@ public class TreeViewUtils {
 
     }
 
-    private static void addAd(TreeItem<String> adsBranch, Item ad,TheGame game){
+    private static void addAd(TreeItem<String> adsBranch, MapItem ad,TheGame game){
         int size = adsBranch.getChildren().size();
-        TreeItem<String> poss = new TreeItem<>("Position: " + ad.getLocation().toString());
+        TreeItem<String> poss = new TreeItem<>("Position: " + game.getListeMapItemJoueur().get(game.getRanking().get(size)).get(l).getLatitude());
         TreeItem<String> inf = new TreeItem<>("Influence: " + ad.getInfluence());
         TreeItem<String> ads = new TreeItem<>(String.valueOf(size+1));
         ads.getChildren().addAll(poss,inf);
@@ -228,4 +230,4 @@ public class TreeViewUtils {
 
 
 }
->>>>>>> 5307de695d68b3885d5f62d65128c0f8fd875791
+*/

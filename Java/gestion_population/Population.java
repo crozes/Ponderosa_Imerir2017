@@ -6,7 +6,6 @@ import java.util.Random;
 
 import outils.Global;
 import outils.Meteo;
-import sun.security.ssl.HandshakeOutStream;
 
 public class Population {
 

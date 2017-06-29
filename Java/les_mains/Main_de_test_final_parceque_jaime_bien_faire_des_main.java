@@ -7,11 +7,12 @@ import communication.ManipulationJson;
 import communication.ThreadGetForecast;
 import gestion_population.TheGame;
 import graphique.Graph;
+import javafx.application.Application;
 import javafx.stage.Stage;
 import outils.Meteo;
 
 public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
-
+	public static TheGame laPartie=new TheGame();
 	public static void main(String[] args) throws Exception {
 		
 		
@@ -19,8 +20,8 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 		String stringDeLaMapEnJson;
 		
 		//creation de la partie 
-		TheGame laPartie;
-		laPartie= TheGame.getInstance();
+		//TheGame laPartie;
+		//laPartie= TheGame.getInstance();
 
 		
 		boolean localOuServeur = outils.Global.requeteServeurVraiOuFauxPourSimulationEnLocal;
@@ -50,8 +51,13 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 			laPartie.setHeureDepuisDebutJeu(10);
 			laPartie.setMeteoDuJour(Meteo.valueOf("sunny"));
 		}
-
-		Stage scene =new Stage();
+		
+		laPartie.getMapDeLaPopulation().genererPopulation(0,
+				795, 0,
+				495, laPartie.getRanking().size(), Meteo.valueOf("sunny"),
+				Meteo.matin, laPartie.getListeDesStand());
+		Application.launch(Graph.class,args);
+	//	Stage scene =new Stage();
 
 
 		
@@ -111,6 +117,8 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 						Meteo.matin, laPartie.getListeDesStand());
 				
 				
+				outils.Global.uneFoisAfficherLaCarte=true;
+				
 				outils.ToString.toStringListe("Voici la population :");
 				outils.ToString.toStringListe(laPartie.getMapDeLaPopulation());
 				
@@ -138,6 +146,8 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 			if(laPartie.getRanking().size()>0){
 				//on fait deplacer la population
 				laPartie.getMapDeLaPopulation().mouvementDuMidi(laPartie.getMeteoDuJour(), Meteo.soir);
+				
+				outils.Global.uneFoisAfficherLaCarte=true;
 				
 				//on fait boire la population le soir
 				laPartie.getMapDeLaPopulation().faireBoireLaPopulation2(laPartie);

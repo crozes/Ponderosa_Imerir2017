@@ -52,8 +52,9 @@ public final class Global {
 	
 	
 	
-	public static final boolean requeteServeurVraiOuFauxPourSimulationEnLocal = true;
+	public static final boolean requeteServeurVraiOuFauxPourSimulationEnLocal = false;
 	
+	public static boolean uneFoisAfficherLaCarte=false;
 	
 	
 
