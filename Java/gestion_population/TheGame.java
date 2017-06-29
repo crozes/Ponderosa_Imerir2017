@@ -9,6 +9,12 @@ import com.google.gson.JsonPrimitive;
 
 import outils.Meteo;
 
+
+/**
+ * Le coeur du simulateur, il contient toutes les entitees et est l'element central du simulateur.
+ * @author atila
+ *
+ */
 public class TheGame {
 
 	private static TheGame singleton;

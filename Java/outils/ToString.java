@@ -7,16 +7,16 @@ import java.io.IOException;
 
 public class ToString {
 
-	private static boolean activerToStringDebug = true;
-	private static boolean activerToStringListe = true;
-	private static boolean activerToStringMath = true;
-	private static boolean activerToStringHTTP = true;
-	private static boolean activerToStringJSON = true;
-	private static boolean activerToStringVousEtesIci = true;
-	private static boolean activerToStringDivers = true;
-	private static boolean activerToStringMeteo = true;
+	private static boolean activerToStringDebug = false;
+	private static boolean activerToStringListe = false;
+	private static boolean activerToStringMath = false;
+	private static boolean activerToStringHTTP = false;
+	private static boolean activerToStringJSON = false;
+	private static boolean activerToStringVousEtesIci = false;
+	private static boolean activerToStringDivers = false;
+	private static boolean activerToStringMeteo = false;
 	
-	private static boolean activerTraceFichier = true;
+	private static boolean activerTraceFichier = false;
 	
 	public static void toStringDebug (Object o){
 		if (activerToStringDebug == true){
