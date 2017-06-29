@@ -60,24 +60,24 @@ public class Graph extends Application {
 		//population
 		for(int i=0;i<game.getMapDeLaPopulation().getPopulation().size();i++){
 			gc.setFill(Color.rgb(0, 0, 0, 1));
-        	gc.fillOval(game.getMapDeLaPopulation().getPopulation().get(i).getLatitude(), game.getMapDeLaPopulation().getPopulation().get(i).getLongitude(), 10, 10);
+        	gc.fillOval(game.getMapDeLaPopulation().getPopulation().get(i).getLatitude(), game.getMapDeLaPopulation().getPopulation().get(i).getLongitude(), 5, 5);
         	
         }
 		//joueur
 		for(int j=0;j<game.getRanking().size();j++){
 			gc.setFill(Color.rgb(100, 255, 100, 0.7));
-	        gc.fillOval(game.getListeDesStand().get(game.getRanking().get(j)).getCoordonnees().getLatitude()+400, game.getListeDesStand().get(game.getRanking().get(j)).getCoordonnees().getLongitude()+250,100, 100);
+	        gc.fillOval(game.getListeDesStand().get(game.getRanking().get(j)).getCoordonnees().getLatitude(), game.getListeDesStand().get(game.getRanking().get(j)).getCoordonnees().getLongitude(),100, 100);
 	        
 		}
 		//pub
 		for(int k=0;k<game.getRanking().size();k++){
-			for(int l=0;l<game.getListeMapItemJoueur().get(game.getRanking().get(k)).size();l++){
+			for(int l=1;l<game.getListeMapItemJoueur().get(game.getRanking().get(k)).size();l++){
 				gc.setFill(Color.rgb(255, 100, 100, 0.7));
 				//gc.fillOval(400,/***/250, 50,50);//game.getListeDesStand().get(l).getInfluence(), game.getListeDesStand().get(l).getInfluence())
-				double latitude=Double.parseDouble(String.valueOf(game.getListeMapItemJoueur().get(game.getRanking().get(k)).get(l).getLatitude()+400));
-				double longitude=Double.parseDouble(String.valueOf(game.getListeMapItemJoueur().get(game.getRanking().get(k)).get(l).getLongitude()+250));
+				double latitude=Double.parseDouble(String.valueOf(game.getListeMapItemJoueur().get(game.getRanking().get(k)).get(l).getLatitude()));
+				double longitude=Double.parseDouble(String.valueOf(game.getListeMapItemJoueur().get(game.getRanking().get(k)).get(l).getLongitude()));
 				double influence=Double.parseDouble(String.valueOf(game.getListeMapItemJoueur().get(game.getRanking().get(k)).get(l).getInfluence()));
-				gc.fillOval(latitude,longitude,influence*10,influence*10);
+				gc.fillOval(latitude,longitude,influence*2,influence*2);
 				}
 		}
 		return gc;
@@ -96,13 +96,14 @@ public class Graph extends Application {
                     );
             
             TreeItem<String> posPub =new TreeItem<String>("pub");
-            	for(int k=0;k<game.getListeMapItemJoueur().get(game.getRanking().get(i)).size();k++){
+            	for(int k=1;k<game.getListeMapItemJoueur().get(game.getRanking().get(i)).size();k++){
             		
             			TreeItem<String> pub = new TreeItem<String>("pub"+k);
             	        pub.getChildren().addAll(
             	        		new TreeItem<String>("pos X : "+game.getListeMapItemJoueur().get(game.getRanking().get(i)).get(k).getLatitude()),
-                                new TreeItem<String>("pos Y : "+game.getListeMapItemJoueur().get(game.getRanking().get(i)).get(k).getLatitude())
-            	                );
+                                new TreeItem<String>("pos Y : "+game.getListeMapItemJoueur().get(game.getRanking().get(i)).get(k).getLongitude()),
+            	                new TreeItem<String>("influence : "+Double.parseDouble(String.valueOf(game.getListeMapItemJoueur().get(game.getRanking().get(i)).get(k).getInfluence())))
+            	        		);
             	        
                         posPub.getChildren().addAll(pub);
             	}
@@ -204,7 +205,7 @@ public class Graph extends Application {
         //creation de la population
         migration();
     	carte.getChildren().add(canvas);
-        threadGraph miseAJour = new threadGraph(label2);
+        threadGraph miseAJour = new threadGraph(label2,genPanel);
         miseAJour.start();
         
         /////////////////affichage carte et information gaphique////////////////////
@@ -217,8 +218,10 @@ public class Graph extends Application {
    
     private class threadGraph extends Thread{
     	Label label2;
-    	threadGraph(Label label){
+    	GridPane panelJoueur;
+    	threadGraph(Label label,GridPane panel){
     		this.label2=label;
+    		this.panelJoueur=panel;
     	}
     	public void run(){
     		while(true)
@@ -232,10 +235,11 @@ public class Graph extends Application {
     	        int jour=game.getHeureDepuisDebutJeu()/24;
     	        int heure=game.getHeureDepuisDebutJeu()%24;
     			Platform.runLater(()->label2.setText(String.valueOf("jour : "+jour+ "\nheure : "+heure)));    			
-    			if(outils.Global.uneFoisAfficherLaCarte==true){
+    			if((game.getHeureDepuisDebutJeu()%12)==0){
     				migration().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     				migration();
-    				infoPlayer();
+    				TreeView<String> treeView = new TreeView<String>(infoPlayer());
+    		        Platform.runLater(()->panelJoueur.add(treeView, 1, 0));
     				outils.Global.uneFoisAfficherLaCarte=false;
     			}else{
     				
