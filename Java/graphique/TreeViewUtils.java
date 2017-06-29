@@ -1,3 +1,4 @@
+package graphique;
 
 
 import javafx.collections.ObservableList;
@@ -227,3 +228,4 @@ public class TreeViewUtils {
 
 
 }
+>>>>>>> 5307de695d68b3885d5f62d65128c0f8fd875791

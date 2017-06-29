@@ -1,4 +1,6 @@
+
 package les_mains;
+
 
 import communication.Communication;
 import communication.ManipulationJson;
@@ -47,6 +49,7 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 			laPartie.setHeureDepuisDebutJeu(10);
 			laPartie.setMeteoDuJour(Meteo.valueOf("sunny"));
 		}
+
 
 
 		//lancement du threadImage
