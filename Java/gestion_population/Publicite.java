@@ -1,5 +1,11 @@
 package gestion_population;
 
+
+/**
+ * Une MapItem "ad"
+ * @author atila
+ *
+ */
 public class Publicite extends MapItem {
 
 	public Publicite(String kind, String owner, float influence, Coordonnees coordonnees) {

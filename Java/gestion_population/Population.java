@@ -7,6 +7,13 @@ import java.util.Random;
 import outils.Global;
 import outils.Meteo;
 
+/**
+ * Class population qui contient les client et lance la simulation de leurs
+ * comportements
+ * 
+ * @author atila
+ *
+ */
 public class Population {
 
 	private ArrayList<Agent> population;
@@ -41,6 +48,14 @@ public class Population {
 		}
 	}
 
+	/**
+	 * Creer un nouveau client avec les bon paramettre, position et envie
+	 * 
+	 * @param meteo
+	 * @param periodeJournee
+	 * @param listeDesStand
+	 * @return
+	 */
 	private Agent creerUnAgent(Meteo meteo, Meteo periodeJournee, HashMap<String, Stand> listeDesStand) {
 		Agent client = new Agent(meteo, periodeJournee, listeDesStand);
 
@@ -205,6 +220,13 @@ public class Population {
 
 	}
 
+	/**
+	 * Meme fonctionnement que faireBoireLaPopulation, mais en corrigeant
+	 * quelques erreur. La version 1 reste car elle est malgré tout
+	 * fonctionnelle
+	 * 
+	 * @param laPartie
+	 */
 	public void faireBoireLaPopulation2(TheGame laPartie) {
 		// pour chaque client faire
 
@@ -248,15 +270,13 @@ public class Population {
 
 					if (aPuBoire == true) {
 						client.setaBueAujourdhui(true);
-						
+
 						outils.ToString.toStringDiver("----------------------> On a retirer un client. Il reste : "
 								+ population.size() + " clients");
 
 						outils.ToString.ecrireUneTrace("----------------------> On a retirer un client. Il reste : "
 								+ population.size() + " clients");
-						
-						
-						
+
 						vendeManip = laPartie.getListePlayerInfo().get(client.getListeDesStandTrie().get(i_stand))
 								.getSales();
 						vendeManip++;
@@ -265,7 +285,8 @@ public class Population {
 						// this.population.remove(client);
 					} else {
 						// le client boude
-						outils.ToString.toStringDebug("Le bar : "+client.getListeDesStandTrie().get(i_stand)+" est retirer de la liste des bar a visite car il n'avait rien qui convenait");
+						outils.ToString.toStringDebug("Le bar : " + client.getListeDesStandTrie().get(i_stand)
+								+ " est retirer de la liste des bar a visite car il n'avait rien qui convenait");
 						client.getListeDesStandNonVisite().remove(client.getListeDesStandTrie().get(i_stand));
 						client.setMotivation((client.getMotivation() / 2));
 					}
@@ -312,6 +333,10 @@ public class Population {
 	public void mouvementDuMidi(Meteo meteo, Meteo periodeJournee) {
 		for (Agent client : this.population) {
 			client.setCoordonnees(this.calculerPositionClient(meteo, periodeJournee));
+
+			client.calculerEnvieBoissonSansAlcool(meteo, periodeJournee);
+			client.calculerBoissonFroideClient(meteo, periodeJournee);
+
 		}
 	}
 

@@ -15,13 +15,6 @@ public abstract class MapItem {
 	private float influence;
 
 	private Coordonnees coordonnees;
-	
-	
-	
-	
-	
-	
-
 
 	public MapItem(String kind, String owner, float influence, Coordonnees coordonnees) {
 		super();
@@ -93,9 +86,8 @@ public abstract class MapItem {
 
 		return jsonOb;
 	}
-	
-	
-	public String toString(){
+
+	public String toString() {
 		return ("   " + " type : " + this.kind + " influence : " + this.influence);
 	}
 

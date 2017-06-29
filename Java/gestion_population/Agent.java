@@ -6,10 +6,9 @@ import java.util.HashMap;
 import outils.Global;
 import outils.Meteo;
 
-
-
 /**
  * Voila la classe qui simule les clients
+ * 
  * @author atila
  *
  */
@@ -18,7 +17,7 @@ public class Agent {
 	private Coordonnees coordonnees;
 
 	private float motivation;
-    // definie la volonte de boire une boisson
+	// definie la volonte de boire une boisson
 	private HashMap<String, Stand> listeDesStandNonVisite;
 	private HashMap<String, Float> listeDeLaVolontePourStand; //
 	private ArrayList<String> listeDesStandTrie;
@@ -76,7 +75,7 @@ public class Agent {
 			float motivation = outils.OutilsCalculs.randomFloat(Global.clientMinMotivation, Global.clientMaxMotivation);
 
 			motivation *= outils.OutilsCalculs.bonusDeMotivationSelonLaMeteo(meteo);
-			
+
 			return motivation;
 		}
 	}
@@ -90,7 +89,7 @@ public class Agent {
 	 * @return Vrai si le client veut une boisson froide, faux s'il veut une
 	 *         boisson chaude
 	 */
-	private void calculerBoissonFroideClient(Meteo meteo, Meteo periodeJournee) {
+	public void calculerBoissonFroideClient(Meteo meteo, Meteo periodeJournee) {
 
 		float des = outils.OutilsCalculs.randomFloat(0, 100);
 
@@ -109,7 +108,7 @@ public class Agent {
 	 * @param meteo
 	 * @param periodeJournee
 	 */
-	private void calculerEnvieBoissonSansAlcool(Meteo meteo, Meteo periodeJournee) {
+	public void calculerEnvieBoissonSansAlcool(Meteo meteo, Meteo periodeJournee) {
 
 		float des = outils.OutilsCalculs.randomFloat(0, 100);
 
@@ -128,28 +127,6 @@ public class Agent {
 		}
 	}
 
-//	/**
-//	 * Calcul du bonus de volonte finale d'une pub sur un client
-//	 * avec prise en compte de la distance en fonction de la meteo
-//	 * et de la motivation du client
-//	 * 
-//	 * @param playerName
-//	 * @param mapItem
-//	 */
-//	public void calculerGainVolonteFinaleParUnePub(String playerName, MapItem mapItem, Meteo meteo) {
-//
-//		// petite verification que la valeur existe
-//		if (this.listeDeLaVolontePourStand.get(playerName) == null) {
-//			this.listeDeLaVolontePourStand.put(playerName, 1f);
-//		}
-//
-//		float volonteFinale = this.listeDeLaVolontePourStand.get(playerName).floatValue();
-//		volonteFinale += ((this.calculerInfluancePub(mapItem) * outils.Global.poidInfluencePub)
-//				- (outils.OutilsCalculs.calculerDistance(this, mapItem)
-//						* outils.Global.poidDistancePerteVolonteFinale));
-//		this.listeDeLaVolontePourStand.put(playerName, volonteFinale);
-//	}
-
 	/**
 	 * Calcule l'influence d'une pub sur un client
 	 * 
@@ -161,16 +138,14 @@ public class Agent {
 		outils.ToString.toStringVousEtesIci(" class.Agent method clacluler InfluancePub");
 		float distance = outils.OutilsCalculs.calculerDistance(this, mapItem);
 		float influancePub = (float) ((mapItem.getInfluence() * outils.Global.poidInfluencePub)
-				/ (Math.pow((distance+0.01), 2)));
+				/ (Math.pow((distance + 0.01), 2)));
 
-		
 		outils.ToString.ecrireUneTrace("influance pub : " + influancePub);
 		outils.ToString.toStringMath("Valeur infuancePub : " + influancePub);
 
 		return influancePub * outils.Global.poidCalculInfluence;
 	}
-	
-	
+
 	/**
 	 * Calcule l'influence d'une pub sur un client
 	 * 
@@ -182,19 +157,18 @@ public class Agent {
 		outils.ToString.toStringVousEtesIci(" class.Agent method clacluler InfluancePub");
 		float distance = outils.OutilsCalculs.calculerDistance(this, mapItem);
 
-		float influancePub = (float) ((mapItem.getInfluence() * outils.Global.poidInfluencePub)
-		/(distance+0.01));
-		
+		float influancePub = (float) ((mapItem.getInfluence() * outils.Global.poidInfluencePub) / (distance + 0.01));
+
 		outils.ToString.ecrireUneTrace("influance pub : " + influancePub);
 		outils.ToString.toStringMath("Valeur infuancePub : " + influancePub);
 
 		return influancePub;
 	}
 
-
 	/**
-	 * Done le cout en volonteFInale pour alle au stand donne pour ce client.
-	 * on multiplie cette valeur par un poid
+	 * Done le cout en volonteFInale pour alle au stand donne pour ce client. on
+	 * multiplie cette valeur par un poid
+	 * 
 	 * @param coordonneesStand
 	 * @return
 	 */
@@ -204,16 +178,18 @@ public class Agent {
 		outils.ToString.ecrireUneTrace("Cout en volonte pour aller au stand : " + coutEnVolontePourAllerAuStand);
 		return coutEnVolontePourAllerAuStand;
 	}
-	
+
 	/**
-	 * Done le cout en volonteFInale pour alle au stand donne pour ce client.
-	 * on multiplie cette valeur par un poid
+	 * Done le cout en volonteFInale pour alle au stand donne pour ce client. on
+	 * multiplie cette valeur par un poid
+	 * 
 	 * @param coordonneesStand
 	 * @return
 	 */
 	private float coutDuDeplacementVers2(Coordonnees coordonneesStand) {
 		float coutEnVolontePourAllerAuStand = outils.OutilsCalculs.calculerDistance(this.coordonnees, coordonneesStand);
-		coutEnVolontePourAllerAuStand = (float) Math.pow(coutEnVolontePourAllerAuStand, outils.Global.poidCoutDeplacementPuissanceFormule2);
+		coutEnVolontePourAllerAuStand = (float) Math.pow(coutEnVolontePourAllerAuStand,
+				outils.Global.poidCoutDeplacementPuissanceFormule2);
 		outils.ToString.ecrireUneTrace("Cout en volonte pour aller au stand : " + coutEnVolontePourAllerAuStand);
 		return coutEnVolontePourAllerAuStand;
 	}
@@ -247,8 +223,7 @@ public class Agent {
 			return false;
 		}
 	}
-	
-	
+
 	/**
 	 * Calcule s'il restera sufisament de volonte finale pour boire un verre
 	 * dans le stand choisie
@@ -267,22 +242,19 @@ public class Agent {
 		outils.ToString.toStringDebug("listeDesStandNonVisite : " + listeDesStandNonVisite + " stand en cour : " + stand
 				+ " avec proprio : " + stand.getOwner());
 		coutDistance = coutDuDeplacementVers2(stand.getCoordonnees());
-		
-		
-		
+
 		outils.ToString.ecrireUneTrace("Stand : " + stand.getOwner() + " cout en deplacement : " + coutDistance
 				+ " volonteMin a l'arrive autorise : " + outils.Global.volonteMinPourAllerVersUnStand);
 		volonteFinaleDuBar = this.listeDeLaVolontePourStand.get(stand.getOwner()).floatValue();
 		volonteFinaleDuBar -= -coutDistance;
-		
-		
-		
+
 		this.listeDeLaVolontePourStand.put(stand.getOwner(), volonteFinaleDuBar);
-		if (this.listeDeLaVolontePourStand.get(stand.getOwner()).floatValue() > outils.Global.volonteMinPourAllerVersUnStand) {
-			
+		if (this.listeDeLaVolontePourStand.get(stand.getOwner())
+				.floatValue() > outils.Global.volonteMinPourAllerVersUnStand) {
+
 			outils.ToString.toStringDiver("Le bar :" + stand.getOwner() + " est choisie car Volonte : "
 					+ this.listeDeLaVolontePourStand.get(stand.getOwner()) + " cout de la distance : " + coutDistance);
-			
+
 			return true;
 		} else {
 			outils.ToString.toStringDiver("Le bar :" + stand.getOwner() + " est trop loin car Volonte : "
@@ -308,22 +280,24 @@ public class Agent {
 
 		while (this.aBueAujourdhui == false && i_drinks < boissonPropose.size()) {
 			coutBoissonVF = boissonPropose.get(i_drinks).getCoutEnVolonteFinalePourBoire();
-			
+
 			outils.ToString.ecrireUneTrace("cout boisson : " + coutBoissonVF);
 			if (this.listeDeLaVolontePourStand.get(debitDeBoisson) > coutBoissonVF) {
 				if (this.veutBoissonFroide == boissonPropose.get(i_drinks).getIsCold()
 						&& this.veutBoissonSansAlcool == boissonPropose.get(i_drinks).getIsHasAlcohol()) {
 
 					aBue = boissonPropose.get(i_drinks).demandeDeBoire(debitDeBoisson, 1);
-					
-					//si on est en simulation, on test juste si le client va boire.
-					if (false == outils.Global.requeteServeurVraiOuFauxPourSimulationEnLocal){
+
+					// si on est en simulation, on test juste si le client va
+					// boire.
+					boolean simuOuServeur = outils.Global.requeteServeurVraiOuFauxPourSimulationEnLocal;
+					if (false == simuOuServeur) {
 						aBue = true;
 					}
-					
-					outils.ToString.toStringMath("Un client essaie de boire cout boisson : "+ coutBoissonVF + 
-							" volonte qu'a le client : "+this.listeDeLaVolontePourStand.get(debitDeBoisson) +
-							" boisson en stock : " + aBue);
+
+					outils.ToString.toStringMath("Un client essaie de boire cout boisson : " + coutBoissonVF
+							+ " volonte qu'a le client : " + this.listeDeLaVolontePourStand.get(debitDeBoisson)
+							+ " boisson en stock : " + aBue);
 					if (aBue == true) {
 						this.aBueAujourdhui = true;
 						outils.ToString.toStringDiver("!!!  Client a bue " + boissonPropose.get(i_drinks).toString()
@@ -339,10 +313,7 @@ public class Agent {
 		return false;
 
 	}
-	
-	
-	
-	
+
 	/**
 	 * tente de boire une boisson dans le stand d'un joueur
 	 * 
@@ -350,24 +321,27 @@ public class Agent {
 	 * @return
 	 */
 	public boolean commanderUneBoisson2(TheGame leMonde, String debitDeBoisson) {
-		//On oublie pas de se deplacer sur le bar
-		outils.ToString.toStringDebug("Attention coordonne du bar : "+ leMonde.getListeDesStand().get(debitDeBoisson).getCoordonnees().toString()+" pour verification qu'il bouge pas avec le client");
+		boolean simuOuServeur = outils.Global.requeteServeurVraiOuFauxPourSimulationEnLocal;
+		// On oublie pas de se deplacer sur le bar
+		outils.ToString.toStringDebug("Attention coordonne du bar : "
+				+ leMonde.getListeDesStand().get(debitDeBoisson).getCoordonnees().toString()
+				+ " pour verification qu'il bouge pas avec le client");
 		this.setCoordonnees(leMonde.getListeDesStand().get(debitDeBoisson).getCoordonnees());
-		
+
 		outils.ToString.toStringVousEtesIci("On est dans commanderUneBoisson2 dans class.Agent");
 		float coutBoissonVF;
 		int i_drinks = 0;
 		boolean aBue = false;
-		//on recupere la liste des boissons proposer par le stand
+		// on recupere la liste des boissons proposer par le stand
 		ArrayList<DrinkInfo> boissonPropose = new ArrayList<>(
 				leMonde.getListePlayerInfo().get(debitDeBoisson).getDrinksOffered());
 
-		//si le client a pas bu et qu'il reste une boisson
+		// si le client a pas bu et qu'il reste une boisson
 		while (this.aBueAujourdhui == false && i_drinks < boissonPropose.size()) {
 			coutBoissonVF = boissonPropose.get(i_drinks).getCoutEnVolonteFinalePourBoire();
 			outils.ToString.ecrireUneTrace("cout boisson : " + coutBoissonVF);
-			
-			//s'il a envie de boire
+
+			// s'il a envie de boire
 			if (this.listeDeLaVolontePourStand.get(debitDeBoisson) > coutBoissonVF
 					&& this.veutBoissonFroide == boissonPropose.get(i_drinks).getIsCold()
 					&& this.veutBoissonSansAlcool == boissonPropose.get(i_drinks).getIsHasAlcohol()) {
@@ -375,7 +349,7 @@ public class Agent {
 				aBue = boissonPropose.get(i_drinks).demandeDeBoire(debitDeBoisson, 1);
 
 				// si on est en simulation, on test juste si le client va boire.
-				if (false == outils.Global.requeteServeurVraiOuFauxPourSimulationEnLocal) {
+				if (false == simuOuServeur) {
 					aBue = true;
 				}
 
@@ -389,7 +363,7 @@ public class Agent {
 					return true;
 				}
 			}
-			
+
 			i_drinks++;
 		}
 
@@ -401,9 +375,9 @@ public class Agent {
 	}
 
 	/**
-	 * On genere la volonte finale
-	 * On recherche les stand non visite, puis pour chacun d'entre eux
-	 * on genere la volonteLie
+	 * On genere la volonte finale On recherche les stand non visite, puis pour
+	 * chacun d'entre eux on genere la volonteLie
+	 * 
 	 * @param listeItemByPlayer
 	 */
 	public void generationDeLaVolonteFinale(HashMap<String, ArrayList<MapItem>> listeItemByPlayer) {
@@ -412,11 +386,11 @@ public class Agent {
 		this.listeDeLaVolontePourStand = new HashMap<String, Float>();
 		float volonte = 0f;
 		float influancePub = 0f;
-		outils.ToString.toStringListe("Voila la liste des standNonVisite : " +this.listeDesStandNonVisite);
+		outils.ToString.toStringListe("Voila la liste des standNonVisite : " + this.listeDesStandNonVisite);
 		for (String playerName : this.listeDesStandNonVisite.keySet()) {
 			this.listeDeLaVolontePourStand.put(playerName, 0f);
 			volonte = 0f;
-			outils.ToString.toStringListe("Voila la liste des mapItem de : " + playerName +" : " +listeItemByPlayer);
+			outils.ToString.toStringListe("Voila la liste des mapItem de : " + playerName + " : " + listeItemByPlayer);
 			for (MapItem mapItem : listeItemByPlayer.get(playerName)) {
 				influancePub = this.calculerInfluancePub(mapItem);
 
@@ -438,13 +412,11 @@ public class Agent {
 		this.listeDesStandTrie = trierCleHasmapStringFloatDescendant(pourTrie);
 
 	}
-	
-	
-	
+
 	/**
-	 * On genere la volonte finale
-	 * On recherche les stand non visite, puis pour chacun d'entre eux
-	 * on genere la volonteLie
+	 * On genere la volonte finale On recherche les stand non visite, puis pour
+	 * chacun d'entre eux on genere la volonteLie
+	 * 
 	 * @param listeItemByPlayer
 	 */
 	public void generationDeLaVolonteFinale2(HashMap<String, ArrayList<MapItem>> listeItemByPlayer) {
@@ -453,25 +425,25 @@ public class Agent {
 		this.listeDeLaVolontePourStand = new HashMap<String, Float>();
 		float volonte = 0f;
 		float influancePub = 0f;
-		outils.ToString.toStringListe("Voila la liste des standNonVisite : " +this.listeDesStandNonVisite);
-		//Pour chaque Stand qui n'a pas encore ete visité
+		outils.ToString.toStringListe("Voila la liste des standNonVisite : " + this.listeDesStandNonVisite);
+		// Pour chaque Stand qui n'a pas encore ete visité
 		for (String playerName : this.listeDesStandNonVisite.keySet()) {
 			this.listeDeLaVolontePourStand.put(playerName, 0f);
 			volonte = 0f;
-			outils.ToString.toStringListe("Voila la liste des mapItem de : " + playerName +" : " +listeItemByPlayer);
+			outils.ToString.toStringListe("Voila la liste des mapItem de : " + playerName + " : " + listeItemByPlayer);
 			for (MapItem mapItem : listeItemByPlayer.get(playerName)) {
 				influancePub = this.calculerInfluancePub2(mapItem);
 
 				volonte += influancePub;
 			}
 			outils.ToString.toStringMath("influance pub : " + influancePub + " volonte resultante : " + volonte);
-			this.listeDeLaVolontePourStand.put(playerName, (volonte+this.motivation));
+			this.listeDeLaVolontePourStand.put(playerName, (volonte + this.motivation));
 		}
 
 		// on recupere la liste des stand trie
 
 		outils.ToString.toStringListe("Voila la volonteFinale :" + this.listeDeLaVolontePourStand);
-		outils.ToString.ecrireUneTrace("Voila la volonteFinale :" +this.listeDeLaVolontePourStand.toString());
+		outils.ToString.ecrireUneTrace("Voila la volonteFinale :" + this.listeDeLaVolontePourStand.toString());
 		HashMap<String, Float> pourTrie = new HashMap<String, Float>(this.listeDeLaVolontePourStand);
 		this.listeDesStandTrie = trierCleHasmapStringFloatDescendant(pourTrie);
 		outils.ToString.ecrireUneTrace("Stand avec meilleur volonte trie : " + this.listeDesStandTrie.toString());

@@ -10,15 +10,10 @@ public class CoordonneesSpan {
 	/**
 	 * Constructeur
 	 * 
-	 * 
-	 * 
-	 * 
 	 * @param latitude_span
 	 * @param longitude_span
-	 * 
 	 * @exception Si
 	 *                latitude_span ou longitude_span sont négatives
-	 * 
 	 * @author atila
 	 * @throws Exception
 	 * @throws PositionException

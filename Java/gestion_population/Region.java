@@ -2,9 +2,9 @@ package gestion_population;
 
 import com.google.gson.JsonObject;
 
-
 /**
- * c
+ * Classe region, elle peut permettre de calculer la taille de la map
+ * 
  * @author atila
  *
  */
@@ -30,9 +30,8 @@ public class Region {
 		this.calculerBordDeLaMapCarre();
 	}
 
-	
 	/**
-	 * permet de definir 
+	 * permet de definir
 	 */
 	private void calculerBordDeLaMapCarre() {
 		float y_x_max = outils.OutilsCalculs.calculerDistance(center.getLatitude(), center.getLongitude(),
