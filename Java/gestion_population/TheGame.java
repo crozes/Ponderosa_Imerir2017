@@ -11,6 +11,9 @@ import javafx.stage.Stage;
 import outils.Meteo;
 
 public class TheGame {
+	
+	
+	private static TheGame singleton;
 
 	private Meteo meteoDuJour;
 	private Meteo meteoDeDemain;
@@ -67,6 +70,15 @@ public class TheGame {
 		this.ranking = ranking;
 		this.region = region;
 	}
+	
+	
+	
+	public static TheGame getInstance() {
+        if (null == singleton) { // Premier appel
+        	singleton = new TheGame();
+        }
+        return singleton;
+    }
 	
 	
 	

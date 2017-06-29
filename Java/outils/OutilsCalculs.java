@@ -46,7 +46,7 @@ public class OutilsCalculs {
 	 */
 	public static float calculerDistance(float latitude, float longitude, float latitude_p, float longitude_p) {
 
-		return (float) Math.sqrt(Math.pow((latitude - latitude_p), 2) + Math.pow((longitude + longitude_p), 2));
+		return (float) Math.sqrt(Math.pow((latitude - latitude_p), 2) + Math.pow((longitude - longitude_p), 2));
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class OutilsCalculs {
 	 * @param meteo
 	 * @return Valeur du poid de la meteo sur la motivation
 	 */
-	public static float poidMeteoParcourBoissonFroide(Meteo meteo) {
+	public static float bonusDeMotivationSelonLaMeteo(Meteo meteo) {
 		float poid = 1;
 
 		switch (meteo) {
@@ -131,7 +131,7 @@ public class OutilsCalculs {
 	 * @param meteo
 	 * @return Pourcentage d'envie d'une boisson froide
 	 */
-	public static float poidMeteoMotivationBoissonFroide(Meteo meteo) {
+	public static float pourcentagePopulationVoulantUneBoissonSelonLaMeteo(Meteo meteo) {
 		float poid = 100;
 
 		// Consommation Clients rainny:15% cloudy:30% sunny:75% heatwave:100%

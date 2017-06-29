@@ -2,3 +2,11 @@
 /recup.class
 /Graph$MAJ.class
 /communication.class
+/Graph$MAJinfo.class
+/TreeViewUtils.class
+/exeption.class
+/threadGraph.class
+/MAJinfo.class
+/Graph$threadGraph.class
+/PlayerNotFound.class
+/NoDrinkFound.class
