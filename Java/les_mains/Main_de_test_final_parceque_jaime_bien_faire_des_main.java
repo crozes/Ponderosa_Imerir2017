@@ -8,7 +8,6 @@ import communication.ThreadGetForecast;
 import gestion_population.TheGame;
 import graphique.Graph;
 import javafx.application.Application;
-import javafx.stage.Stage;
 import outils.Meteo;
 
 public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
@@ -31,7 +30,7 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 			outils.ToString.toStringJSON(stringDeLaMapEnJson);
 			ManipulationJson.jsonFromStringMap(stringDeLaMapEnJson, laPartie);
 			
-			
+			outils.ToString.ecrireUneTrace(laPartie.toString());
 			//lancement du thread de requete du Forecast
 			ThreadGetForecast threadForecast = new ThreadGetForecast(laPartie);
 			threadForecast.start();
@@ -43,6 +42,7 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 				
 				e.printStackTrace();
 			}
+			
 		}
 		else{ //on simule
 			
@@ -51,22 +51,23 @@ public class Main_de_test_final_parceque_jaime_bien_faire_des_main {
 			laPartie.setHeureDepuisDebutJeu(10);
 			laPartie.setMeteoDuJour(Meteo.valueOf("sunny"));
 		}
+
 		
 		laPartie.getMapDeLaPopulation().genererPopulation(0,
 				795, 0,
 				495, laPartie.getRanking().size(), Meteo.valueOf("sunny"),
 				Meteo.matin, laPartie.getListeDesStand());
 		Application.launch(Graph.class,args);
-	//	Stage scene =new Stage();
+	
 
 
-		
+
 		//lancement du threadImage
 		/*
 		 * ThreadGraphism threadGraphism = new ThreadGraphism(laPartie);
-		threadGraphism.start(arg);
+		threadGraphism.start(laPartie);
 		 */
-		
+
 		
 //		//correction du bug json
 //		Stand stand;

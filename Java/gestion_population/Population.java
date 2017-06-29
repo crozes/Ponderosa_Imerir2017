@@ -17,9 +17,7 @@ public class Population {
 	private float LongitudeMin;
 	private float nombreDeClient;
 
-
-	
-	public Population(){
+	public Population() {
 		this.population = new ArrayList<Agent>();
 	}
 
@@ -44,10 +42,9 @@ public class Population {
 	}
 
 	private Agent creerUnAgent(Meteo meteo, Meteo periodeJournee, HashMap<String, Stand> listeDesStand) {
-		Agent client = new Agent(meteo, periodeJournee,listeDesStand);
+		Agent client = new Agent(meteo, periodeJournee, listeDesStand);
 
 		client.setCoordonnees(calculerPositionClient(meteo, periodeJournee));
-
 
 		return client;
 	}
@@ -87,14 +84,14 @@ public class Population {
 			int nbJoueur, Meteo meteo, Meteo periodeJournee, HashMap<String, Stand> listeDesStand) {
 		nombreDeClient = calculDuNombreDeClient(nbJoueur, meteo, periodeJournee);
 
-		//on fixe la taille de la map
+		// on fixe la taille de la map
 		this.latitudeMax = latitudeMax;
 		this.LatitudeMin = LatitudeMin;
 		this.longitudeMax = longitudeMax;
 		this.LongitudeMin = LongitudeMin;
-		
+
 		outils.ToString.toStringVousEtesIci("On genere les pigeons ... les clients pardons");
-		
+
 		for (int i = 0; i < nombreDeClient; i++) {
 			this.population.add(this.creerUnAgent(meteo, periodeJournee, listeDesStand));
 		}
@@ -105,55 +102,53 @@ public class Population {
 	 * le matin et qu'il n'a pas trouver de boisson a son gout (par rapport au
 	 * stock) il n'essaira pas dis retourner le soir (il boude)
 	 * 
-	 * La pub et sa motivation creer sa volontéFinale de vouloir boire dans un bar
-	 * il va dans le bar qui lui procure la plus grande volonte finale et qui n'est pas trop loin pour qu'il lui reste
-	 * de la volontéFinale une fois arrivé
+	 * La pub et sa motivation creer sa volontéFinale de vouloir boire dans un
+	 * bar il va dans le bar qui lui procure la plus grande volonte finale et
+	 * qui n'est pas trop loin pour qu'il lui reste de la volontéFinale une fois
+	 * arrivé
 	 * 
-	 * se deplacer diminue ca volonté finale, donc avant de se deplacer, on voie si 
-	 * sa volonté finale ne sera pas trop basse
+	 * se deplacer diminue ca volonté finale, donc avant de se deplacer, on voie
+	 * si sa volonté finale ne sera pas trop basse
 	 * 
-	 * une fois arrivé il voie s'il y a une boisson qu'il aimerai boire par rapport a ces envie et
-	 * aussi s'il lui reste suffisament de volonté de commandé. Il tente de boire la boisson la plus chere selon ca volonté
-	 * Une boisson à un tot de consomation de volontéFinale calculé par rapport a son prix
-	 * 
-	 * 
-	 * s'il peut boire il fait la demande, s'il y a du stock (requete au serveur) il boit et on le retire de la population
-	 * 
-	 * s'il n'a pas bue, il divise sa motivation par 2 et recherche un nouveau bar (et tout recommence)
+	 * une fois arrivé il voie s'il y a une boisson qu'il aimerai boire par
+	 * rapport a ces envie et aussi s'il lui reste suffisament de volonté de
+	 * commandé. Il tente de boire la boisson la plus chere selon ca volonté Une
+	 * boisson à un tot de consomation de volontéFinale calculé par rapport a
+	 * son prix
 	 * 
 	 * 
+	 * s'il peut boire il fait la demande, s'il y a du stock (requete au
+	 * serveur) il boit et on le retire de la population
 	 * 
-	 * Explication du fonctionnement de cette grosse fonction :
-	 * On agit client par client
-	 * tant que le client n'a pas bu, a la volonté de continué, a encore un stand qu'il peut visiter
-	 * 	on calcule la volontéFInale de chaque stand pour le client
-	 * 	on recupere la liste trie des stand par ordre de volonté finale
-	 *  
-	 *  on voie si on peut allé au premier sinon on va au suivant ...
-	 *  
-	 *  on va au bar -> changement de coordonnees on est sur le bar
-	 *  
-	 *  on essaie de boire
-	 *  	post boire
-	 *  	oui 
-	 *  		-> stand -> recipe +1 vente
-	 *			-> on retire l'agent
+	 * s'il n'a pas bue, il divise sa motivation par 2 et recherche un nouveau
+	 * bar (et tout recommence)
+	 * 
+	 * 
+	 * 
+	 * Explication du fonctionnement de cette grosse fonction : On agit client
+	 * par client tant que le client n'a pas bu, a la volonté de continué, a
+	 * encore un stand qu'il peut visiter on calcule la volontéFInale de chaque
+	 * stand pour le client on recupere la liste trie des stand par ordre de
+	 * volonté finale
+	 * 
+	 * on voie si on peut allé au premier sinon on va au suivant ...
+	 * 
+	 * on va au bar -> changement de coordonnees on est sur le bar
+	 * 
+	 * on essaie de boire post boire oui -> stand -> recipe +1 vente -> on
+	 * retire l'agent
 	 *
-	 *  	non -> on essaie boisson suivante
-	 *  		il n'y a pas de boisson	
-	 *  			-> on retire le stand 
-	 *  			-> on relance sur les stand qu'il reste		
-	 *  
-	 *  
-	 *  
-	 *  
-	 *  
-	 *  Population : faireBoireLaPopulation
-	 *  	Agent : generationDeLaVolonteFinale
-	 *  		Agent : calculerInfluancePub
-	 *  		Agent : trierCleHasmapStringFloatDescendant
-	 *  	
-
+	 * non -> on essaie boisson suivante il n'y a pas de boisson -> on retire le
+	 * stand -> on relance sur les stand qu'il reste
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * Population : faireBoireLaPopulation Agent : generationDeLaVolonteFinale
+	 * Agent : calculerInfluancePub Agent : trierCleHasmapStringFloatDescendant
+	 * 
+	 * 
 	 * @param meteo
 	 * @param periodeJournee
 	 * @param ranking
@@ -163,124 +158,129 @@ public class Population {
 	public void faireBoireLaPopulation(TheGame laPartie) {
 		int numeroClient = 0;
 		Agent client;
-		//for (Agent client : this.population) {
-		for(int i_client = 0; i_client<this.population.size(); i_client++){
+		// for (Agent client : this.population) {
+		for (int i_client = 0; i_client < this.population.size(); i_client++) {
 			client = this.population.get(i_client);
 			numeroClient++;
 			outils.ToString.toStringDiver("On s'occupe du client : " + numeroClient + " sur : " + population.size());
-			outils.ToString.toStringDiver("aBue = " + client.getIsaBueAujourdhui() + " motivation : "+ client.getMotivation() + 
-					" motivation min autorise : " + outils.Global.minMotivationAvantDeNePlusVouloirBoire +
-				" nombre de stand qu'il reste a visiter : " + client.getListeDesStandNonVisite().size()	);
-			do{
-			
-			
-				//on genere la volontéFinale
+			outils.ToString
+					.toStringDiver("aBue = " + client.getIsaBueAujourdhui() + " motivation : " + client.getMotivation()
+							+ " motivation min autorise : " + outils.Global.minMotivationAvantDeNePlusVouloirBoire
+							+ " nombre de stand qu'il reste a visiter : " + client.getListeDesStandNonVisite().size());
+			do {
+
+				// on genere la volontéFinale
 				outils.ToString.toStringDebug(laPartie.getListeMapItemJoueur());
 				client.generationDeLaVolonteFinale(laPartie.getListeMapItemJoueur());
-					
-				//on cherche sur qu'elle bar on va.
+
+				// on cherche sur qu'elle bar on va.
 				int i_stand = -1;
 				boolean peutSeDeplacer = false;
-				while (i_stand < client.getListeDesStandTrie().size()-1 && peutSeDeplacer == false ){
+				while (i_stand < client.getListeDesStandTrie().size() - 1 && peutSeDeplacer == false) {
 					i_stand++;
-					outils.ToString.toStringDebug("i : " + i_stand + " size : " + client.getListeDesStandTrie().size() +"probleme d'index Population faireBoire...");
+					outils.ToString.toStringDebug("i : " + i_stand + " size : " + client.getListeDesStandTrie().size()
+							+ "probleme d'index Population faireBoire...");
 					peutSeDeplacer = client.choisirLeBarOuAller(laPartie, client.getListeDesStandTrie().get(i_stand));
-					
+
 				}
-					
-				
-				if(i_stand!=-1){
-					//le client passe sa commande
-					outils.ToString.toStringDiver("Le client :" + numeroClient + " passe commande chez : " + client.getListeDesStandTrie().get(i_stand));
+
+				if (i_stand != -1) {
+					// le client passe sa commande
+					outils.ToString.toStringDiver("Le client :" + numeroClient + " passe commande chez : "
+							+ client.getListeDesStandTrie().get(i_stand));
 					client.commanderUneBoisson(laPartie, client.getListeDesStandTrie().get(i_stand));
 				}
 
-				
-			}while(client.getIsaBueAujourdhui()==false && client.getMotivation()>outils.Global.minMotivationAvantDeNePlusVouloirBoire && client.getListeDesStandNonVisite().size()>0);
-			//Le client  a bue, il n'a plus soif, on peut le retirer du jeu
-			if (client.getIsaBueAujourdhui() == true){
-				outils.ToString.toStringDiver("----------------------> On a retirer un client. Il reste : "+ population.size()+" clients");
+			} while (client.getIsaBueAujourdhui() == false
+					&& client.getMotivation() > outils.Global.minMotivationAvantDeNePlusVouloirBoire
+					&& client.getListeDesStandNonVisite().size() > 0);
+			// Le client a bue, il n'a plus soif, on peut le retirer du jeu
+			if (client.getIsaBueAujourdhui() == true) {
+				outils.ToString.toStringDiver(
+						"----------------------> On a retirer un client. Il reste : " + population.size() + " clients");
 				this.population.remove(client);
 			}
 
 		}
 
 	}
-	
-	public void faireBoireLaPopulation2(TheGame laPartie){
-		//pour chaque client faire
+
+	public void faireBoireLaPopulation2(TheGame laPartie) {
+		// pour chaque client faire
 
 		int vendeManip = 0;
 
-		String barOuAller;
 		boolean aPuBoire = false;
 		Agent client;
-		int indice_boucle1 = 0;
-		int indice_boucle2 = 0;
-		int indice_boucle3 = 0;
-		for(int i_agent = 0; i_agent<this.population.size(); i_agent++){
+
+		for (int i_agent = 0; i_agent < this.population.size(); i_agent++) {
 			client = population.get(i_agent);
 			outils.ToString.ecrireUneTrace("\n\n Client : " + i_agent + "\n\n");
-			//generer la volonterFinale de tous les stands.
-			
+			// generer la volonterFinale de tous les stands.
+
 			// genere volonteFinale et la liste des stand trie a partir des
 			// stand non visite
 			client.generationDeLaVolonteFinale2(laPartie.getListeMapItemJoueur());
-			indice_boucle1=0;
+
 			do {
-				outils.ToString.toStringDebug("-------------- indice 1 : "+indice_boucle1);
-				indice_boucle2=0;
-				indice_boucle1++;
+
 				// on essaie de voir si on peut aller dans un des bar
 				int i_stand = -1;
 				boolean peutSeDeplacer = false;
-				
-				outils.ToString.toStringDebug ("stand trie sont : "+client.getListeDesStandTrie());
+
+				outils.ToString.toStringDebug("stand trie sont : " + client.getListeDesStandTrie());
 				while (i_stand < client.getListeDesStandTrie().size() && peutSeDeplacer == false) {
-					outils.ToString.toStringDebug("-------------- indice 2 : "+indice_boucle2);
-					indice_boucle2++;
+
 					i_stand++;
 					outils.ToString.toStringDebug("i : " + i_stand + " size : " + client.getListeDesStandTrie().size()
 							+ "probleme d'index Population faireBoire...");
-					peutSeDeplacer = client.choisirLeBarOuAller2(laPartie, laPartie.getListeDesStand().get(client.getListeDesStandTrie().get(i_stand)));
+					peutSeDeplacer = client.choisirLeBarOuAller2(laPartie,
+							laPartie.getListeDesStand().get(client.getListeDesStandTrie().get(i_stand)));
 
 				}
-				
-				outils.ToString.toStringDebug("-------------- i_stand: "+i_stand);
+
+				outils.ToString.toStringDebug("-------------- i_stand: " + i_stand);
 				// si on peut se deplacer alors on va tenter d'y boire une
 				// bierre
-				
+
 				if (i_stand != -1) {
 					aPuBoire = client.commanderUneBoisson2(laPartie, client.getListeDesStandTrie().get(i_stand));
-					
+
 					if (aPuBoire == true) {
 						client.setaBueAujourdhui(true);
+						
 						outils.ToString.toStringDiver("----------------------> On a retirer un client. Il reste : "
 								+ population.size() + " clients");
-					
-						vendeManip = laPartie.getListePlayerInfo().get(client.getListeDesStandTrie().get(i_stand)).getSales();
+
+						outils.ToString.ecrireUneTrace("----------------------> On a retirer un client. Il reste : "
+								+ population.size() + " clients");
+						
+						
+						
+						vendeManip = laPartie.getListePlayerInfo().get(client.getListeDesStandTrie().get(i_stand))
+								.getSales();
 						vendeManip++;
-						laPartie.getListePlayerInfo().get(client.getListeDesStandTrie().get(i_stand)).setSales(vendeManip);
-					//	this.population.remove(client);
-					}
-					else{
-						//le client boude
+						laPartie.getListePlayerInfo().get(client.getListeDesStandTrie().get(i_stand))
+								.setSales(vendeManip);
+						// this.population.remove(client);
+					} else {
+						// le client boude
+						outils.ToString.toStringDebug("Le bar : "+client.getListeDesStandTrie().get(i_stand)+" est retirer de la liste des bar a visite car il n'avait rien qui convenait");
 						client.getListeDesStandNonVisite().remove(client.getListeDesStandTrie().get(i_stand));
-						client.setMotivation((client.getMotivation()/2));
+						client.setMotivation((client.getMotivation() / 2));
 					}
 				}
 
-			} while (aPuBoire == false
-					&& client.getMotivation() > outils.Global.minMotivationAvantDeNePlusVouloirBoire
+			} while (aPuBoire == false && client.getMotivation() > outils.Global.minMotivationAvantDeNePlusVouloirBoire
 					&& client.getListeDesStandNonVisite().size() > 0);
-			
-			
-			
+
 		}
-		
+
 		System.out.println(laPartie.getListePlayerInfo().toString());
-//		outils.ToString.toStringDiver("Nombre de client qui ont bu : " + ventes.toString());
-//		outils.ToString.ecrireUneTrace("Nombre de client qui ont bu : " + ventes.toString());
+		// outils.ToString.toStringDiver("Nombre de client qui ont bu : " +
+		// ventes.toString());
+		// outils.ToString.ecrireUneTrace("Nombre de client qui ont bu : " +
+		// ventes.toString());
 	}
 
 	/**
@@ -302,20 +302,18 @@ public class Population {
 
 		return nbClient;
 	}
-	
-	
+
 	/**
 	 * On deplace la population qui n'a pas bue
+	 * 
 	 * @param meteo
 	 * @param periodeJournee
 	 */
-	public void mouvementDuMidi(Meteo meteo, Meteo periodeJournee){
-		for(Agent client : this.population){
+	public void mouvementDuMidi(Meteo meteo, Meteo periodeJournee) {
+		for (Agent client : this.population) {
 			client.setCoordonnees(this.calculerPositionClient(meteo, periodeJournee));
 		}
 	}
-	
-	
 
 	public String toString() {
 		String toReturn = "";
@@ -383,16 +381,12 @@ public class Population {
 		LongitudeMin = longitudeMin;
 	}
 
-	public float getNombreDeClient() {
-		return nombreDeClient;
+	public int getNombreDeClient() {
+		return this.population.size();
 	}
 
 	public void setNombreDeClient(float nombreDeClient) {
 		this.nombreDeClient = nombreDeClient;
 	}
-
-
-	
-	
 
 }

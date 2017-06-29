@@ -2,6 +2,12 @@ package gestion_population;
 
 import com.google.gson.JsonObject;
 
+
+/**
+ * c
+ * @author atila
+ *
+ */
 public class Region {
 
 	private Coordonnees center;
@@ -24,6 +30,10 @@ public class Region {
 		this.calculerBordDeLaMapCarre();
 	}
 
+	
+	/**
+	 * permet de definir 
+	 */
 	private void calculerBordDeLaMapCarre() {
 		float y_x_max = outils.OutilsCalculs.calculerDistance(center.getLatitude(), center.getLongitude(),
 				span.getLatitude_span(), span.getLongitude_span());
@@ -89,13 +99,12 @@ public class Region {
 
 		return jsonOb;
 	}
-	
-	public String toString(){
-		if(this.center != null && this.span!= null){
+
+	public String toString() {
+		if (this.center != null && this.span != null) {
 			String toReturn = (this.center.toString() + " " + this.span.toString());
 			return toReturn;
-		}
-		else{
+		} else {
 			return "Objet null";
 		}
 	}

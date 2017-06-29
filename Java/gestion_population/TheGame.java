@@ -6,15 +6,11 @@ import java.util.HashMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.sun.corba.se.impl.orbutil.graph.Graph;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
 import outils.Meteo;
 
 public class TheGame {
-	
-	
+
 	private static TheGame singleton;
 
 	private Meteo meteoDuJour;
@@ -32,11 +28,9 @@ public class TheGame {
 	private HashMap<String, ArrayList<DrinkInfo>> listeDesDrinkInfo; // joueur
 																		// drinkinfo
 	private HashMap<String, Stand> listeDesStand;
-	
+
 	private ArrayList<MapItem> laMapDesObjets;
 	private Population mapDeLaPopulation;
-	
-	private Stage primaryStage;
 
 	public TheGame() {
 		this.region = new Region();
@@ -46,15 +40,12 @@ public class TheGame {
 		this.listePlayerInfo = new HashMap<String, PlayerInfo>();
 		this.listeDesDrinkInfo = new HashMap<String, ArrayList<DrinkInfo>>();
 		this.listeDesStand = new HashMap<String, Stand>();
-		
-		
+
 		this.laMapDesObjets = new ArrayList<MapItem>();
 
 		this.mapDeLaPopulation = new Population();
 
 	}
-
-	
 
 	public TheGame(ArrayList<MapItem> laMapDesObjets, Population mapDeLaPopulation,
 			HashMap<String, ArrayList<MapItem>> listeItemByPlayer, HashMap<String, PlayerInfo> listePlayerInfo,
@@ -72,18 +63,13 @@ public class TheGame {
 		this.ranking = ranking;
 		this.region = region;
 	}
-	
-	
-	
+
 	public static TheGame getInstance() {
-        if (null == singleton) { // Premier appel
-        	singleton = new TheGame();
-        }
-        return singleton;
-    }
-	
-	
-	
+		if (null == singleton) { // Premier appel
+			singleton = new TheGame();
+		}
+		return singleton;
+	}
 
 	public HashMap<String, Stand> getListeDesStand() {
 		return listeDesStand;
@@ -188,14 +174,6 @@ public class TheGame {
 	public void setHeureDepuisDebutJeu(int heureDepuisDebutJeu) {
 		this.heureDepuisDebutJeu = heureDepuisDebutJeu;
 	}
-	
-	public Stage getStage() {
-		return primaryStage;
-	}
-
-	public void setStage(Stage primaryStage) {
-		this.primaryStage = primaryStage;
-	}
 
 	/**
 	 * Permet de creer l'objet JsonMap afin de l'envoyer au serveur
@@ -277,41 +255,40 @@ public class TheGame {
 		return jsonArSales;
 
 	}
-	
-	
-	public String toString(){
-		String resultToReturn ="";
-		
-//		private Region region;
-		resultToReturn+= "Region :"+this.region.toString()+"\n";
-//		private ArrayList<String> ranking;
-		resultToReturn+= "Ranking :"+this.ranking.toString()+"\n";
-//		private HashMap<String, ArrayList<MapItem>> listeMapItemJoueur;
-		resultToReturn+= "listeMapItemJoueur :"+this.listeMapItemJoueur.toString()+"\n";
-//		for(MapItem mapItem : this.listeMapItemJoueur){
-//			mapItem.toString();
-//		}
-//		private HashMap<String, PlayerInfo> listePlayerInfo;
-		resultToReturn+= "listePlayerInfo :"+this.listePlayerInfo.toString()+"\n";
-//		private HashMap<String, ArrayList<DrinkInfo>> listeDesDrinkInfo; // joueur	
-		resultToReturn+= "listeDesDrinkInfo :"+this.listeDesDrinkInfo.toString()+"\n";// drinkinfo
-//		private HashMap<String, Stand> listeDesStand;
-		resultToReturn+= "listeDesStand :"+this.listeDesStand.toString()+"\n";
-//		private ArrayList<MapItem> laMapDesObjets;
-		resultToReturn+= "laMapDesObjets :"+this.laMapDesObjets.toString()+"\n";
-//		private Population mapDeLaPopulation;
-		resultToReturn+= "mapDeLaPopulation :"+this.mapDeLaPopulation.toString()+"\n";
-			
-		
+
+	public String toString() {
+		String resultToReturn = "";
+
+		// private Region region;
+		resultToReturn += "Region :" + this.region.toString() + "\n";
+		// private ArrayList<String> ranking;
+		resultToReturn += "Ranking :" + this.ranking.toString() + "\n";
+		// private HashMap<String, ArrayList<MapItem>> listeMapItemJoueur;
+		resultToReturn += "listeMapItemJoueur :" + this.listeMapItemJoueur.toString() + "\n";
+		// for(MapItem mapItem : this.listeMapItemJoueur){
+		// mapItem.toString();
+		// }
+		// private HashMap<String, PlayerInfo> listePlayerInfo;
+		resultToReturn += "listePlayerInfo :" + this.listePlayerInfo.toString() + "\n";
+		// private HashMap<String, ArrayList<DrinkInfo>> listeDesDrinkInfo; //
+		// joueur
+		resultToReturn += "listeDesDrinkInfo :" + this.listeDesDrinkInfo.toString() + "\n";// drinkinfo
+		// private HashMap<String, Stand> listeDesStand;
+		resultToReturn += "listeDesStand :" + this.listeDesStand.toString() + "\n";
+		// private ArrayList<MapItem> laMapDesObjets;
+		resultToReturn += "laMapDesObjets :" + this.laMapDesObjets.toString() + "\n";
+		// private Population mapDeLaPopulation;
+		resultToReturn += "mapDeLaPopulation :" + this.mapDeLaPopulation.toString() + "\n";
+
 		return resultToReturn;
-				
+
 	}
-	
-	public void apercuDesVentes(){
-		for(String playerInfo : this.listePlayerInfo.keySet()){
-			System.out.println(playerInfo + " a vendue : "+ this.listePlayerInfo.get(playerInfo));
+
+	public void apercuDesVentes() {
+		for (String playerInfo : this.listePlayerInfo.keySet()) {
+			System.out.println(playerInfo + " a vendue : " + this.listePlayerInfo.get(playerInfo));
 		}
-		
+
 	}
 
 }
