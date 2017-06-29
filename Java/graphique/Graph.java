@@ -36,7 +36,7 @@ import les_mains.Main_de_test_final_parceque_jaime_bien_faire_des_main;
 
 
 public class Graph extends Application {
-	TheGame game=Main_de_test_final_parceque_jaime_bien_faire_des_main.laPartie ;
+	TheGame game ;
 	
 	float carte_x=800;//game.getRegion().getLongitudeMax();
 	float carte_y=500;//game.getRegion().getLatitudeMax();

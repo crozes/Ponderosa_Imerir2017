@@ -122,5 +122,11 @@ public class PlayerInfo {
 		return jsonOb;
 	}
 
+	
+	public String toString(){
+		return ("Nb ventes : "+this.sales);
+	}
+	
+	
 
 }

@@ -50,12 +50,22 @@ public class DrinkInfo {
 	 * 		faux s'il n'y a plus de boisson en stock
 	 */
 	public boolean demandeDeBoire(String playerName, int quantityCommande) {
+		int quantityEnStock;
+		
 		if (this.isPlusEnStock == true) {
 			return false;
 		} else {
-			String resultJson = Communication.postEnvoyer(this.postUneCommandeDeBoissonEnArSales(playerName, quantityCommande).toString(),
-					outils.Global.URL_POST_REQUEST_FOR_SELLING);
-			int quantityEnStock = this.lireReponsePostCommande(resultJson);
+			
+			if (false == outils.Global.requeteServeurVraiOuFauxPourSimulationEnLocal){
+				quantityEnStock = 1;
+			}
+			else{
+				String resultJson = Communication.postEnvoyer(this.postUneCommandeDeBoissonEnArSales(playerName, quantityCommande).toString(),
+						outils.Global.URL_POST_REQUEST_FOR_SELLING);
+				
+				quantityEnStock = this.lireReponsePostCommande(resultJson);
+			}
+
 
 			//on en commande plus qu'il y en a
 			if (quantityEnStock < quantityCommande) {

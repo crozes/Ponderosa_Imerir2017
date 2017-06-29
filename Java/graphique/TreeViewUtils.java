@@ -17,6 +17,19 @@ import gestion_population.TheGame;
  * Created by brice on 27/06/17.
  *//*
 public class TreeViewUtils {
+	
+}
+	try {
+    	String name;
+    	for (Entry<String, PlayerInfo> e : game.getListePlayerInfo().entrySet()) {
+    	    String key = e.getKey();
+    	    PlayerInfo value = e.getValue();
+    	    if(value==playerInfo){
+    	    	name=key;
+    	    	break;
+    	    }
+    	}
+    	
     public static TreeItem<String> getPlayerBranch(TreeItem<String> root, String playerID,TheGame game) throws PlayerNotFound {
         ObservableList<TreeItem<String>> playersBranch = root.getChildren();
         for(TreeItem<String> aBranche : playersBranch){
@@ -39,16 +52,7 @@ public class TreeViewUtils {
 
     public static void updatePlayerBranche(TreeItem<String> root, PlayerInfo playerInfo,TheGame game){
 
-        try {
-        	String name;
-        	for (Entry<String, PlayerInfo> e : game.getListePlayerInfo().entrySet()) {
-        	    String key = e.getKey();
-        	    PlayerInfo value = e.getValue();
-        	    if(value==playerInfo){
-        	    	name=key;
-        	    	break;
-        	    }
-        	}
+        
             TreeItem<String> playerBranch = getPlayerBranch(root,name,game);
 //            System.out.println("Ok player");
             getBranch(playerBranch,"Cash",game).setValue(String.valueOf(("Cash: " + playerInfo.getCash())));
@@ -60,28 +64,30 @@ public class TreeViewUtils {
             TreeItem<String> standsBranch = getBranch(playerBranch, "Stand",game);
 //            System.out.println("Ok Stands");
             try {
-                MapItem stands = game.getListeMapItemJoueur().get(name).get(l)/*stand*/;/*
+            	
+            	for(int i=0;i<game.getListeMapItemJoueur().get(name).size();i++){
+                MapItem stands = game.getListeMapItemJoueur().get(name).get(1)/*stand*/;/*
                 if(standsBranch.getChildren().size() == 0){
-                    TreeItem<String> poss = new TreeItem<>("Position: " + stands.getLocation().toString());
-                    TreeItem<String> inf = new TreeItem<>("Influence: " + stands.getInfluence());
+                    TreeItem<String> poss = new TreeItem<>("Position: " + game.getListeMapItemJoueur().get(name).get(i).getCoordonnees().toString());
+                    TreeItem<String> inf = new TreeItem<>("Influence: " + String.valueOf(game.getListeMapItemJoueur().get(name).get(i).getInfluence()));
                     standsBranch.getChildren().addAll(poss,inf);
                 }
+                
+                
                 else
                 {
 
-                    getBranch(standsBranch,"Positon",game).setValue("Position: " + stands.getLocation().toString());
-                    getBranch(standsBranch,"Positon",game).setValue("Influence: " + stands.getInfluence());
-
-
+                    getBranch(standsBranch,"Positon",game).setValue("Position: " + game.getListeMapItemJoueur().get(name).get(i).getCoordonnees().toString().toString());
+                    getBranch(standsBranch,"Positon",game).setValue("Influence: " + String.valueOf(game.getListeMapItemJoueur().get(name).get(1).getInfluence()));
                 }
-
+            	
             TreeItem<String> adsBranch = getBranch(playerBranch, "Ads",game);
 //            System.out.println("Ok ads");
             try {
-                ArrayList<Publicite> ads = playerInfo.getAds();//pub
-                if(ads.size()!=adsBranch.getChildren().size()){
+                MapItem ads = game.getListeMapItemJoueur().get(name).get(i);//pub
+                if( game.getListeMapItemJoueur().get(name).size()!=adsBranch.getChildren().size()){
                     adsBranch.getChildren().clear();
-                    for(Item unAd : ads){
+                    for(MapItem unAd : game.getListeMapItemJoueur().get(name)){
                         addAd(adsBranch,unAd);
                     }
                 }
@@ -100,6 +106,7 @@ public class TreeViewUtils {
             } catch (NoAdFound noAdFound) {//exeption pas de pub je creer ou pas 
                 adsBranch.getChildren().clear();
             }
+            	}
             TreeItem<String> drinksBranch = getBranch(playerBranch, "Drinks",game);
 
 
@@ -165,9 +172,9 @@ public class TreeViewUtils {
 
     }
 
-    private static void addAd(TreeItem<String> adsBranch, Item ad,TheGame game){
+    private static void addAd(TreeItem<String> adsBranch, MapItem ad,TheGame game){
         int size = adsBranch.getChildren().size();
-        TreeItem<String> poss = new TreeItem<>("Position: " + ad.getLocation().toString());
+        TreeItem<String> poss = new TreeItem<>("Position: " +  game.getListeMapItemJoueur().get(name).get(i).getLocation());
         TreeItem<String> inf = new TreeItem<>("Influence: " + ad.getInfluence());
         TreeItem<String> ads = new TreeItem<>(String.valueOf(size+1));
         ads.getChildren().addAll(poss,inf);

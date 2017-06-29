@@ -6,6 +6,7 @@ import java.util.Random;
 
 import outils.Global;
 import outils.Meteo;
+import sun.security.ssl.HandshakeOutStream;
 
 public class Population {
 
@@ -17,8 +18,7 @@ public class Population {
 	private float LongitudeMin;
 	private float nombreDeClient;
 
-	public float test_motivationMax = 0;
-	public float test_motivationMin = 1000000;
+
 	
 	public Population(){
 		this.population = new ArrayList<Agent>();
@@ -49,12 +49,7 @@ public class Population {
 
 		client.setCoordonnees(calculerPositionClient(meteo, periodeJournee));
 
-		if (client.getMotivation() > this.test_motivationMax) {
-			test_motivationMax = client.getMotivation();
-		}
-		if (client.getMotivation() < this.test_motivationMin) {
-			test_motivationMin = client.getMotivation();
-		}
+
 		return client;
 	}
 
@@ -166,7 +161,7 @@ public class Population {
 	 *            cle de la hasmap listeItemByPlayer
 	 * @param listeItemByPlayer
 	 */
-	public void faireBoireLaPopulation(Meteo meteo, TheGame laPartie) {
+	public void faireBoireLaPopulation(TheGame laPartie) {
 		int numeroClient = 0;
 		Agent client;
 		//for (Agent client : this.population) {
@@ -190,11 +185,9 @@ public class Population {
 				while (i_stand < client.getListeDesStandTrie().size()-1 && peutSeDeplacer == false ){
 					i_stand++;
 					outils.ToString.toStringDebug("i : " + i_stand + " size : " + client.getListeDesStandTrie().size() +"probleme d'index Population faireBoire...");
-					peutSeDeplacer = client.peutSeDeplacerVersCeBar(laPartie, client.getListeDesStandTrie().get(i_stand));
+					peutSeDeplacer = client.choisirLeBarOuAller(laPartie, client.getListeDesStandTrie().get(i_stand));
 					
 				}
-					
-
 					
 				
 				if(i_stand!=-1){
@@ -213,6 +206,82 @@ public class Population {
 
 		}
 
+	}
+	
+	public void faireBoireLaPopulation2(TheGame laPartie){
+		//pour chaque client faire
+
+		int vendeManip = 0;
+
+		String barOuAller;
+		boolean aPuBoire = false;
+		Agent client;
+		int indice_boucle1 = 0;
+		int indice_boucle2 = 0;
+		int indice_boucle3 = 0;
+		for(int i_agent = 0; i_agent<this.population.size(); i_agent++){
+			client = population.get(i_agent);
+			outils.ToString.ecrireUneTrace("\n\n Client : " + i_agent + "\n\n");
+			//generer la volonterFinale de tous les stands.
+			
+			// genere volonteFinale et la liste des stand trie a partir des
+			// stand non visite
+			client.generationDeLaVolonteFinale2(laPartie.getListeMapItemJoueur());
+			indice_boucle1=0;
+			do {
+				outils.ToString.toStringDebug("-------------- indice 1 : "+indice_boucle1);
+				indice_boucle2=0;
+				indice_boucle1++;
+				// on essaie de voir si on peut aller dans un des bar
+				int i_stand = -1;
+				boolean peutSeDeplacer = false;
+				
+				outils.ToString.toStringDebug ("stand trie sont : "+client.getListeDesStandTrie());
+				while (i_stand < client.getListeDesStandTrie().size() && peutSeDeplacer == false) {
+					outils.ToString.toStringDebug("-------------- indice 2 : "+indice_boucle2);
+					indice_boucle2++;
+					i_stand++;
+					outils.ToString.toStringDebug("i : " + i_stand + " size : " + client.getListeDesStandTrie().size()
+							+ "probleme d'index Population faireBoire...");
+					peutSeDeplacer = client.choisirLeBarOuAller2(laPartie, laPartie.getListeDesStand().get(client.getListeDesStandTrie().get(i_stand)));
+
+				}
+				
+				outils.ToString.toStringDebug("-------------- i_stand: "+i_stand);
+				// si on peut se deplacer alors on va tenter d'y boire une
+				// bierre
+				
+				if (i_stand != -1) {
+					aPuBoire = client.commanderUneBoisson2(laPartie, client.getListeDesStandTrie().get(i_stand));
+					
+					if (aPuBoire == true) {
+						client.setaBueAujourdhui(true);
+						outils.ToString.toStringDiver("----------------------> On a retirer un client. Il reste : "
+								+ population.size() + " clients");
+					
+						vendeManip = laPartie.getListePlayerInfo().get(client.getListeDesStandTrie().get(i_stand)).getSales();
+						vendeManip++;
+						laPartie.getListePlayerInfo().get(client.getListeDesStandTrie().get(i_stand)).setSales(vendeManip);
+					//	this.population.remove(client);
+					}
+					else{
+						//le client boude
+						client.getListeDesStandNonVisite().remove(client.getListeDesStandTrie().get(i_stand));
+						client.setMotivation((client.getMotivation()/2));
+					}
+				}
+
+			} while (aPuBoire == false
+					&& client.getMotivation() > outils.Global.minMotivationAvantDeNePlusVouloirBoire
+					&& client.getListeDesStandNonVisite().size() > 0);
+			
+			
+			
+		}
+		
+		System.out.println(laPartie.getListePlayerInfo().toString());
+//		outils.ToString.toStringDiver("Nombre de client qui ont bu : " + ventes.toString());
+//		outils.ToString.ecrireUneTrace("Nombre de client qui ont bu : " + ventes.toString());
 	}
 
 	/**
@@ -236,6 +305,11 @@ public class Population {
 	}
 	
 	
+	/**
+	 * On deplace la population qui n'a pas bue
+	 * @param meteo
+	 * @param periodeJournee
+	 */
 	public void mouvementDuMidi(Meteo meteo, Meteo periodeJournee){
 		for(Agent client : this.population){
 			client.setCoordonnees(this.calculerPositionClient(meteo, periodeJournee));
@@ -318,22 +392,7 @@ public class Population {
 		this.nombreDeClient = nombreDeClient;
 	}
 
-	public float getTest_motivationMax() {
-		return test_motivationMax;
-	}
 
-	public void setTest_motivationMax(float test_motivationMax) {
-		this.test_motivationMax = test_motivationMax;
-	}
-
-	public float getTest_motivationMin() {
-		return test_motivationMin;
-	}
-
-	public void setTest_motivationMin(float test_motivationMin) {
-		this.test_motivationMin = test_motivationMin;
-	}
-	
 	
 	
 
